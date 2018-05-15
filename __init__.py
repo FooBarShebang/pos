@@ -10,3 +10,5 @@ __version__ = "0.1.20180515"
 __date__ = "15-05-2018"
 __status__ = "Development"
 __maintainer__ = "a.azarov@diagnoptics.com"
+
+__all__ = []
