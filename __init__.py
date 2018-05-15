@@ -1,1 +1,1 @@
-"just testing"
+_strTest = "just testing"
