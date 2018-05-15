@@ -13,5 +13,6 @@ Thus the goal of the project is to build a framework of objects (as classes) pro
 * Partial 'Design by Contract' paradigm implementation
 * Custom data types more resembling those available in the 'classic' static typed languages, including but not limited to unsigned integer numbers, constants and enumeration types
 * Unified structure of custom exceptions to separate the wrong / unexpected input data from the errors in the source code
+
 None of these goals is new; there are already many projects / libraries implementing these features, but the fun is to do it yourself and in the same, consistent manner.
 Extra components can and will be build based on these base objects.
