@@ -11,7 +11,7 @@ def class_meth_dbc(method):
     def decorated(instance, *args, **kwargs):
         """
         Decorator 'class_meth_dbc' closure. Implements input and output
-        data check for the instance method to be decorated.
+        data check for the class method to be decorated.
         """
         print 'Design by Contract:'
         print 'Input check for {}.{}'.format(
