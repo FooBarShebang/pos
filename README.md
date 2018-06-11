@@ -1,4 +1,4 @@
-# pos
+# pos Library
 as in Python on Steroids / Python of Steel - working title
 ## Description
 Hacking of the Python programming language in its original MIT / UC Berkeley sense, not as in the computer security breaching.

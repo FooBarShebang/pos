@@ -1,0 +1,82 @@
+@startuml
+
+salt
+{
+    {T
+        BaseException
+        + SystemExit
+        + KeyboardInterrupt
+        + GeneratorExit
+        + Exception
+        ++ StopIteration
+        ++ StandardError
+        +++ ArithmenticError
+        ++++ OverflowError
+        ++++ ZeroDivisionError
+        ++++ FloatingPointError
+        +++ AssertionError
+        +++ AttributeError
+        ++++ <&star> **CustomAttributeError**
+        +++++ <&star> **ConstantAttributeAssignement**
+        +++++ <&star> **NotExistingAttribute**
+        +++++ <&star> **PrivateAttributeAccess**
+        +++ BufferError
+        +++ <&star> **CustomError**
+        ++++ <&star> **DesignContractError**
+        +++++ <&link-intact> //DCArgumentType//
+        +++++ <&link-intact> //DCArgumentValue//
+        +++++ <&link-intact> //DCReturnType//
+        +++++ <&link-intact> //DCReturnValue//
+        +++++ <&link-intact> //NotInDCError//
+        ++++ <&star> **ConstantAssignment**
+        +++++ <&link-intact> //ConstantAttributeAssignement//
+        ++++ <&link-intact> //CustomAttributeError//
+        ++++ <&link-intact> //CustomTypeError//
+        ++++ <&link-intact> //CustomValueError//
+        +++ EnvironmentError
+        ++++ IOError
+        ++++ OSError
+        +++++ WindowsError
+        +++++ VMSError
+        +++ EOFError
+        +++ ImportError
+        +++ LookupError
+        ++++ KeyError
+        ++++ IndexError
+        +++ MemoryError
+        +++ NameError
+        ++++ UnboundLocalError
+        +++ ReferenceError
+        +++ RuntimeError
+        ++++ NotImplementedError
+        +++ SyntaxError
+        ++++ IndentationError
+        +++++ TabError
+        ++++ <&star> **NotInDCError**
+        +++ SystemError
+        +++ TypeError
+        ++++ <&star> **CustomTypeError**
+        +++++ <&star> **DCArgumentType**
+        +++++ <&star> **DCReturnType**
+        +++ ValueError
+        ++++ <&star> **CustomValueError**
+        +++++ <&star> **DCArgumentValue**
+        +++++ <&star> **DCReturnValue**
+        ++++ UnicodeError
+        +++++ UnicodeDecodeError
+        +++++ UnicodeEncodeError
+        +++++ UnicodeTranslateError
+        ++ Warning
+        +++ DeprecationWarning
+        ++++ PendingDeprecationWarning
+        +++ RuntimeWarning
+        +++ SyntaxWarning
+        +++ UserWarning
+        +++ FutureWarning
+        +++ ImportWarning
+        +++ UnicodeWarning
+        +++ BytesWarning
+    }
+}
+
+@enduml

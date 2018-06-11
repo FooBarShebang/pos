@@ -1,0 +1,46 @@
+@startuml
+
+salt
+{
+    {T
+        pos
+        + <&folder> Docs
+        ++ <&folder> Problem Analysis
+        +++ <&folder> PA001 Descriptors
+        ++++ <&script> pa001_descriptors_test01.py
+        ++++ <&script> pa001_descriptors_test02.py
+        ++++ <&script> pa001_descriptors_test03.py
+        ++++ <&script> pa001_descriptors_test04.py
+        ++++ <&script> pa001_descriptors_test05.py
+        ++++ <&script> pa001_descriptors_test06.py
+        ++++ <&script> pa001_descriptors_test07.py
+        ++++ <&script> pa001_descriptors_test08.py
+        ++++ <&document> PA001 Descriptors.odt
+        +++ <&folder> PA002 Decorators
+        ++++ <&script> pa002_decorators_test01.py
+        ++++ <&script> pa002_decorators_test02.py
+        ++++ <&script> pa002_decorators_test03.py
+        ++++ <&script> pa002_decorators_test04.py
+        ++++ <&script> pa002_decorators_test05.py
+        ++++ <&script> pa002_decorators_test06.py
+        ++++ <&script> pa002_decorators_test07.py
+        ++++ <&script> pa002_decorators_test08.py
+        ++++ <&script> pa002_decorators_test09.py
+        ++++ <&document> PA002 Decorators.odt
+        ++ <&folder> UML
+        +++ <&folder> Miscellaneous
+        ++++ <&image> Custom Exceptions tree.png
+        ++++ <&code> Custom Exceptions tree.txt
+        ++++ <&image> Exceptions tree.png
+        ++++ <&code> Exceptions tree.txt
+        +++ <&folder> Templates
+        ++++ <&code> Classes.cuml
+        ++++ <&code> Components.cuml
+        +++ <&image> pos File Structure.png
+        +++ <&code> pos File Structure.txt
+        + <&script> _ _init_ _.py
+        + <&info> README.md
+    }
+}
+
+@enduml
