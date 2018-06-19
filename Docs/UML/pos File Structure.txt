@@ -5,6 +5,8 @@ salt
     {T
         pos
         + <&folder> Docs
+        ++ <&folder> Design and Requirements
+        +++ <&document> DE001 Core Features.odt
         ++ <&folder> Problem Analysis
         +++ <&folder> PA001 Descriptors
         ++++ <&script> pa001_descriptors_test01.py
@@ -33,6 +35,23 @@ salt
         ++++ <&script> pa003_virtual_inheritance_test003.py
         ++++ <&script> pa003_virtual_inheritance_test004.py
         ++++ <&document> PA003 Virtual Inheritance Exceptions.odt
+        +++ <&folder> PA004 Traceback
+        ++++ <&script> pa004_traceback_test001.py
+        ++++ <&script> pa004_traceback_test002.py
+        ++++ <&script> pa004_traceback_test003.py
+        ++++ <&script> pa004_traceback_test004.py
+        ++++ <&script> pa004_traceback_test005.py
+        ++++ <&script> pa004_traceback_test006.py
+        ++++ <&script> pa004_traceback_test007.py
+        ++++ <&script> pa004_traceback_test008.py
+        ++++ <&script> pa004_traceback_test009.py
+        ++++ <&script> pa004_traceback_test010.py
+        ++++ <&script> pa004_traceback_test011.py
+        ++++ <&script> pa004_traceback_test012.py
+        ++++ <&script> pa004_traceback_test013.py
+        ++++ <&script> pa004_traceback_test014.py
+        ++++ <&script> pa004_traceback_test015.py
+        ++++ <&document> PA004 Traceback of Exceptions.odt
         ++ <&folder> UML
         +++ <&folder> Miscellaneous
         ++++ <&image> Custom Exceptions tree.png

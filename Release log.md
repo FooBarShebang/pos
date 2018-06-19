@@ -1,5 +1,13 @@
 # pos Library Release Log
 
+## 2018-06-19
+
+Finished core functionality design document. Started implementation.
+
+## 2018-06-18
+
+Finished problem analysis on the traceback functionality
+
 ## 2018-06-13
 
 Finished problem analysis on virtual sub-classes
