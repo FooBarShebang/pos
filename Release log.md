@@ -2,7 +2,9 @@
 
 ## 2018-06-19
 
-Finished core functionality design document. Started implementation.
+Finished core functionality design document.
+Started implementation - implemented module utils.traceback and the
+corresponding unit tests.
 
 ## 2018-06-18
 
