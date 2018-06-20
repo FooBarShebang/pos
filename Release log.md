@@ -1,10 +1,10 @@
 # pos Library Release Log
 
-## 2018-06-19
+## 2018-06-20
 
 Finished core functionality design document.
 Started implementation - implemented module utils.traceback and the
-corresponding unit tests.
+corresponding unit tests. Made documentation.
 
 ## 2018-06-18
 

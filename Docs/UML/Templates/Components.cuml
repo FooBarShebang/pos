@@ -16,6 +16,10 @@ of the created element.
 
 !define class(x, y) component "x" as y <<class>>
 
+!define function(x) component "x" <<function>>
+
+!define function(x, y) component "x" as y <<function>>
+
 !define file(x) component "x" <<file>>
 
 !define file(x, y) component "x" as y <<file>>

@@ -1,0 +1,15 @@
+!define UTILS
+
+!ifndef COMPONENTS
+!include ../Templates/Components.cuml
+!endif
+
+package(utils) {
+    module(traceback) {
+        class(StackTraceback)
+        
+        class(ExceptionTraceback)
+        
+        StackTraceback <|- ExceptionTraceback
+    }
+}

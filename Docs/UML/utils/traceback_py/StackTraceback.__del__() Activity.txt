@@ -1,0 +1,27 @@
+@startuml
+
+title Activity Diagram of the Method utils.traceback.StackTraceback._ _del_ _()
+
+start
+
+if (traceback is stored?) then (True)
+    if (in the try...except) then (no exceptions)
+        while (for each frame in the traceback)
+            while (for each element in the frame record)
+                :delete object referenced by that element;
+            end while
+        end while
+        
+        :delete object referenced by <b>self._tblstTraceback</b> attribute;
+        
+        :store <b>None</b> in the <b>self._tblstTraceback</b> attribute;
+    else (exception raised)
+        :delete object referenced by <b>self._tblstTraceback</b> attribute;
+        
+        :store <b>None</b> in the <b>self._tblstTraceback</b> attribute;
+    endif
+endif
+
+stop
+
+@enduml

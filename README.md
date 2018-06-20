@@ -47,3 +47,10 @@ Besides, I have some personal grudges with these implementations and my own wish
   - use any data type, including the user defined classes without necessity to register them somehow
   - be sure that the scheme works as expected even if the attributes resolution scheme is altered (for the data encapsulation)
   - seamlessly integrate the functionality into the unified framework / eco-system, including the exceptions convention
+
+## Structure
+
+* package **utils**
+  - module **traceback**
+   * class StackTraceback
+   * class ExceptionTraceback

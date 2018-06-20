@@ -1,0 +1,15 @@
+@startuml
+
+title Components Diagram of the Library pos
+
+!ifndef COMPONENTS
+!include ./Templates/Components.cuml
+!endif
+
+library(pos) {
+    !ifndef UTILS
+    !include ./utils/utils_components.iuml
+    !endif
+}
+
+@enduml

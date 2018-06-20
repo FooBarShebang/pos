@@ -40,7 +40,7 @@ class StackTraceback(object):
     
     #class data attributes
     
-    ConsoleWidth = 72
+    ConsoleWidth = 80
     
     ContextLenght = 3
     
@@ -86,6 +86,7 @@ class StackTraceback(object):
                 self._tblstTraceback = tblstTemp[ : -(iSkip + 1)]
             else:
                 self._tblstTraceback = tblstTemp[ : - 1]
+            del tblstTemp
         except:
             self._tblstTraceback = None
     
@@ -231,7 +232,7 @@ class ExceptionTraceback(StackTraceback):
     
     #class data attributes - in order to decouple from the super class values
     
-    ConsoleWidth = 72
+    ConsoleWidth = 80
     
     ContextLenght = 3
     
@@ -278,5 +279,6 @@ class ExceptionTraceback(StackTraceback):
                 self._tblstTraceback = tblstTemp[ : -iSkip]
             else:
                 self._tblstTraceback = tblstTemp
+            del tblstTemp
         except:
             self._tblstTraceback = None

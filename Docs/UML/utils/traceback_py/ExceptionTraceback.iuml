@@ -1,0 +1,19 @@
+!define UTILS_TRACEBACK_EXCEPTIONTRACEBACK
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+class ExceptionTraceback {
+    ___
+    ..special methods..
+    + _ _init_ _() : /int, int, int/ -> None
+    ___
+    <b>NB</b> if the desired number of the source
+    code lines per frame and / or their maximum
+    allowed width are not passed as the arguments
+    into the initialization method, or their values
+    are unacceptable, the default values of 3 and 80
+    respectively are used, which are stored as the
+    class data attributes of the same name
+}

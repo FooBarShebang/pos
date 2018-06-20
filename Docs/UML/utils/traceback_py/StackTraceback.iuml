@@ -1,0 +1,25 @@
+!define UTILS_TRACEBACK_STACKTRACEBACK
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+class StackTraceback {
+    + ConsoleWidth : int
+    + ContextLength : int
+    ..read-only properties..
+    # {field} CallChain : list(str)
+    # Info : str
+    ___
+    ..special methods..
+    + _ _init_ _() : /int, int, int/ -> None
+    + _ _del_ _() : None -> None
+    ___
+    <b>NB</b> if the desired number of the source
+    code lines per frame and / or their maximum
+    allowed width are not passed as the arguments
+    into the initialization method, or their values
+    are unacceptable, the default values of 3 and 80
+    respectively are used, which are stored as the
+    class data attributes of the same name
+}
