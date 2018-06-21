@@ -1,0 +1,11 @@
+!define EXCEPTIONS_CUSTOMERROR
+
+!ifndef CLASSES
+!include ../Templates/Classes.cuml
+!endif
+
+class CustomError {
+    __
+    ..special methods..
+    + static_method(__subclasshook__) : type A -> bool
+}

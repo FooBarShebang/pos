@@ -1,8 +1,8 @@
 #usr/bin/python
 """
-Module pos.tests.utility.traceback_ut
+Module pos.tests.utils.traceback_ut
 
-Implements unit testing of the module pos.utility.traceback.
+Implements unit testing of the module pos.utils.traceback.
 """
 
 __version__ = "0.0.1.0"

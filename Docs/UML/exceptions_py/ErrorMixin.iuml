@@ -1,0 +1,13 @@
+!define EXCEPTIONS_ERRORMIXIN
+
+!ifndef CLASSES
+!include ../Templates/Classes.cuml
+!endif
+
+class ErrorMixin <<MIXIN>> {
+    ..read-only properties..
+    # Traceback : pos.utils.traceback.ExceptionTraceback
+    # {field} CallChain : list(str)
+    # Info : str
+    __
+}

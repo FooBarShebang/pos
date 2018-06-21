@@ -1,6 +1,6 @@
 #usr/bin/python
 """
-Module pos.utility.traceback
+Module pos.utils.traceback
 
 Implements classes to obtain, store and analyze the stack and exception
 traceback:

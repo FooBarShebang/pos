@@ -1,5 +1,9 @@
 # pos Library Release Log
 
+## 2018-06-21
+
+Started implementation of the exceptions - real and virtual subclasses relation.
+
 ## 2018-06-20
 
 Finished core functionality design document.
