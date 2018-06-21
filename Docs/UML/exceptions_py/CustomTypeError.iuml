@@ -1,0 +1,11 @@
+!define EXCEPTIONS_CUSTOMTYPEERROR
+
+!ifndef CLASSES
+!include ../Templates/Classes.cuml
+!endif
+
+class CustomTypeError {
+    __
+    ..special methods..
+    + _ _init_ _() : type A, type type B/, pos.utils.traceback.ExceptionTraceback, int/ -> None
+}

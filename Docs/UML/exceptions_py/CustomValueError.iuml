@@ -1,0 +1,11 @@
+!define EXCEPTIONS_CUSTOMVALUEERROR
+
+!ifndef CLASSES
+!include ../Templates/Classes.cuml
+!endif
+
+class CustomValueError {
+    __
+    ..special methods..
+    + _ _init_ _() : type A, str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
+}

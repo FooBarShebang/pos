@@ -208,19 +208,19 @@ class Test_ExceptionTraceback(Test_StackTraceback):
         
         # second element must point to the outer() function
         self.assertEqual(lstCallChain[1],
-                '{}.outer'.format(__name__, self.__class__.__name__),
-                    'second element - {} not "__main__.outer"'.format(
-                                                            lstCallChain[1]))
+                '{}.outer'.format(__name__),
+                    'second element - {} not "{}.outer"'.format(
+                                                    lstCallChain[1], __name__))
         # third element must point to the middle() function
         self.assertEqual(lstCallChain[2],
-                '{}.middle'.format(__name__, self.__class__.__name__),
-                    'third element - {} not "__main__.middle"'.format(
-                                                            lstCallChain[2]))
+                '{}.middle'.format(__name__),
+                    'third element - {} not "{}.middle"'.format(
+                                                    lstCallChain[2], __name__))
         # last element must point to the inner() function
         self.assertEqual(lstCallChain[3],
-                '{}.inner'.format(__name__, self.__class__.__name__),
-                    'forth element - {} not "__main__.inner"'.format(
-                                                            lstCallChain[3]))
+                '{}.inner'.format(__name__),
+                    'forth element - {} not "{}.inner"'.format(
+                                                    lstCallChain[3], __name__))
         objTestNew = self.TestClass(iSkip = 2)
         lstCallChainNew = objTestNew.CallChain
         self.assertListEqual(lstCallChainNew, lstCallChain[:-2])

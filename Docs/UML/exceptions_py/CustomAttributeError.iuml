@@ -1,0 +1,11 @@
+!define EXCEPTIONS_CUSTOMATTRIBUTEERROR
+
+!ifndef CLASSES
+!include ../Templates/Classes.cuml
+!endif
+
+class CustomAttributeError {
+    __
+    ..special methods..
+    + _ _init_ _() : str, class A/, pos.utils.traceback.ExceptionTraceback, int/ -> None
+}

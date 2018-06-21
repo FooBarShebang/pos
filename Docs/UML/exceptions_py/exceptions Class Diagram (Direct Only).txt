@@ -90,24 +90,6 @@ CustomValueError <|-- DCArgumentValue
 
 CustomValueError <|-- DCReturnValue
 
-CustomError <|.. CustomAttributeError : virtual
-
-CustomError <|.. CustomTypeError : virtual
-
-CustomError <|.. CustomValueError : virtual
-
-DesignContractError <|.. DCArgumentType : virtual
-
-DesignContractError <|.. DCArgumentValue : virtual
-
-DesignContractError <|.. DCReturnType : virtual
-
-DesignContractError <|.. DCReturnValue : virtual
-
-DesignContractError <|.. NotInDCError : virtual
-
-ConstantAssignment <|.. ConstantAttributeAssignment : virtual
-
 ErrorMixin <|- CustomError
 
 ErrorMixin <|-- CustomAttributeError

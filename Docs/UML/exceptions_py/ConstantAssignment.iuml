@@ -1,12 +1,11 @@
-!define EXCEPTIONS_CUSTOMERROR
+!define EXCEPTIONS_CONSTANTASSIGNMENT
 
 !ifndef CLASSES
 !include ../Templates/Classes.cuml
 !endif
 
-class CustomError {
+class ConstantAssignment {
     __
     ..special methods..
-    + static_method(__subclasshook__) : type A -> bool
     + _ _init_ _() : str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
 }

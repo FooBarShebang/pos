@@ -1,12 +1,11 @@
-!define EXCEPTIONS_CUSTOMERROR
+!define EXCEPTIONS_NOTINDCERROR
 
 !ifndef CLASSES
 !include ../Templates/Classes.cuml
 !endif
 
-class CustomError {
+class NotInDCError {
     __
     ..special methods..
-    + static_method(__subclasshook__) : type A -> bool
     + _ _init_ _() : str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
 }
