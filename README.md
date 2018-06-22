@@ -52,5 +52,48 @@ Besides, I have some personal grudges with these implementations and my own wish
 
 * package **utils**
   - module **traceback**
-   * class StackTraceback
-   * class ExceptionTraceback
+    * class StackTraceback
+    * class ExceptionTraceback
+* module **exceptions**
+  - class ErrorMixin
+  - class CustomError
+  - class DesignContractError
+  - class ConstantAssignment
+  - class CustomAttributeError
+  - class ConstantAttributeAssignment
+  - class NotExistingAttribute
+  - class PrivateAttributeAccess
+  - class NotInDCError
+  - class CustomTypeError
+  - class DCArgumentType
+  - class DCReturnType
+  - class CustomValueError
+  - class DCArgumentValue
+  - class DCReturnValue
+
+## Functionality
+
+### Core
+
+#### Module exceptions
+
+Custom exceptions with the added functionality for the analysis of the exception traceback, which are integrated into the standard exceptions tree like branches originated from TypeError, ValueError, AttributeError, etc. Virtual subclass relations are also used in order to enable 'umbrella' catching of the custom exceptions closely related by their meaning / situations to be raised in but belonging to the different branches.
+
+These exceptions can be raised with the optional arguments, which allow substitution of the actual traceback of that particular exception by the traceback of another exception (handy if raised as a part of handling of another one) as well as 'hiding' of the specified number of the innermost call frames in the traceback.
+
+Apart from the standard exceptions' arguments **message** and **args** these custom exceptions provide read-only properties **CallChain** and **Info**, which can be used for the analysis of the traceback of a caught exception. The first property returns a list of strings - the fully qualified names of the callers, whereas the second property returns a single string containing multiple lines ('\n' separated) human-readable representation of the traceback frames records.
+
+### Additional
+
+### Utilities - package utils
+
+#### Module traceback
+
+Provides two classes - **StackTraceback** and **ExceptionTraceback** which are useful for the analysis of the the call stack and of the exception traceback. In fact, the added functionality of the custom exceptions is based on the class **ExceptionTraceback**. Both classes have identical API - read-only properties **CallChain** and **Info**, which can be used for the analysis of the traceback of a caught exception. The first property returns a list of strings - the fully qualified names of the callers, whereas the second property returns a single string containing multiple lines ('\n' separated) human-readable representation of the traceback frames records.
+
+The **StackTraceback** provides the traceback in the inverse order with respect to **inspect.stack**() call - the outermost (the first) call is the first element, whereas the innermost (last) call frame is the last element. The traceback starts at the top level of the interpreter's loop (as module '__main__') and ends in the frame where this class has been instantiated.
+
+The **ExceptionTraceback** provides the traceback in the same order as **inspect.trace**() call - the first element is the frame where an exception is being handled, the last element - the frame, where it has been raised.
+
+With the both classes a specified number of the last elements can be 'hidden' / removed from the traceback.
+

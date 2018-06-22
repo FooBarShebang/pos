@@ -53,6 +53,27 @@ salt
         ++++ <&script> pa004_traceback_test015.py
         ++++ <&document> PA004 Traceback of Exceptions.odt
         ++ <&folder> UML
+        +++ <&folder> exceptions_py
+        ++++ <&code> ConstantAssignment.iuml
+        ++++ <&code> CustmAttributeError.iuml
+        ++++ <&code> CustomError.iuml
+        ++++ <&image> Custom Exception Instantiation.png
+        ++++ <&code> Custom Exception Instantiation.txt
+        ++++ <&code> CustomTypeError.iuml
+        ++++ <&code> CustomValueError.iuml
+        ++++ <&image> ErrorMixin.__del__() Activity.png
+        ++++ <&code> ErrorMixin.__del__() Activity.txt
+        ++++ <&code> ErrorMixin.iuml
+        ++++ <&image> ErrorMixin.presetTraceback() Activity.png
+        ++++ <&code> ErrorMixin.presetTraceback() Activity.txt
+        ++++ <&image> ErrorMixin.Traceback Activity.png
+        ++++ <&code> ErrorMixin.Traceback Activity.txt
+        ++++ <&code> exceptions_Components.iuml
+        ++++ <&image> exceptions Class Diagram.png
+        ++++ <&code> exceptions Class Diagram.txt
+        ++++ <&image> exceptions Class Diagram (Direct Only).png
+        ++++ <&code> exceptions Class Diagram (Direct Only).txt
+        ++++ <&code> NotInDCError.iuml
         +++ <&folder> Miscellaneous
         ++++ <&image> Custom Exceptions tree.png
         ++++ <&code> Custom Exceptions tree.txt
@@ -92,11 +113,13 @@ salt
         +++ <&script> traceback_ut.py
         +++ <&script> utils_all_ut.py
         ++ <&script> _ _init_ _.py
+        ++ <&script> exceptions_ut.py
         ++ <&script> pos_all_ut.py
         + <&folder> utils
         ++ <&script> _ _init_ _.py
         ++ <&script> traceback.py
         + <&script> _ _init_ _.py
+        + <&script> exceptions.py
         + <&info> README.md
         + <&info> Release log.md
     }

@@ -1,5 +1,9 @@
 # pos Library Release Log
 
+## 2018-06-22
+
+Finished implementation and testing of the custom exceptions with traceback analysis functionality.
+
 ## 2018-06-21
 
 Started implementation of the exceptions - real and virtual subclasses relation.

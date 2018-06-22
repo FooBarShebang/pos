@@ -1,0 +1,17 @@
+!define EXCEPTIONS_COMPONENTS
+
+!ifndef COMPONENTS
+!include ../Templates/Components.cuml
+!endif
+
+module(exceptions) {
+    class(ErrorMixin)
+    
+    class(CustomError)
+    
+    class(SpecificCustomExceptions)
+    
+    ErrorMixin <|-- CustomError
+    
+    CustomError <|-left- SpecificCustomExceptions
+}

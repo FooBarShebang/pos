@@ -48,7 +48,7 @@ mix-in class ErrorMixin.
 
 __version__ = "0.0.1.0"
 __date__ = "21-06-2018"
-__status__ = "Development"
+__status__ = "Production"
 
 #imports
 

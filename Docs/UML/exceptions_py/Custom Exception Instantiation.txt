@@ -1,0 +1,21 @@
+@startuml
+
+title Activity Diagram of Custom Exception (in general) Initialization
+
+start
+
+:<b>Args</b> - mandatory positional arguments required by the _ _init_ _() method of the exception
+<b>Traceback</b> - optional / keyword - replacement traceback object (as pos.utils.traceback.ExceptionTraceback class)
+<b>SkipFrames</b> - optional / keyword, non-negative integer - number of the innermost frames to hide in the traceback<
+
+:form <b>Message</b> of the exception from the passed <b>Args</b> arguments;
+
+:call _ _init_ _() method of the super class (built-in exception) with <b>Message</b> as parameter;
+
+:store <b>Args</b> arguments values in the tuple instance attribute <b>args</b> ;
+
+:call <b>presetTraceback</b> method with the received values of <b>Traceback</b> and <b>SkipFrames</b> arguments (defaults are None);
+
+stop
+
+@enduml

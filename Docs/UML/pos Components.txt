@@ -10,6 +10,32 @@ library(pos) {
     !ifndef UTILS
     !include ./utils/utils_components.iuml
     !endif
+    
+    !ifndef EXCEPTIONS_COMPONENTS
+    !include ./exceptions_py/exceptions_Components.iuml
+    !endif
+    
+    ExceptionTraceback --o ErrorMixin : gerenerates
 }
+
+library(builtins) {
+        module(inspect, inspect_b) {
+            function(stack, stack_b)
+            
+            function(trace, trace_b)
+            
+            stack_b -[hidden]- trace_b
+        }
+        
+        class(StandardError)
+        
+        trace_b -[hidden]- StandardError
+    }
+
+StackTraceback -left-> stack_b : uses
+
+ExceptionTraceback -left-> trace_b : uses
+
+StandardError <|-- CustomError
 
 @enduml

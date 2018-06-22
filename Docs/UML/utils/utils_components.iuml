@@ -10,6 +10,6 @@ package(utils) {
         
         class(ExceptionTraceback)
         
-        StackTraceback <|- ExceptionTraceback
+        StackTraceback <|-- ExceptionTraceback
     }
 }

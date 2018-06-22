@@ -1,0 +1,21 @@
+@startuml
+
+title Activity Diagram of the Property exceptions.ErrorMixin.Traceback
+
+start
+
+if (does not have attribute <b>_traceback</b> OR it does not reference an instance of pos.utils.traceback.ExceptionTracenback?) then (True)
+    if (does not have attribute <b>_skip</b> OR it is None?) then (True)
+        :instantiate ExceptionTracenback() without arguments;
+    else (False)
+        :instantiate ExceptionTracenback() with <b>self._skip</b> as the argument;
+    endif
+    
+    :store reference to the created object in <b>self._traceback</b> attribute;
+endif 
+
+:return <b>self._traceback</b> >
+
+stop
+
+@enduml

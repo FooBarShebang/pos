@@ -10,4 +10,8 @@ class ErrorMixin <<MIXIN>> {
     # {field} CallChain : list(str)
     # Info : str
     __
+    ..special methods..
+    + _ _del_ _() : None -> None
+    ..public methods..
+    + presetTraceback() : /pos.utils.traceback.ExceptionTraceback, int/ -> None
 }
