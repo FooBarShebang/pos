@@ -56,13 +56,15 @@ salt
         +++ <&folder> exceptions_py
         ++++ <&code> ConstantAssignment.iuml
         ++++ <&code> CustmAttributeError.iuml
+        ++++ <&image>CustomError._ _subclasshook_ _() Activity.png
+        ++++ <&code>CustomError._ _subclasshook_ _() Activity.txt
         ++++ <&code> CustomError.iuml
         ++++ <&image> Custom Exception Instantiation.png
         ++++ <&code> Custom Exception Instantiation.txt
         ++++ <&code> CustomTypeError.iuml
         ++++ <&code> CustomValueError.iuml
-        ++++ <&image> ErrorMixin.__del__() Activity.png
-        ++++ <&code> ErrorMixin.__del__() Activity.txt
+        ++++ <&image> ErrorMixin._ _del_ _() Activity.png
+        ++++ <&code> ErrorMixin._ _del_ _() Activity.txt
         ++++ <&code> ErrorMixin.iuml
         ++++ <&image> ErrorMixin.presetTraceback() Activity.png
         ++++ <&code> ErrorMixin.presetTraceback() Activity.txt
@@ -107,6 +109,7 @@ salt
         +++ <&code> pos File Structure.txt
         ++ <&folder> User Documentation
         +++ <&document> UD001 Module pos.utils.traceback Reference.odt
+        +++ <&document> UD002 Module pos.exceptions Reference.odt
         + <&folder> Tests
         ++ <&folder> utils
         +++ <&script> _ _init_ _.py

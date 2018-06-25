@@ -248,7 +248,7 @@ class CustomError(StandardError, ErrorMixin):
     def __subclasshook__(cls, clsOther):
         """
         Special class method to hook into the 'IS A' relation check upon which
-        the built-in functions issubclass() and isinstance() relies. Introduces
+        the built-in functions issubclass() and isinstance() rely. Introduces
         partial 'HAS A' (composition over inheritance / duck typing) resolution.
         
         A class will be considered being a sub-class of this one if:
@@ -265,7 +265,7 @@ class CustomError(StandardError, ErrorMixin):
         applicable, instead the standard 'IS A' check is applied.
         
         Signature:
-            class A -> bool
+            class A -> bool OR NotImplemented
         
         Version 0.0.1.0
         """
@@ -644,7 +644,8 @@ class CustomTypeError(TypeError, ErrorMixin):
         call frames.
         
         Signature:
-            str, type A/, pos.utils.traceback.ExceptionTraceback, int/ -> None
+            type A, type type B/, pos.utils.traceback.ExceptionTraceback, int/
+                -> None
         
         Input:
             gValue - mandatory, the 'offending' value, will be used to construct
@@ -764,7 +765,7 @@ class CustomValueError(ValueError, ErrorMixin):
         call frames.
         
         Signature:
-            str, type A/, pos.utils.traceback.ExceptionTraceback, int/ -> None
+            type A, str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
         
         Input:
             gValue - mandatory, the 'offending' value, will be used to construct

@@ -1,5 +1,9 @@
 # pos Library Release Log
 
+## 2018-06-25
+
+Finished documentation on the exceptions module.
+
 ## 2018-06-22
 
 Finished implementation and testing of the custom exceptions with traceback analysis functionality.

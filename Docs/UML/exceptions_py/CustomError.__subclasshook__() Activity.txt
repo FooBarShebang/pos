@@ -1,0 +1,23 @@
+@startuml
+
+title Activity Diagram of the Class Method exceptions.CustomError._ _subclasshook_ _()
+
+start
+
+:<b>OtherClass</b> - reference class (as type) to be compared with<
+
+if (own class is <b>CustomError</b>?) then (True)
+    if (<b>OtherClass</b> is subclass\nof <b>StandardError</b> AND it\nhas attributes <b>Traceback</b>,\n<b>CallChain</b> and <b>Info</b>?) then (True)
+        :return True>
+    elseif (<b>OtherClass</b> is not subclass\nof <b>StandardError</b>?) then (True)
+        :return False>
+    else (False)
+        :return <b>NotImplemented</b>\n - use standard resolution scheme>
+    endif
+else (False)
+    :return <b>NotImplemented</b>\n - use standard resolution scheme>
+endif
+
+stop
+
+@enduml
