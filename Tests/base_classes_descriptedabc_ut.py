@@ -1,0 +1,674 @@
+#usr/bin/python
+"""
+Module pos.tests.base_classes_descriptedabc_ut
+
+Implements unit testing of the module base_classes concerning the class
+DescriptedABC.
+"""
+
+__version__ = "0.0.1.0"
+__date__ = "03-07-2018"
+__status__ = "Testing"
+
+#imports
+
+#+ standard libraries
+
+import sys
+import unittest
+
+#+ my libraries
+
+import pos.base_classes as testmodule
+
+#classes
+
+#+ helper classes
+
+class IntegerDescriptor(object):
+    """
+    Imitates an integer number
+    """
+    
+    def __init__(self, gValue):
+        """
+        Stores as integer the integer part of the the passed numeric argument.
+        """
+        self.Value = int(gValue)
+    
+    def __get__(self, objInstance, clsOwner):
+        """
+        Simply returns the stored value.
+        """
+        return self.Value
+    
+    def __set__(self, objInstance, gValue):
+        """
+        Converts the second (numeric) argument into an integer and stores it.
+        """
+        self.Value = int(gValue)
+
+class FloatDescriptor(object):
+    """
+    Imitates a floating point number
+    """
+    
+    def __init__(self, gValue):
+        """
+        Stores as floating point number the passed numeric argument.
+        """
+        self.Value = float(gValue)
+    
+    def __get__(self, objInstance, clsOwner):
+        """
+        Simply returns the stored value.
+        """
+        return self.Value
+    
+    def __set__(self, objInstance, gValue):
+        """
+        Converts the second (numeric) argument into a float type and stores it.
+        """
+        self.Value = float(gValue)
+
+class ConstIntegerDescriptor(IntegerDescriptor):
+    """
+    Imitates a constant integer number
+    """
+    
+    def __set__(self, objInstance, gValue):
+        """
+        Raises AttributeError upon attempted assignment.
+        """
+        raise AttributeError
+    
+    def __delete__(self, objInstance):
+        """
+        Raises AttributeError upon attempted deletion.
+        """
+        raise AttributeError
+
+class ConstFloatDescriptor(FloatDescriptor):
+    """
+    Imitates a constant floating point number
+    """
+    
+    def __set__(self, objInstance, gValue):
+        """
+        Raises AttributeError upon attempted assignment.
+        """
+        raise AttributeError
+    
+    def __delete__(self, objInstance):
+        """
+        Raises AttributeError upon attempted deletion.
+        """
+        raise AttributeError
+
+class ClassTest1(testmodule.DescriptedABC):
+    """
+    Abstract sub-class of pos.base_classes.DescriptedABC. Defines class fields
+    with the descriptors.
+    """
+    
+    #class fields
+    
+    ClassInt = IntegerDescriptor(2.5)
+    
+    ClassConstFloat = ConstFloatDescriptor(1)
+    
+    ClassSimpleInt = 2
+
+class ClassTest2(ClassTest1):
+    """
+    Sub-class of ClassTest1 -|> pos.base_classes.DescriptedABC. No longer
+    abstract. Defines instance attributes as data descriptors.
+    """
+    
+    def onInit(self, *args, **kwargs):
+        """
+        Overrides the abstract method of the super class. Creates the instance
+        attributes.
+        """
+        self.InstFloat = FloatDescriptor(3)
+        
+        self.InstConstInt = ConstIntegerDescriptor(4.0)
+        
+        self.SimpleInt = 5
+
+class ClassTest3(ClassTest2):
+    """
+    Sub-class of ClassTest2 -|> ClassTest1 -|> pos.base_classes.DescriptedABC.
+    No longer abstract. Defines instance attributes as data descriptors by
+    extending the super class onInit() method, but changes its signature.
+    """
+    
+    def onInit(self):
+        """
+        Simply calls the same method of the super class. However, the signature
+        is changed: no positional or keyword arguments are allowed to be passed
+        into the initialization method any longer.
+        """
+        super(ClassTest3, self).onInit()
+
+#+ test cases
+
+class Test_DescriptedABC(unittest.TestCase):
+    """
+    Test cases for the class pos.base_classes.DescriptedABC
+    """
+    
+    @classmethod
+    def setUpClass(cls):
+        """
+        Preparation for the test cases, done only once.
+        """
+        cls.TestClass = testmodule.DescriptedABC
+    
+    def test_IsAbstract(self):
+        """
+        Checks that the test class cannot be instantiated, i.e. it is abstract.
+        """
+        with self.assertRaises(TypeError):
+            self.TestClass()
+
+class Test_ClassTest1(Test_DescriptedABC):
+    """
+    Test cases for the class ClassTest1 derived from the
+    pos.base_classes.DescriptedABC - must remain abstract, but inherit the
+    support for the descriptors for the class fields.
+    """
+    
+    @classmethod
+    def setUpClass(cls):
+        """
+        Preparation for the test cases, done only once.
+        """
+        cls.TestClass = ClassTest1
+        cls.SecondClass = ClassTest2
+        cls.ClassFields = [['ClassInt', int, IntegerDescriptor],
+                           ['ClassConstFloat', float, ConstFloatDescriptor],
+                           ['ClassSimpleInt', int, int]]
+        cls.ConstantClassFields = ['ClassConstFloat']
+    
+    def test_HasClassFields(self):
+        """
+        Checks that all expected class fields are present in the class.
+        """
+        for strAttr, _, _ in self.ClassFields:
+            strError = 'Missing attribute {} in class {}'.format(strAttr,
+                                                    self.TestClass.__name__)
+            self.assertTrue(hasattr(self.TestClass, strAttr), strError)
+        strAttr = 'foo_bar_shebang'
+        strError = 'Attribute {} should not be in class {}'.format(strAttr,
+                                                    self.TestClass.__name__)
+        self.assertFalse(hasattr(self.TestClass, strAttr), strError)
+    
+    def test_TypeClassFields(self):
+        """
+        Checks that all expected class fields in the class are returned as the
+        expected types (via descriptors protocol).
+        """
+        for strAttr, typType, _ in self.ClassFields:
+            strError = ' '.join(['Type of attribute', strAttr, 'in class',
+                                self.TestClass.__name__, 'is',
+                                str(type(getattr(self.TestClass, strAttr))),
+                                'instead of', str(typType)])
+            self.assertIsInstance(getattr(self.TestClass, strAttr), typType,
+                                                                    strError)
+    
+    def test_InnerTypeClassFields(self):
+        """
+        Checks that all expected class fields in the class are internally stored
+        as references to the instances of the specific classes.
+        """
+        for strAttr, _, typType in self.ClassFields:
+            objData = None
+            for clsParent in self.TestClass.__mro__:
+                if strAttr in clsParent.__dict__:
+                    objData = clsParent.__dict__[strAttr]
+                    break
+            strError = ' '.join(['Inner type of attribute', strAttr, 'in class',
+                                self.TestClass.__name__, 'is',
+                                str(type(objData)), 'instead of', str(typType)])
+            self.assertIsInstance(objData, typType, strError)
+    
+    def test_DeleteClassFields(self):
+        """
+        Checks that the class fields with the descriptors can be deleted unless
+        they raise an AttributeError in the __set__() descriptor or they are
+        not defined in this class but are inherited from its super class. The
+        AttributeError should also be raised if a non-existent class attribute
+        is to be deleted.
+        """
+        for strAttr, _, typType in self.ClassFields:
+            if strAttr in self.TestClass.__dict__: #must be directly in
+            #the class, not inherited!
+                if not (strAttr in self.ConstantClassFields):
+                    gOldValue = getattr(self.TestClass, strAttr)
+                    delattr(self.TestClass, strAttr)
+                    strError = ' '.join(['Attribute', strAttr, 'of class',
+                                     self.TestClass.__name__, 'is not deleted'])
+                    self.assertFalse(hasattr(self.TestClass, strAttr), strError)
+                    #restore the class field
+                    setattr(self.TestClass, strAttr, typType(gOldValue))
+                    strError = ' '.join(['Attribute', strAttr, 'of class',
+                                     self.TestClass.__name__, 'is not set',
+                                     'to the proper value'])
+                    self.assertTrue(hasattr(self.TestClass, strAttr), strError)
+                    objData = self.TestClass.__dict__[strAttr]
+                    strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in class', self.TestClass.__name__,
+                                         'is', str(type(objData)), 'instead of',
+                                         str(typType)])
+                    self.assertIsInstance(objData, typType, strError)
+                else: #go through __delete__() descriptor
+                    with self.assertRaises(AttributeError):
+                        delattr(self.TestClass, strAttr)
+            else: #not in the class itself, inherited!
+                with self.assertRaises(AttributeError):
+                    delattr(self.TestClass, strAttr)
+        with self.assertRaises(AttributeError): #non-existent attribute
+            delattr(self.TestClass, 'foo_bar_shebang')
+    
+    def test_SetClassFields(self):
+        """
+        Checks that the class fields with the descriptors can be set unless
+        they raise an AttributeError in the __set__() descriptor
+        """
+        for strAttr, _, typType in self.ClassFields:
+            gOldValue = getattr(self.TestClass, strAttr)
+            gNewValue = gOldValue + 1
+            if not (strAttr in self.ConstantClassFields):
+                strErrorValue = ' '.join(['Attribute', strAttr, 'of class',
+                                     self.TestClass.__name__, 'is not set',
+                                     'to the proper value'])
+                setattr(self.TestClass, strAttr, gNewValue)
+                self.assertEqual(getattr(self.TestClass, strAttr), gNewValue,
+                                    strErrorValue)
+                strError = ' '.join(['Attribute', strAttr, 'is a shared',
+                                     'state between super and subclass'])
+                if issubclass(self.TestClass, self.SecondClass):
+                    self.assertNotEqual(getattr(self.TestClass, strAttr),
+                            getattr(self.SecondClass, strAttr), strError)
+                    #change of the class field of the subclass should not affect
+                    #the same field of the super class - otherwise, the behavior
+                    #is not defined - depends on the events sequence
+                objData = None
+                for clsParent in self.TestClass.__mro__:
+                    if strAttr in clsParent.__dict__:
+                        objData = clsParent.__dict__[strAttr]
+                        break
+                strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in class', self.TestClass.__name__,
+                                         'is', str(type(objData)), 'instead of',
+                                         str(typType)])
+                self.assertIsInstance(objData, typType, strError)
+                #change back
+                strErrorValue = ' '.join(['Attribute', strAttr, 'of class',
+                                     self.TestClass.__name__, 'is not set',
+                                     'to the proper value'])
+                setattr(self.TestClass, strAttr, gOldValue)
+                self.assertEqual(getattr(self.TestClass, strAttr), gOldValue,
+                                    strErrorValue)
+                objData = None
+                for clsParent in self.TestClass.__mro__:
+                    if strAttr in clsParent.__dict__:
+                        objData = clsParent.__dict__[strAttr]
+                        break
+                strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in class', self.TestClass.__name__,
+                                         'is', str(type(objData)), 'instead of',
+                                         str(typType)])
+                self.assertIsInstance(objData, typType, strError)
+            else:
+                with self.assertRaises(AttributeError):
+                    setattr(self.TestClass, strAttr, gNewValue)
+    
+    def test_GetClassFields(self):
+        """
+        Checks that all class fields are accessible from the class without
+        instantiation.
+        """
+        for strAttr, _, _ in self.ClassFields:
+            getattr(self.TestClass, strAttr) #must be ok
+        with self.assertRaises(AttributeError): #non-existent attribute
+            getattr(self.TestClass, 'foo_bar_shebang')
+
+class Test_ClassTest2(Test_ClassTest1):
+    """
+    Test cases for the class ClassTest2 derived from the ClassTest1 derived from
+    pos.base_classes.DescriptedABC - no longer abstract, but inherit the
+    support for the descriptors for the class fields.
+    """
+    
+    @classmethod
+    def setUpClass(cls):
+        """
+        Preparation for the test cases, done only once.
+        """
+        cls.TestClass = ClassTest2
+        cls.SecondClass = ClassTest1
+        cls.ClassFields = [['ClassInt', int, IntegerDescriptor],
+                           ['ClassConstFloat', float, ConstFloatDescriptor],
+                           ['ClassSimpleInt', int, int]]
+        cls.ConstantClassFields = ['ClassConstFloat']
+        cls.InstanceFields = [['InstFloat', float, FloatDescriptor],
+                              ['InstConstInt', int, ConstIntegerDescriptor],
+                              ['SimpleInt', int, int]]
+        cls.ConstantInstanceFields = ['InstConstInt']
+    
+    def test_IsAbstract(self):
+        """
+        Checks that the test class can be instantiated, i.e. it is not abstract.
+        """
+        objTest = self.TestClass()
+        del objTest
+    
+    def test_HasInstanceFields(self):
+        """
+        Checks that all expected class fields are present in the class.
+        """
+        objTest = self.TestClass()
+        for strAttr, _, _ in self.ClassFields:
+            strError = 'Missing attribute {} in instance of class {}'.format(
+                                            strAttr, self.TestClass.__name__)
+            self.assertTrue(hasattr(objTest, strAttr), strError)
+        for strAttr, _, _ in self.InstanceFields:
+            strError = 'Missing attribute {} in instance of class {}'.format(
+                                            strAttr, self.TestClass.__name__)
+            self.assertTrue(hasattr(objTest, strAttr), strError)
+        strAttr = 'foo_bar_shebang'
+        strError = '{} should not be in instance of class {}'.format(strAttr,
+                                                    self.TestClass.__name__)
+        self.assertFalse(hasattr(objTest, strAttr), strError)
+        del objTest
+    
+    def test_TypeInstanceFields(self):
+        """
+        Checks that all expected class and instance fields in the class'
+        instance are returned as the expected types (via descriptors protocol).
+        """
+        objTest = self.TestClass()
+        for strAttr, typType, _ in self.ClassFields:
+            strError = ' '.join(['Type of attribute', strAttr, 'in instance of',
+                                'class', self.TestClass.__name__, 'is',
+                                str(type(getattr(objTest, strAttr))),
+                                'instead of', str(typType)])
+            self.assertIsInstance(getattr(objTest, strAttr), typType, strError)
+        for strAttr, typType, _ in self.InstanceFields:
+            strError = ' '.join(['Type of attribute', strAttr, 'in instance of',
+                                'class', self.TestClass.__name__, 'is',
+                                str(type(getattr(objTest, strAttr))),
+                                'instead of', str(typType)])
+            self.assertIsInstance(getattr(objTest, strAttr), typType, strError)
+        del objTest
+    
+    def test_InnerTypeInstanceFields(self):
+        """
+        Checks that all expected instance fields in the class are internally
+        stored as references to the instances of the specific classes.
+        """
+        objTest = self.TestClass()
+        for strAttr, _, typType in self.InstanceFields:
+            objData = objTest.__dict__[strAttr]
+            strError = ' '.join(['Inner type of attribute', strAttr, 'in'
+                                 'instance of the class',
+                                 self.TestClass.__name__, 'is',
+                                str(type(objData)), 'instead of', str(typType)])
+            self.assertIsInstance(objData, typType, strError)
+        del objTest
+    
+    def test_SetInstanceFields(self):
+        """
+        Checks that the class and instance fields with the descriptors can be
+        set from an instance unless they raise an AttributeError in the
+        __set__() descriptor.
+        """
+        objTest = self.TestClass()
+        for strAttr, _, typType in self.ClassFields:
+            gOldValue = getattr(objTest, strAttr)
+            gNewValue = gOldValue + 1
+            if not (strAttr in self.ConstantClassFields):
+                strErrorValue = ' '.join(['Attribute', strAttr, 'of instance',
+                                          'of the class',
+                                          self.TestClass.__name__, 'is not set',
+                                          'to the proper value'])
+                setattr(objTest, strAttr, gNewValue)
+                self.assertEqual(getattr(objTest, strAttr), gNewValue,
+                                                                strErrorValue)
+                strError = ' '.join(['Attribute', strAttr, 'is not a shared',
+                                     'state'])
+                self.assertEqual(getattr(objTest, strAttr),
+                            getattr(self.TestClass, strAttr), strError)
+                strError = ' '.join(['Attribute', strAttr, 'is a shared',
+                                     'state between super and subclass'])
+                if issubclass(self.TestClass, self.SecondClass):
+                    self.assertNotEqual(getattr(self.TestClass, strAttr),
+                            getattr(self.SecondClass, strAttr), strError)
+                    #change of the class field of the subclass should not affect
+                    #the same field of the super class - otherwise, the behavior
+                    #is not defined - depends on the events sequence
+                objData = None
+                for clsParent in self.TestClass.__mro__:
+                    if strAttr in clsParent.__dict__:
+                        objData = clsParent.__dict__[strAttr]
+                        break
+                strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in class', self.TestClass.__name__,
+                                         'is', str(type(objData)), 'instead of',
+                                         str(typType)])
+                self.assertIsInstance(objData, typType, strError)
+                #change back
+                strErrorValue = ' '.join(['Attribute', strAttr, 'of instance',
+                                          'of the class',
+                                          self.TestClass.__name__, 'is not set',
+                                          'to the proper value'])
+                setattr(objTest, strAttr, gOldValue)
+                self.assertEqual(getattr(self.TestClass, strAttr), gOldValue,
+                                    strErrorValue)
+                strError = ' '.join(['Attribute', strAttr, 'is not a shared',
+                                     'state'])
+                self.assertEqual(getattr(objTest, strAttr),
+                            getattr(self.TestClass, strAttr), strError)
+                objData = None
+                for clsParent in self.TestClass.__mro__:
+                    if strAttr in clsParent.__dict__:
+                        objData = clsParent.__dict__[strAttr]
+                        break
+                strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in class', self.TestClass.__name__,
+                                         'is', str(type(objData)), 'instead of',
+                                         str(typType)])
+                self.assertIsInstance(objData, typType, strError)
+            else:
+                with self.assertRaises(AttributeError):
+                    setattr(objTest, strAttr, gNewValue)
+        for strAttr, _, typType in self.InstanceFields:
+            gOldValue = getattr(objTest, strAttr)
+            gNewValue = gOldValue + 1
+            if not (strAttr in self.ConstantInstanceFields):
+                strErrorValue = ' '.join(['Attribute', strAttr, 'of instance',
+                                          'of the class',
+                                          self.TestClass.__name__, 'is not set',
+                                          'to the proper value'])
+                setattr(objTest, strAttr, gNewValue)
+                self.assertEqual(getattr(objTest, strAttr), gNewValue,
+                                                                strErrorValue)
+                objData = objTest.__dict__[strAttr]
+                strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in instance of class',
+                                         self.TestClass.__name__, 'is',
+                                         str(type(objData)), 'instead of',
+                                         str(typType)])
+                self.assertIsInstance(objData, typType, strError)
+                #change back
+                strErrorValue = ' '.join(['Attribute', strAttr, 'of instance',
+                                          'of the class',
+                                          self.TestClass.__name__, 'is not set',
+                                          'to the proper value'])
+                setattr(objTest, strAttr, gOldValue)
+                self.assertEqual(getattr(objTest, strAttr), gOldValue,
+                                                                strErrorValue)
+                objData = objTest.__dict__[strAttr]
+                strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in instance of class',
+                                         self.TestClass.__name__, 'is',
+                                         str(type(objData)), 'instead of',
+                                         str(typType)])
+                self.assertIsInstance(objData, typType, strError)
+            else:
+                with self.assertRaises(AttributeError):
+                    setattr(objTest, strAttr, gNewValue)
+        del objTest
+    
+    def test_DeleteInstanceFields(self):
+        """
+        Checks that the class and instance fields with the descriptors can be
+        deleted unless they raise an AttributeError in the __set__() descriptor
+        or they are not at all find in the instance, its class or super classes.
+        The AttributeError should also be raised if a non-existent class or
+        instance attribute is to be deleted.
+        """
+        objTest = self.TestClass()
+        for strAttr, _, typType in self.ClassFields:
+            if strAttr in self.TestClass.__dict__: #must be directly in
+            #the class, not inherited!
+                if not (strAttr in self.ConstantClassFields):
+                    gOldValue = getattr(objTest, strAttr)
+                    delattr(objTest, strAttr)
+                    strError = ' '.join(['Attribute', strAttr, 'of class',
+                                     self.TestClass.__name__, 'is not deleted'])
+                    self.assertFalse(hasattr(objTest, strAttr), strError)
+                    #restore the class field
+                    setattr(objTest.__class__, strAttr, typType(gOldValue))
+                    strError = ' '.join(['Attribute', strAttr, 'of class',
+                                     self.TestClass.__name__, 'is not set',
+                                     'to the proper value'])
+                    self.assertTrue(hasattr(objTest, strAttr), strError)
+                    strError = ' '.join(['Attribute', strAttr,
+                                         'is not a shared', 'state'])
+                    self.assertEqual(getattr(objTest, strAttr),
+                            getattr(self.TestClass, strAttr), strError)
+                    objData = self.TestClass.__dict__[strAttr]
+                    strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in class', self.TestClass.__name__,
+                                         'is', str(type(objData)), 'instead of',
+                                         str(typType)])
+                    self.assertIsInstance(objData, typType, strError)
+                else: #go through __delete__() descriptor
+                    with self.assertRaises(AttributeError):
+                        delattr(objTest, strAttr)
+            else: #not in the class itself, inherited!
+                with self.assertRaises(AttributeError):
+                    delattr(objTest, strAttr)
+        for strAttr, _, typType in self.InstanceFields:
+            if not (strAttr in self.ConstantInstanceFields):
+                gOldValue = getattr(objTest, strAttr)
+                delattr(objTest, strAttr)
+                strError = ' '.join(['Attribute', strAttr, 'of class',
+                                     self.TestClass.__name__, 'is not deleted'])
+                self.assertFalse(hasattr(objTest, strAttr), strError)
+                #restore the instance field
+                setattr(objTest, strAttr, typType(gOldValue))
+                strError = ' '.join(['Attribute', strAttr, 'of class',
+                                     self.TestClass.__name__, 'is not set',
+                                     'to the proper value'])
+                self.assertTrue(hasattr(objTest, strAttr), strError)
+                objData = objTest.__dict__[strAttr]
+                strError = ' '.join(['Inner type of attribute', strAttr,
+                                         'in class', self.TestClass.__name__,
+                                         'is', str(type(objData)), 'instead of',
+                                         str(typType)])
+                self.assertIsInstance(objData, typType, strError)
+            else: #go through __delete__() descriptor
+                with self.assertRaises(AttributeError):
+                    delattr(objTest, strAttr)
+        with self.assertRaises(AttributeError): #non-existent attribute
+            delattr(objTest, 'foo_bar_shebang')
+        del objTest
+    
+    def test_GetInstanceFields(self):
+        """
+        Checks that all required instance and class fields are accessible from
+        the class instance.
+        """
+        objTest = self.TestClass()
+        for strAttr, _, _ in self.ClassFields:
+            getattr(objTest, strAttr) #must be ok
+        for strAttr, _, _ in self.InstanceFields:
+            getattr(objTest, strAttr) #must be ok
+        with self.assertRaises(AttributeError): #non-existent attribute
+            getattr(objTest, 'foo_bar_shebang')
+        del objTest
+    
+    def test_init(self):
+        """
+        Checks that the class can be instantiated with any number of the
+        positional and / or keyword arguments, since the onInit() method accepts
+        any such combination.
+        """
+        #should be ok in all cases
+        objTest = self.TestClass()
+        del objTest
+        objTest = self.TestClass(1)
+        del objTest
+        objTest = self.TestClass(1, 2)
+        del objTest
+        objTest = self.TestClass(a = 1)
+        del objTest
+        objTest = self.TestClass(a = 1, b =2)
+        del objTest
+        objTest = self.TestClass(1, 2, a = 1, b =2)
+        del objTest
+
+class Test_ClassTest3(Test_ClassTest2):
+    """
+    Test cases for the class ClassTest3 -|> ClassTest2 -|>ClassTest1 -|>
+    pos.base_classes.DescriptedABC - no longer abstract, but inherit the
+    support for the descriptors for the class fields.
+    """
+    
+    @classmethod
+    def setUpClass(cls):
+        """
+        Preparation for the test cases, done only once.
+        """
+        cls.TestClass = ClassTest3
+        cls.SecondClass = ClassTest2
+        cls.ClassFields = [['ClassInt', int, IntegerDescriptor],
+                           ['ClassConstFloat', float, ConstFloatDescriptor],
+                           ['ClassSimpleInt', int, int]]
+        cls.ConstantClassFields = ['ClassConstFloat']
+        cls.InstanceFields = [['InstFloat', float, FloatDescriptor],
+                              ['InstConstInt', int, ConstIntegerDescriptor],
+                              ['SimpleInt', int, int]]
+        cls.ConstantInstanceFields = ['InstConstInt']
+    
+    def test_init(self):
+        """
+        Checks that the onInit() method is properly overridden - neither
+        positional nor keyword arguments are allowed. Therefore, the class can
+        be instantiated only without arguments.
+        """
+        objTest = self.TestClass() #should be ok
+        del objTest
+        with self.assertRaises(TypeError):
+            self.TestClass(1) #should be wrong
+        with self.assertRaises(TypeError):
+            self.TestClass(a = 1) #should be wrong
+
+#+ test suites
+
+TestSuite1 = unittest.TestLoader().loadTestsFromTestCase(Test_DescriptedABC)
+TestSuite2 = unittest.TestLoader().loadTestsFromTestCase(Test_ClassTest1)
+TestSuite3 = unittest.TestLoader().loadTestsFromTestCase(Test_ClassTest2)
+TestSuite4 = unittest.TestLoader().loadTestsFromTestCase(Test_ClassTest3)
+
+TestSuite = unittest.TestSuite()
+TestSuite.addTests([TestSuite1, TestSuite2, TestSuite3, TestSuite4])
+
+if __name__ == "__main__":
+    sys.stdout.write("Conducting pos.base_classes.DescriptedABC tests...\n")
+    sys.stdout.flush()
+    unittest.TextTestRunner(verbosity = 2).run(TestSuite)

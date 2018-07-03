@@ -5,8 +5,8 @@ Module pos.Tests.pos_all_ut
 Aggregation of the unit tests for all modules within pos library
 """
 
-__version__ = "0.0.1.1"
-__date__ = "21-06-2018"
+__version__ = "0.0.1.2"
+__date__ = "03-07-2018"
 __status__ = "Testing"
 
 #imports
@@ -20,12 +20,14 @@ import unittest
 
 import pos.Tests.utils.utils_all_ut as ut
 import pos.Tests.exceptions_ut as exceptions
+import pos.Tests.base_classes_descriptedabc_ut as descripted
 
 #classes
 
 #+ test suite
 
-TestSuite = unittest.TestSuite([ut.TestSuite, exceptions.TestSuite])
+TestSuite = unittest.TestSuite([ut.TestSuite, exceptions.TestSuite,
+                                descripted.TestSuite])
 
 if __name__ == "__main__":
     sys.stdout.write("Conducting pos library tests...\n")
