@@ -6,8 +6,8 @@ Implements unit testing of the module base_classes concerning the class
 DescriptedABC.
 """
 
-__version__ = "0.0.1.0"
-__date__ = "03-07-2018"
+__version__ = "0.0.1.1"
+__date__ = "05-07-2018"
 __status__ = "Testing"
 
 #imports
@@ -118,6 +118,78 @@ class ClassTest1(testmodule.DescriptedABC):
     ClassConstFloat = ConstFloatDescriptor(1)
     
     ClassSimpleInt = 2
+    
+    #properties
+    
+    @property
+    def RO_String(self):
+        """
+        Read only property, returns same string
+        """
+        return 'test_ro'
+    
+    @property
+    def RW_String(self):
+        """
+        Getter property, returns a string, which is stored in a 'private'
+        instance attribute '_string1'
+        """
+        return self._string1
+    
+    @RW_String.setter
+    def RW_String(self, strString):
+        """
+        Setter property, stores the passed string in the 'private' instance
+        attribute '_string1'
+        """
+        self._string1 = strString
+    
+    @property
+    def RWD_String(self):
+        """
+        Getter property, returns a string, which is stored in a 'private'
+        instance attribute '_string2'
+        """
+        return self._string2
+    
+    @RWD_String.setter
+    def RWD_String(self, strString):
+        """
+        Setter property, stores the passed string in the 'private' instance
+        attribute '_string2'
+        """
+        self._string2 = strString
+    
+    @RWD_String.deleter
+    def RWD_String(self):
+        """
+        Sets the 'private' instance attribute '_string2' to 'deleted' value.
+        """
+        self._string2 = 'deleted'
+    
+    #class / static methods
+    
+    @classmethod
+    def TestClassMethod(cls):
+        """
+        Simply returns a string
+        """
+        return 'test_class_method'
+    
+    @staticmethod
+    def TestStaticMethod():
+        """
+        Simply returns a string
+        """
+        return 'test_static_method'
+    
+    #instance methods
+    
+    def TestMethod(self):
+        """
+        Simply returns a string
+        """
+        return 'test_method'
 
 class ClassTest2(ClassTest1):
     """
@@ -131,10 +203,10 @@ class ClassTest2(ClassTest1):
         attributes.
         """
         self.InstFloat = FloatDescriptor(3)
-        
         self.InstConstInt = ConstIntegerDescriptor(4.0)
-        
         self.SimpleInt = 5
+        self._string1 = 'test_rw'
+        self._string2 = 'test_rwd'
 
 class ClassTest3(ClassTest2):
     """
@@ -190,6 +262,11 @@ class Test_ClassTest1(Test_DescriptedABC):
                            ['ClassConstFloat', float, ConstFloatDescriptor],
                            ['ClassSimpleInt', int, int]]
         cls.ConstantClassFields = ['ClassConstFloat']
+        cls.Getters = [['RO_String', 'test_ro', str, property],
+                        ['RW_String', 'test_rw', str, property],
+                        ['RWD_String', 'test_rwd', str, property]]
+        cls.Setters = ['RW_String', 'RWD_String']
+        cls.Deleters = ['RWD_String']
     
     def test_HasClassFields(self):
         """
@@ -334,6 +411,23 @@ class Test_ClassTest1(Test_DescriptedABC):
             getattr(self.TestClass, strAttr) #must be ok
         with self.assertRaises(AttributeError): #non-existent attribute
             getattr(self.TestClass, 'foo_bar_shebang')
+    
+    def test_HasProperties(self):
+        """
+        Checks that the test class defines the required properties
+        """
+        for strAttr, _, _, typType in self.Getters:
+            strError = 'Class {} has no attribute {}'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertTrue(hasattr(self.TestClass, strAttr), strError)
+            strError = 'Class {} has no property {}'.format(
+                                            self.TestClass.__name__, strAttr)
+            objData = None
+            for clsParent in self.TestClass.__mro__:
+                if strAttr in clsParent.__dict__:
+                    objData = clsParent.__dict__[strAttr]
+                    break
+            self.assertIsInstance(objData, typType, strError)
 
 class Test_ClassTest2(Test_ClassTest1):
     """
@@ -347,12 +441,9 @@ class Test_ClassTest2(Test_ClassTest1):
         """
         Preparation for the test cases, done only once.
         """
+        super(Test_ClassTest2, cls).setUpClass()
         cls.TestClass = ClassTest2
         cls.SecondClass = ClassTest1
-        cls.ClassFields = [['ClassInt', int, IntegerDescriptor],
-                           ['ClassConstFloat', float, ConstFloatDescriptor],
-                           ['ClassSimpleInt', int, int]]
-        cls.ConstantClassFields = ['ClassConstFloat']
         cls.InstanceFields = [['InstFloat', float, FloatDescriptor],
                               ['InstConstInt', int, ConstIntegerDescriptor],
                               ['SimpleInt', int, int]]
@@ -621,6 +712,96 @@ class Test_ClassTest2(Test_ClassTest1):
         del objTest
         objTest = self.TestClass(1, 2, a = 1, b =2)
         del objTest
+    
+    def test_HasProperties(self):
+        """
+        Checks that the test class defines the required properties, and they are
+        accessible for its instance.
+        """
+        super(Test_ClassTest2, self).test_HasProperties()
+        objTest = self.TestClass()
+        for strAttr, _, _, _ in self.Getters:
+            strError = 'Instance of class {} has no attribute {}'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertTrue(hasattr(objTest, strAttr), strError)
+        del objTest
+    
+    def test_GetProperties(self):
+        """
+        Checks that the properties are accessed as properties, i.e. return
+        strings of the expected values.
+        """
+        objTest = self.TestClass()
+        for strAttr, strValue, typType, _ in self.Getters:
+            strError = ' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong type'])
+            self.assertIsInstance(getattr(objTest, strAttr), typType, strError)
+            strError = ' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong value'])
+            self.assertEqual(getattr(objTest, strAttr), strValue, strError)
+        del objTest
+    
+    def test_SetProperties(self):
+        """
+        Checks that only the properties with the setter descriptor methods can
+        be assigned, but this assignment goes as expected.
+        """
+        objTest = self.TestClass()
+        for strAttr, strValue, typType, _ in self.Getters:
+            if strAttr in self.Setters:
+                setattr(objTest, strAttr, 'foo-bar')
+                strError =' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong type'])
+                self.assertIsInstance(getattr(objTest, strAttr), typType,
+                                                                    strError)
+                strError =' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong value'])
+                self.assertEqual(getattr(objTest, strAttr), 'foo-bar',
+                                                                    strError)
+                #set back
+                setattr(objTest, strAttr, strValue)
+                strError =' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong type'])
+                self.assertIsInstance(getattr(objTest, strAttr), typType,
+                                                                    strError)
+                strError =' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong value'])
+                self.assertEqual(getattr(objTest, strAttr), strValue, strError)
+            else:
+                with self.assertRaises(AttributeError):
+                    setattr(objTest, strAttr, 'foo-bar')
+        del objTest
+    
+    def test_DeleteProperties(self):
+        """
+        Checks that only the properties with the deleter descriptor methods can
+        be used in 'del' statement.
+        """
+        objTest = self.TestClass()
+        for strAttr, strValue, typType, _ in self.Getters:
+            if strAttr in self.Deleters:
+                delattr(objTest, strAttr)
+                strError =' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong type'])
+                self.assertIsInstance(getattr(objTest, strAttr), typType,
+                                                                    strError)
+                strError =' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong value'])
+                self.assertEqual(getattr(objTest, strAttr), 'deleted',
+                                                                    strError)
+                #set back
+                setattr(objTest, strAttr, strValue)
+                strError =' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong type'])
+                self.assertIsInstance(getattr(objTest, strAttr), typType,
+                                                                    strError)
+                strError =' '.join(['Property', strAttr, 'of instance of class',
+                                self.TestClass.__name__, 'returns wrong value'])
+                self.assertEqual(getattr(objTest, strAttr), strValue, strError)
+            else:
+                with self.assertRaises(AttributeError):
+                    delattr(objTest, strAttr)
+        del objTest
 
 class Test_ClassTest3(Test_ClassTest2):
     """
@@ -634,16 +815,9 @@ class Test_ClassTest3(Test_ClassTest2):
         """
         Preparation for the test cases, done only once.
         """
+        super(Test_ClassTest2, cls).setUpClass()
         cls.TestClass = ClassTest3
         cls.SecondClass = ClassTest2
-        cls.ClassFields = [['ClassInt', int, IntegerDescriptor],
-                           ['ClassConstFloat', float, ConstFloatDescriptor],
-                           ['ClassSimpleInt', int, int]]
-        cls.ConstantClassFields = ['ClassConstFloat']
-        cls.InstanceFields = [['InstFloat', float, FloatDescriptor],
-                              ['InstConstInt', int, ConstIntegerDescriptor],
-                              ['SimpleInt', int, int]]
-        cls.ConstantInstanceFields = ['InstConstInt']
     
     def test_init(self):
         """

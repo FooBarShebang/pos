@@ -11,8 +11,8 @@ Defined classes:
         class without instantiation; also implements the basic introspection
 """
 
-__version__ = "0.0.1.0"
-__date__ = "03-07-2018"
+__version__ = "0.0.1.1"
+__date__ = "05-07-2018"
 __status__ = "Development"
 
 #imports
@@ -32,7 +32,7 @@ class DescriptedABC_Meta(abc.ABCMeta):
     being data descriptors when the action is performed on the class itself
     without its instantiation.
     
-    Version 0.0.1.0
+    Version 0.0.1.1
     """
     
     def __setattr__(self, strAttr, gValue):
@@ -42,6 +42,13 @@ class DescriptedABC_Meta(abc.ABCMeta):
         resolution scheme is used. Applied to the calls on the class, not on its
         instance.
         
+        The side effect is that if the value of the class attribute being a data
+        descriptor inherited from a super class is changed, a 'local' copy of
+        that attribute is created in the subclass, and only its value is
+        changed, so the change does not propagate upwards. The downwards
+        propagation of the change happens only down to a subclass, which has
+        already 'decoupled' that class attribute.
+        
         Signature:
             str, type A -> None
         
@@ -50,23 +57,25 @@ class DescriptedABC_Meta(abc.ABCMeta):
             
             gValue - any type, value to be assigned to the attribute
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         lstMRO = type.__getattribute__(self, '__mro__')
         for objBase in lstMRO: #go through the MRO
             dictVars = type.__getattribute__(objBase, '__dict__')
-            if strAttr in dictVars.keys(): #found in a dictionary (own or super)
+            if strAttr in dictVars: #found in a dictionary (own or super)
                 objTemp = dictVars[strAttr]
                 if hasattr(objTemp, '__set__'): #via descriptor
                     if objBase is lstMRO[0]: #own
                         objTemp.__set__(self, gValue)
-                    else: #inherited -> copy into own and try to set
+                    elif not isinstance(objTemp, property):
+                        #inherited data descriptor but not a property
+                        #-> copy into own class and try to set
                         type.__setattr__(self, strAttr,
                                 objTemp.__class__(objTemp.__get__(self, self)))
                         objTrial = type.__getattribute__(
                                                     self, '__dict__')[strAttr]
                         objTrial.__set__(self, gValue)
-                else: #via usual way -> should make an own class field
+                else: #via usual way, not a data descriptor / property
                     type.__setattr__(self, strAttr, gValue)
                 break
         else: # doesn't exist yet -> create own class field
@@ -116,7 +125,7 @@ class DescriptedABC(object):
     getClassInfo() and getInfo() - for non-abstract subclasses only - in order
     to get more detailed information on the class / instance.
     
-    Version 0.0.1.0
+    Version 0.0.1.1
     """
     
     #class fields
@@ -188,7 +197,7 @@ class DescriptedABC(object):
             
             gValue - any type, value to be assigned to the attribute
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         if strAttr in object.__getattribute__(self, '__dict__'):#instance field
             objTemp = object.__getattribute__(self, strAttr)
@@ -197,8 +206,16 @@ class DescriptedABC(object):
             else: #usual type
                 object.__setattr__(self, strAttr, gValue)
         else: #check if it is a class field
-            if hasattr(self.__class__, strAttr): #class field -> redirect
-                setattr(self.__class__, strAttr, gValue)
+            if hasattr(self.__class__, strAttr):
+                for clsBase in self.__class__.__mro__:
+                    dictVars = type.__getattribute__(clsBase, '__dict__')
+                    if strAttr in dictVars:
+                        objTemp = dictVars[strAttr]
+                        if isinstance(objTemp, property): #property
+                            object.__setattr__(self, strAttr, gValue)
+                        else: #another type of the class attribute
+                            setattr(self.__class__, strAttr, gValue)
+                        break
             else: # doesn't exist yet -> create
                 object.__setattr__(self, strAttr, gValue)
     
@@ -214,18 +231,26 @@ class DescriptedABC(object):
         Input:
             strAttr - string, name of the attribute to be deleted.
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         if strAttr in object.__getattribute__(self, '__dict__'):#instance field
             objTemp = object.__getattribute__(self, strAttr)
-            if hasattr(objTemp, '__delete__'): #data descriptor
+            if hasattr(objTemp, '__delete__'): #data descriptor ?
                 objTemp.__delete__(self)
             else: #usual type
                 object.__delattr__(self, strAttr)
         else: #check if it is a class field
-            if hasattr(self.__class__, strAttr): #class field -> redirect
-                delattr(self.__class__, strAttr)
-            else: # doesn't exist yet -> create
+            if hasattr(self.__class__, strAttr): #class field
+                for clsBase in self.__class__.__mro__:
+                    dictVars = type.__getattribute__(clsBase, '__dict__')
+                    if strAttr in dictVars:
+                        objTemp = dictVars[strAttr]
+                        if isinstance(objTemp, property): #property
+                            object.__delattr__(self, strAttr)
+                        else: #another type of the class attribute
+                            delattr(self.__class__, strAttr)
+                        break
+            else: # doesn't exist yet, should raise attribute error exception
                 object.__delattr__(self, strAttr)
     
     def __del__(self):
