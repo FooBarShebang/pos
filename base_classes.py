@@ -2,7 +2,7 @@
 """
 Module pos.base_classes
 
-Abstaract Base Classes implementing the modified attributes access scheme and
+Abstract Base Classes implementing the modified attributes access scheme and
 the classes introspection functionality.
 
 Defined classes:
@@ -287,7 +287,7 @@ class DescriptedABC(object):
         special / magic attributes). The returned list is sorted alphabetically.
         
         Signature:
-            None -> str
+            None -> list(str)
         
         Version 0.0.1.0
         """
@@ -300,6 +300,104 @@ class DescriptedABC(object):
                 bCond4 = not strAttr.startswith('_')
                 bCond5 = not (strAttr in strlstTemp)
                 bCond = bCond1 and bCond2 and bCond3 and bCond4 and bCond5
+                if bCond:
+                    strlstTemp.append(strAttr)
+        return list(sorted(strlstTemp))
+    
+    @classmethod
+    def getClassMethods(cls):
+        """
+        Returns as a list of strings the names of all 'public' class methods
+        (attributes, which are either class or static methods and can be called
+        from the class without instantiation). An attribute is considered to be
+        'public' only if name doesn't start with an underscore (including the
+        special / magic attributes). The returned list is sorted alphabetically.
+        
+        Signature:
+            None -> list(str)
+        
+        Version 0.0.1.0
+        """
+        strlstTemp = []
+        for clsBase in cls.__mro__:
+            for strAttr, objValue in clsBase.__dict__.items():
+                bCond1 = isinstance(objValue, (staticmethod, classmethod))
+                bCond2 = not strAttr.startswith('_')
+                bCond3 = not (strAttr in strlstTemp)
+                bCond = bCond1 and bCond2 and bCond3
+                if bCond:
+                    strlstTemp.append(strAttr)
+        return list(sorted(strlstTemp))
+    
+    #public instance methods
+    
+    def getFields(self):
+        """
+        Returns as a list of strings the names of all 'public' data fields
+        (attributes, which are not methods are functions, but class or instance
+        data attributes or properties) which can be called from an instance of
+        a class. An attribute is considered to be 'public' only if name doesn't
+        start with an underscore (including the special / magic attributes).
+        The returned list is sorted alphabetically.
+        
+        Signature:
+            None -> list(str)
+        
+        Version 0.0.1.0
+        """
+        strlstTemp = []
+        for strAttr, objValue in self.__dict__.items():
+            bCond1 = not inspect.ismethod(objValue)
+            bCond2 = not inspect.isfunction(objValue)
+            bCond3 = not inspect.isbuiltin(objValue)
+            bCond4 = not strAttr.startswith('_')
+            bCond5 = not (strAttr in strlstTemp)
+            bCond = bCond1 and bCond2 and bCond3 and bCond4 and bCond5
+            if bCond:
+                strlstTemp.append(strAttr)
+        for clsBase in self.__class__.__mro__:
+            for strAttr, objValue in clsBase.__dict__.items():
+                bCond1 = not isinstance(objValue, (staticmethod, classmethod))
+                bCond2 = not inspect.isfunction(objValue)
+                bCond3 = not strAttr.startswith('_')
+                bCond4 = not (strAttr in strlstTemp)
+                bCond = bCond1 and bCond2 and bCond3 and bCond4
+                if bCond:
+                    strlstTemp.append(strAttr)
+        return list(sorted(strlstTemp))
+    
+    def getMethods(self):
+        """
+        Returns as a list of strings the names of all 'public' methods
+        (class, static or instance methods, as well as function of foreign class
+        methods references stored as instance attributes) which can be called
+        from an instance of a class. An attribute is considered to be 'public'
+        only if name doesn't start with an underscore (including the special /
+        magic attributes). The returned list is sorted alphabetically.
+        
+        Signature:
+            None -> list(str)
+        
+        Version 0.0.1.0
+        """
+        strlstTemp = []
+        for strAttr, objValue in self.__dict__.items():
+            bCond1 = inspect.ismethod(objValue)
+            bCond2 = inspect.isfunction(objValue)
+            bCond3 = inspect.isbuiltin(objValue)
+            bCond4 = not strAttr.startswith('_')
+            bCond5 = not (strAttr in strlstTemp)
+            bCond = (bCond1 or bCond2 or bCond3) and bCond4 and bCond5
+            if bCond:
+                strlstTemp.append(strAttr)
+        for clsBase in self.__class__.__mro__:
+            for strAttr, objValue in clsBase.__dict__.items():
+                bCond1 = isinstance(objValue, (staticmethod, classmethod))
+                bCond2 = inspect.ismethod(objValue)
+                bCond3 = inspect.isfunction(objValue)
+                bCond4 = not strAttr.startswith('_')
+                bCond5 = not (strAttr in strlstTemp)
+                bCond = (bCond1 or bCond2 or bCond3) and bCond4 and bCond5
                 if bCond:
                     strlstTemp.append(strAttr)
         return list(sorted(strlstTemp))

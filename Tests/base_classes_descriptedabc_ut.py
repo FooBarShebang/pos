@@ -22,6 +22,14 @@ import inspect
 
 import pos.base_classes as testmodule
 
+#helper functions
+
+def MyAbs(gValue):
+    """
+    Alias for abs() built-in function
+    """
+    return abs(gValue)
+
 #classes
 
 #+ helper classes
@@ -230,6 +238,8 @@ class ClassTest2(ClassTest1):
         self.SimpleInt = 5
         self._string1 = 'test_rw'
         self._string2 = 'test_rwd'
+        self.funcAbs = MyAbs
+        self.funcAbsBuiltin = abs
 
 class ClassTest3(ClassTest2):
     """
@@ -260,6 +270,8 @@ class Test_DescriptedABC(unittest.TestCase):
         """
         cls.TestClass = testmodule.DescriptedABC
         cls.PublicClassFields = []
+        cls.PublicClassMethods = list(sorted(['getClassFields',
+                                                'getClassMethods']))
     
     def test_IsAbstract(self):
         """
@@ -275,6 +287,14 @@ class Test_DescriptedABC(unittest.TestCase):
         """
         self.assertEqual(self.TestClass.getClassFields(),
                                                         self.PublicClassFields)
+    
+    def test_getClassMethods(self):
+        """
+        Checks that the class method getClassFields() returns a sorted list of
+        all 'public' class methods.
+        """
+        self.assertEqual(self.TestClass.getClassMethods(),
+                                                        self.PublicClassMethods)
 
 class Test_ClassTest1(Test_DescriptedABC):
     """
@@ -310,6 +330,10 @@ class Test_ClassTest1(Test_DescriptedABC):
                        ['_TestHiddenMethod', str, 'test_hidden_method']]
         cls.PublicClassFields = list(sorted(['ClassInt', 'ClassConstFloat',
                                              'ClassSimpleInt']))
+        cls.PublicClassMethods = list(sorted(['getClassFields',
+                                                'getClassMethods',
+                                                'TestClassMethod',
+                                                'TestStaticMethod']))
     
     def test_HasClassFields(self):
         """
@@ -557,6 +581,16 @@ class Test_ClassTest2(Test_ClassTest1):
                               ['_string1', str, str],
                               ['_string2', str, str]]
         cls.ConstantInstanceFields = ['InstConstInt']
+        cls.PublicFields = list(sorted(['ClassInt', 'ClassConstFloat',
+                                        'ClassSimpleInt', 'InstFloat',
+                                        'InstConstInt', 'SimpleInt',
+                                        'RO_String', 'RW_String',
+                                        'RWD_String']))
+        cls.PublicMethods = list(sorted(['getClassFields','getClassMethods',
+                                        'TestClassMethod', 'TestStaticMethod',
+                                        'getFields', 'getMethods',
+                                        'TestMethod', 'onInit', 'funcAbs',
+                                        'funcAbsBuiltin']))
     
     def test_IsAbstract(self):
         """
@@ -953,6 +987,40 @@ class Test_ClassTest2(Test_ClassTest1):
         super(Test_ClassTest2, self).test_getClassFields()
         objTest = self.TestClass()
         self.assertEqual(objTest.getClassFields(), self.PublicClassFields)
+        del objTest
+
+    def test_getFields(self):
+        """
+        Checks that the instance method getFields() returns a sorted list of
+        all 'public' fields when called on an instance of this class. Must
+        include all 'public' class data attributes, real 'public' instance data
+        attributes and properties.
+        """
+        objTest = self.TestClass()
+        self.assertEqual(objTest.getFields(), self.PublicFields)
+        del objTest
+    
+    def test_getClassMethods(self):
+        """
+        Checks that the class method getClassMethods() returns a sorted list of
+        all 'public' class methods when called on the class itself as well as on
+        its instance
+        """
+        super(Test_ClassTest2, self).test_getClassMethods()
+        objTest = self.TestClass()
+        self.assertEqual(objTest.getClassMethods(), self.PublicClassMethods)
+        del objTest
+
+    def test_getMethods(self):
+        """
+        Checks that the instance method getMethods() returns a sorted list of
+        all 'public' methods when called on an instance of this class. Must
+        include all 'public' class/ static methods, real 'public' instance
+        methods as well as foreign class methods / simple functions references
+        stored in the 'public' instance attributes.
+        """
+        objTest = self.TestClass()
+        self.assertEqual(objTest.getMethods(), self.PublicMethods)
         del objTest
 
 class Test_ClassTest3(Test_ClassTest2):
