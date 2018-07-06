@@ -11,8 +11,8 @@ Defined classes:
         class without instantiation; also implements the basic introspection
 """
 
-__version__ = "0.0.1.1"
-__date__ = "05-07-2018"
+__version__ = "0.0.1.2"
+__date__ = "06-07-2018"
 __status__ = "Development"
 
 #imports
@@ -20,6 +20,7 @@ __status__ = "Development"
 #+ standard libraries
 
 import abc
+import inspect
 
 #classes
 
@@ -125,7 +126,7 @@ class DescriptedABC(object):
     getClassInfo() and getInfo() - for non-abstract subclasses only - in order
     to get more detailed information on the class / instance.
     
-    Version 0.0.1.1
+    Version 0.0.1.2
     """
     
     #class fields
@@ -173,11 +174,15 @@ class DescriptedABC(object):
         Input:
             strAttr - string, name of the attribute to be deleted.
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         objOwner = object.__getattribute__(self, '__class__')
         objTemp = object.__getattribute__(self, strAttr)
-        if hasattr(objTemp, '__get__'):
+        if inspect.ismethod(objTemp) or inspect.isfunction(objTemp):
+            #static, class and normal functions
+            objResult = objTemp
+        elif hasattr(objTemp, '__get__'):
+            #properties and custom defined data descriptors
             objResult = objTemp.__get__(self, objOwner)
         else:
             objResult = objTemp
@@ -269,3 +274,32 @@ class DescriptedABC(object):
             del dictDict[strAttr]
         del strlstTemp
         del dictDict
+    
+    #public class methods
+    
+    @classmethod
+    def getClassFields(cls):
+        """
+        Returns as a list of strings the names of all 'public' class data fields
+        (attributes, which are not class or static methods and can be called
+        from the class without instantiation). An attribute is considered to be
+        'public' only if name doesn't start with an underscore (including the
+        special / magic attributes). The returned list is sorted alphabetically.
+        
+        Signature:
+            None -> str
+        
+        Version 0.0.1.0
+        """
+        strlstTemp = []
+        for clsBase in cls.__mro__:
+            for strAttr, objValue in clsBase.__dict__.items():
+                bCond1 = not isinstance(objValue, (staticmethod, classmethod))
+                bCond2 = not inspect.isfunction(objValue)
+                bCond3 = not isinstance(objValue, property)
+                bCond4 = not strAttr.startswith('_')
+                bCond5 = not (strAttr in strlstTemp)
+                bCond = bCond1 and bCond2 and bCond3 and bCond4 and bCond5
+                if bCond:
+                    strlstTemp.append(strAttr)
+        return list(sorted(strlstTemp))

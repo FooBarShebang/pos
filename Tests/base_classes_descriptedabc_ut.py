@@ -6,8 +6,8 @@ Implements unit testing of the module base_classes concerning the class
 DescriptedABC.
 """
 
-__version__ = "0.0.1.1"
-__date__ = "05-07-2018"
+__version__ = "0.0.1.2"
+__date__ = "06-07-2018"
 __status__ = "Testing"
 
 #imports
@@ -16,6 +16,7 @@ __status__ = "Testing"
 
 import sys
 import unittest
+import inspect
 
 #+ my libraries
 
@@ -119,6 +120,8 @@ class ClassTest1(testmodule.DescriptedABC):
     
     ClassSimpleInt = 2
     
+    _ClassHidden = 2
+    
     #properties
     
     @property
@@ -176,12 +179,26 @@ class ClassTest1(testmodule.DescriptedABC):
         """
         return 'test_class_method'
     
+    @classmethod
+    def _TestClassHiddenMethod(cls):
+        """
+        Simply returns a string
+        """
+        return 'test_class_hidden_method'
+    
     @staticmethod
     def TestStaticMethod():
         """
         Simply returns a string
         """
         return 'test_static_method'
+    
+    @staticmethod
+    def _TestStaticHiddenMethod():
+        """
+        Simply returns a string
+        """
+        return 'test_static_hidden_method'
     
     #instance methods
     
@@ -190,6 +207,12 @@ class ClassTest1(testmodule.DescriptedABC):
         Simply returns a string
         """
         return 'test_method'
+    
+    def _TestHiddenMethod(self):
+        """
+        Simply returns a string
+        """
+        return 'test_hidden_method'
 
 class ClassTest2(ClassTest1):
     """
@@ -236,6 +259,7 @@ class Test_DescriptedABC(unittest.TestCase):
         Preparation for the test cases, done only once.
         """
         cls.TestClass = testmodule.DescriptedABC
+        cls.PublicClassFields = []
     
     def test_IsAbstract(self):
         """
@@ -243,6 +267,14 @@ class Test_DescriptedABC(unittest.TestCase):
         """
         with self.assertRaises(TypeError):
             self.TestClass()
+    
+    def test_getClassFields(self):
+        """
+        Checks that the class method getClassFields() returns a sorted list of
+        all 'public' class fields.
+        """
+        self.assertEqual(self.TestClass.getClassFields(),
+                                                        self.PublicClassFields)
 
 class Test_ClassTest1(Test_DescriptedABC):
     """
@@ -260,13 +292,24 @@ class Test_ClassTest1(Test_DescriptedABC):
         cls.SecondClass = ClassTest2
         cls.ClassFields = [['ClassInt', int, IntegerDescriptor],
                            ['ClassConstFloat', float, ConstFloatDescriptor],
-                           ['ClassSimpleInt', int, int]]
+                           ['ClassSimpleInt', int, int],
+                           ['_ClassHidden', int, int]]
         cls.ConstantClassFields = ['ClassConstFloat']
         cls.Getters = [['RO_String', 'test_ro', str, property],
                         ['RW_String', 'test_rw', str, property],
                         ['RWD_String', 'test_rwd', str, property]]
         cls.Setters = ['RW_String', 'RWD_String']
         cls.Deleters = ['RWD_String']
+        cls.StaticMethods = [['TestStaticMethod', str, 'test_static_method'],
+                             ['_TestStaticHiddenMethod', str,
+                              'test_static_hidden_method']]
+        cls.ClassMethods = [['TestClassMethod', str, 'test_class_method'],
+                            ['_TestClassHiddenMethod', str,
+                            'test_class_hidden_method']]
+        cls.Methods = [['TestMethod', str, 'test_method'],
+                       ['_TestHiddenMethod', str, 'test_hidden_method']]
+        cls.PublicClassFields = list(sorted(['ClassInt', 'ClassConstFloat',
+                                             'ClassSimpleInt']))
     
     def test_HasClassFields(self):
         """
@@ -420,7 +463,7 @@ class Test_ClassTest1(Test_DescriptedABC):
             strError = 'Class {} has no attribute {}'.format(
                                             self.TestClass.__name__, strAttr)
             self.assertTrue(hasattr(self.TestClass, strAttr), strError)
-            strError = 'Class {} has no property {}'.format(
+            strError = '{}.{} is not a property'.format(
                                             self.TestClass.__name__, strAttr)
             objData = None
             for clsParent in self.TestClass.__mro__:
@@ -428,6 +471,70 @@ class Test_ClassTest1(Test_DescriptedABC):
                     objData = clsParent.__dict__[strAttr]
                     break
             self.assertIsInstance(objData, typType, strError)
+    
+    def test_CheckMethods(self):
+        """
+        Checks that the class inherits all defined extra methods (class, static
+        and instance - but not the introspection ones), as well as that the
+        class and static methods return the expected values.  Introspection
+        methods are tested separately.
+        """
+        for strAttr, typType, gValue in self.ClassMethods:
+            strError = 'Class {} has no attribute {}'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertTrue(hasattr(self.TestClass, strAttr), strError)
+            strError = 'Attribute {} of class {} is not a class method'.format(
+                                            strAttr, self.TestClass.__name__)
+            self.assertTrue(inspect.ismethod(getattr(self.TestClass, strAttr)),
+                                                                    strError)
+            objCheck = None
+            for clBase in self.TestClass.__mro__:
+                if strAttr in clBase.__dict__:
+                    objCheck = clBase.__dict__[strAttr]
+                    break
+            self.assertIsInstance(objCheck, classmethod, strError)
+            objReturn = getattr(self.TestClass, strAttr)()
+            strError = 'Class method {}.{} returns wrong type'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertIsInstance(objReturn, typType, strError)
+            strError = 'Class method {}.{} returns wrong value'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertEqual(objReturn, gValue, strError)
+        for strAttr, typType, gValue in self.StaticMethods:
+            strError = 'Class {} has no attribute {}'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertTrue(hasattr(self.TestClass, strAttr), strError)
+            strError = 'Attribute {} of class {} is not a static method'.format(
+                                            strAttr, self.TestClass.__name__)
+            self.assertTrue(inspect.isfunction(
+                                    getattr(self.TestClass, strAttr)), strError)
+            objCheck = None
+            for clBase in self.TestClass.__mro__:
+                if strAttr in clBase.__dict__:
+                    objCheck = clBase.__dict__[strAttr]
+                    break
+            self.assertIsInstance(objCheck, staticmethod, strError)
+            objReturn = getattr(self.TestClass, strAttr)()
+            strError = 'Static method {}.{} returns wrong type'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertIsInstance(objReturn, typType, strError)
+            strError = 'Static method {}.{} returns wrong value'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertEqual(objReturn, gValue, strError)
+        for strAttr, typType, gValue in self.Methods:
+            strError = 'Class {} has no attribute {}'.format(
+                                            self.TestClass.__name__, strAttr)
+            self.assertTrue(hasattr(self.TestClass, strAttr), strError)
+            strError = 'Attribute {} of class {} is not a method'.format(
+                                            strAttr, self.TestClass.__name__)
+            self.assertTrue(inspect.ismethod(getattr(self.TestClass, strAttr)),
+                                                                    strError)
+            objCheck = None
+            for clBase in self.TestClass.__mro__:
+                if strAttr in clBase.__dict__:
+                    objCheck = clBase.__dict__[strAttr]
+                    break
+            self.assertTrue(inspect.isfunction(objCheck), strError)
 
 class Test_ClassTest2(Test_ClassTest1):
     """
@@ -446,7 +553,9 @@ class Test_ClassTest2(Test_ClassTest1):
         cls.SecondClass = ClassTest1
         cls.InstanceFields = [['InstFloat', float, FloatDescriptor],
                               ['InstConstInt', int, ConstIntegerDescriptor],
-                              ['SimpleInt', int, int]]
+                              ['SimpleInt', int, int],
+                              ['_string1', str, str],
+                              ['_string2', str, str]]
         cls.ConstantInstanceFields = ['InstConstInt']
     
     def test_IsAbstract(self):
@@ -577,7 +686,10 @@ class Test_ClassTest2(Test_ClassTest1):
                     setattr(objTest, strAttr, gNewValue)
         for strAttr, _, typType in self.InstanceFields:
             gOldValue = getattr(objTest, strAttr)
-            gNewValue = gOldValue + 1
+            if isinstance(gOldValue, basestring):
+                gNewValue = gOldValue + "1"
+            else:
+                gNewValue = gOldValue + 1
             if not (strAttr in self.ConstantInstanceFields):
                 strErrorValue = ' '.join(['Attribute', strAttr, 'of instance',
                                           'of the class',
@@ -801,6 +913,46 @@ class Test_ClassTest2(Test_ClassTest1):
             else:
                 with self.assertRaises(AttributeError):
                     delattr(objTest, strAttr)
+        del objTest
+    
+    def test_CheckMethods(self):
+        """
+        Extends the super class' method to perform the same checks on an
+        instance of the class.
+        """
+        super(Test_ClassTest2, self).test_CheckMethods()
+        objTest = self.TestClass()
+        for Names in [self.ClassMethods, self.StaticMethods, self.Methods]:
+            for strAttr, typType, gValue in Names:
+                strError = 'Class {} instance has no attribute {}'.format(
+                                            self.TestClass.__name__, strAttr)
+                self.assertTrue(hasattr(objTest, strAttr), strError)
+                strError = '{}.{} is not a method on instance'.format(
+                                            self.TestClass.__name__, strAttr)
+                if Names is self.StaticMethods:
+                    self.assertTrue(inspect.isfunction(
+                                        getattr(objTest, strAttr)), strError)
+                else:
+                    self.assertTrue(inspect.ismethod(getattr(objTest, strAttr)),
+                                                                    strError)
+                objReturn = getattr(objTest, strAttr)()
+                strError = 'Method {}.{} returns wrong type'.format(
+                                            self.TestClass.__name__, strAttr)
+                self.assertIsInstance(objReturn, typType, strError)
+                strError = 'Method {}.{} returns wrong value'.format(
+                                            self.TestClass.__name__, strAttr)
+                self.assertEqual(objReturn, gValue, strError)
+        del objTest
+    
+    def test_getClassFields(self):
+        """
+        Checks that the class method getClassFields() returns a sorted list of
+        all 'public' class fields when called on the class itself as well as on
+        its instance
+        """
+        super(Test_ClassTest2, self).test_getClassFields()
+        objTest = self.TestClass()
+        self.assertEqual(objTest.getClassFields(), self.PublicClassFields)
         del objTest
 
 class Test_ClassTest3(Test_ClassTest2):
