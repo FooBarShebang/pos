@@ -69,13 +69,15 @@ class ErrorMixin(object):
     Helper / mix-in class to add the traceback analysis functionality to the
     custom exception classes.
     
-    Implements read-only properties:
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
     
     And a public method intended to be called from the initialization methods of
-    these exceptions:
+    these exceptions.
+    
+    Methods:
         presetTraceback()
             /pos.utils.traceback.ExceptionTraceback, int/ -> None
     
@@ -187,13 +189,13 @@ class ErrorMixin(object):
         Signature:
             /pos.utils.traceback.ExceptionTraceback, int/ -> None
         
-        Input:
-            objTraceback - optional (keyword), a replacement traceback object as
-                an instance of pos.utils.traceback.ExceptionTraceback class
-            iSkipFrames - optional (keyword), the required number of the
-                innermost call stack frames, must be a non-negative integer but
-                not larger than the expected length of the traceback or the
-                length of the replacement traceback object
+        Args:
+            objTraceback: (optional), a replacement traceback object as an
+                instance of pos.utils.traceback.ExceptionTraceback class
+            iSkipFrames: (optional), the required number of the innermost call
+                stack frames, must be a non-negative integer but not larger than
+                the expected length of the traceback or the length of the
+                replacement traceback object
         
         Version 0.0.1.0
         """
@@ -234,7 +236,9 @@ class CustomError(StandardError, ErrorMixin):
     hide / not show in the traceback.
     
     Direct subclass of StandardError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -300,14 +304,14 @@ class CustomError(StandardError, ErrorMixin):
         Signature:
             str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
         
-        Input:
-            strMessage - mandatory, expected to be a string, but is not checked,
-                will be used as the exception message
-            objTraceback - optional (keyword), a replacement traceback object as
-                an instance of pos.utils.traceback.ExceptionTraceback class
-            iSkipFrames - optional (keyword), the required number of the
-                innermost call stack frames, must be a non-negative integer but
-                not larger than the expected length of the traceback
+        Args:
+            strMessage: expected to be a string, but is not checked, will be
+                used as the exception message
+            objTraceback: (optional), a replacement traceback object as an
+                instance of pos.utils.traceback.ExceptionTraceback class
+            iSkipFrames: (optional), the required number of the innermost call
+                stack frames, must be a non-negative integer but not larger than
+                the expected length of the traceback
         
         Version 0.0.1.0
         """
@@ -331,7 +335,9 @@ class DesignContractError(CustomError):
     hide / not show in the traceback.
     
     Direct subclass of CustomError class. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -358,7 +364,9 @@ class ConstantAssignment(CustomError):
     hide / not show in the traceback.
     
     Direct subclass of CustomError class. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -381,15 +389,14 @@ class ConstantAssignment(CustomError):
         Signature:
             str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
         
-        Input:
-            strObject - mandatory, expected to be a string, but is not checked,
-                the name of an object, will be used to construct the exception
-                message
-            objTraceback - optional (keyword), a replacement traceback object as
-                an instance of pos.utils.traceback.ExceptionTraceback class
-            iSkipFrames - optional (keyword), the required number of the
-                innermost call stack frames, must be a non-negative integer but
-                not larger than the expected length of the traceback
+        Args:
+            strObject: expected to be a string, but is not checked, the name of
+                an object, will be used to construct the exception message
+            objTraceback: (optional), a replacement traceback object as an
+                instance of pos.utils.traceback.ExceptionTraceback class
+            iSkipFrames: (optional), the required number of the innermost call
+                stack frames, must be a non-negative integer but not larger than
+                the expected length of the traceback
         
         Version 0.0.1.0
         """
@@ -417,7 +424,9 @@ class CustomAttributeError(AttributeError, ErrorMixin):
     hide / not show in the traceback.
     
     Direct subclass of AttributeError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -442,18 +451,17 @@ class CustomAttributeError(AttributeError, ErrorMixin):
         Signature:
             str, class A/, pos.utils.traceback.ExceptionTraceback, int/ -> None
         
-        Input:
-            strAttr - mandatory, expected to be a string, but is not checked,
-                the name of an attribute, will be used to construct the
-                exception message
-            clsType - mandatory, expected to be a reference to the supposed
-                owner of this attribute (class as a type), but is not checked,
-                will be used to construct the exception message
-            objTraceback - optional (keyword), a replacement traceback object as
-                an instance of pos.utils.traceback.ExceptionTraceback class
-            iSkipFrames - optional (keyword), the required number of the
-                innermost call stack frames, must be a non-negative integer but
-                not larger than the expected length of the traceback
+        Args:
+            strAttr: expected to be a string, but is not checked, the name of an
+                attribute, will be used to construct the exception message
+            clsType: expected to be a reference to the supposed owner of this
+                attribute (class as a type), but is not checked, will be used to
+                construct the exception message
+            objTraceback: (optional), a replacement traceback object as an
+                instance of pos.utils.traceback.ExceptionTraceback class
+            iSkipFrames: (optional), the required number of the innermost call
+                stack frames, must be a non-negative integer but not larger than
+                the expected length of the traceback
         
         Version 0.0.1.0
         """
@@ -508,7 +516,9 @@ class NotExistingAttribute(CustomAttributeError):
     hide / not show in the traceback.
     
     Direct subclass of CustomAttributeError. So inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -535,7 +545,9 @@ class PrivateAttributeAccess(CustomAttributeError):
     hide / not show in the traceback.
     
     Direct subclass of CustomAttributeError. So inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -561,7 +573,9 @@ class NotInDCError(SyntaxError, ErrorMixin):
     hide / not show in the traceback.
     
     Direct subclass of SyntaxError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -586,15 +600,14 @@ class NotInDCError(SyntaxError, ErrorMixin):
         Signature:
             str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
         
-        Input:
-            strObject - mandatory, expected to be a string, but is not checked,
-                the name of an object, will be used to construct the exception
-                message
-            objTraceback - optional (keyword), a replacement traceback object as
-                an instance of pos.utils.traceback.ExceptionTraceback class
-            iSkipFrames - optional (keyword), the required number of the
-                innermost call stack frames, must be a non-negative integer but
-                not larger than the expected length of the traceback
+        Args:
+            strObject: expected to be a string, but is not checked, the name of
+                an object, will be used to construct the exception message
+            objTraceback: (optional), a replacement traceback object as an
+                instance of pos.utils.traceback.ExceptionTraceback class
+            iSkipFrames: (optional), the required number of the innermost call
+                stack frames, must be a non-negative integer but not larger than
+                the expected length of the traceback
         
         Version 0.0.1.0
         """
@@ -621,7 +634,9 @@ class CustomTypeError(TypeError, ErrorMixin):
     hide / not show in the traceback.
     
     Direct subclass of TypeError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -647,17 +662,17 @@ class CustomTypeError(TypeError, ErrorMixin):
             type A, type type B/, pos.utils.traceback.ExceptionTraceback, int/
                 -> None
         
-        Input:
-            gValue - mandatory, the 'offending' value, will be used to construct
-                the exception message
-            clsType - mandatory, expected to be a reference to the supposed
-                reference class or type of this value, but is not checked,
-                will be used to construct the exception message
-            objTraceback - optional (keyword), a replacement traceback object as
-                an instance of pos.utils.traceback.ExceptionTraceback class
-            iSkipFrames - optional (keyword), the required number of the
-                innermost call stack frames, must be a non-negative integer but
-                not larger than the expected length of the traceback
+        Args:
+            gValue: the 'offending' value, will be used to construct the
+                exception message
+            clsType: expected to be a reference to the supposed reference class
+                or type of this value, but is not checked, will be used to
+                construct the exception message
+            objTraceback: (optional), a replacement traceback object as an
+                instance of pos.utils.traceback.ExceptionTraceback class
+            iSkipFrames: (optional), the required number of the innermost call
+                stack frames, must be a non-negative integer but not larger than
+                the expected length of the traceback
         
         Version 0.0.1.0
         """
@@ -684,7 +699,9 @@ class DCArgumentType(CustomTypeError):
     hide / not show in the traceback.
     
     Direct subclass of CustomTypeError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -712,7 +729,9 @@ class DCReturnType(CustomTypeError):
     hide / not show in the traceback.
     
     Direct subclass of CustomTypeError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -742,7 +761,9 @@ class CustomValueError(ValueError, ErrorMixin):
     hide / not show in the traceback.
     
     Direct subclass of ValueError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -767,17 +788,17 @@ class CustomValueError(ValueError, ErrorMixin):
         Signature:
             type A, str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
         
-        Input:
-            gValue - mandatory, the 'offending' value, will be used to construct
-                the exception message
-            strError - mandatory, expected to be a string explaing the reason
-                why the value is wrong, but is not checked, will be used to
-                construct the exception message
-            objTraceback - optional (keyword), a replacement traceback object as
-                an instance of pos.utils.traceback.ExceptionTraceback class
-            iSkipFrames - optional (keyword), the required number of the
-                innermost call stack frames, must be a non-negative integer but
-                not larger than the expected length of the traceback
+        Args:
+            gValue: the 'offending' value, will be used to construct the
+            `exception message
+            strError: expected to be a string explaing the reason why the value
+                is wrong, but is not checked, will be used to construct the
+                exception message
+            objTraceback: (optional), a replacement traceback object as an
+                instance of pos.utils.traceback.ExceptionTraceback class
+            iSkipFrames: (optional), the required number of the innermost call
+                stack frames, must be a non-negative integer but not larger than
+                the expected length of the traceback
         
         Version 0.0.1.0
         """
@@ -805,7 +826,9 @@ class DCArgumentValue(CustomValueError):
     hide / not show in the traceback.
     
     Direct subclass of CustomValueError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str
@@ -834,7 +857,9 @@ class DCReturnValue(CustomValueError):
     hide / not show in the traceback.
     
     Direct subclass of CustomValueError. Also inherits the traceback analysis
-    properties from the ErrorMixin:
+    properties from the ErrorMixin.
+    
+    Read-only properties:
         Traceback : pos.utils.traceback.ExceptionTraceback
         CallChain : list(str)
         Info : str

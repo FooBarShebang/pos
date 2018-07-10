@@ -31,9 +31,9 @@ class StackTraceback(object):
     element, and the frame, where this class is instantiated, is the last
     element.
     
-    Implements the read-only properties:
-        CallChain -> list(str)
-        Info -> str
+    Read-only properties:
+        CallChain: list(str)
+        Info: str
     
     Version 0.0.1.0
     """
@@ -56,15 +56,16 @@ class StackTraceback(object):
         Signature:
             /int, int, int/ -> None
         
-        Input:
-            iSkip - optional non-negative integer, number of the deepest (inner)
-                frames to 'hide' in the traceback excluding the initialization
-                method itself, which is always removed (default is None -> zero)
-            iContext - optional non-negative integer, total number of lines of
+        Args:
+            iSkip: (optional) non-negative integer, number of the deepest
+                (inner) frames to 'hide' in the traceback excluding the
+                initialization method itself, which is always removed (default
+                is None -> zero)
+            iContext: (optional) non-negative integer, total number of lines of
                 the source code to retrieve around and including the one, there
                 a call was made (default is None -> the value of the class field
                 ContextLenght)
-            iWidth - optional non-negative integer, width to which the source
+            iWidth: (optional) non-negative integer, width to which the source
                 code lines must be truncated, including the line's number + 2
                 extra characters (default is None -> the value of the class
                 field ConsoleWidth)
@@ -223,9 +224,11 @@ class ExceptionTraceback(StackTraceback):
     being handled was raised in. Built upon the function inspect.trace();
     preserves the order of the frames.
     
-    Extends the class StackTraceback and inherits the read-only properties:
-        CallChain -> list(str)
-        Info -> str
+    Extends the class StackTraceback and inherits the read-only properties.
+    
+    Read-only properties:
+        CallChain: list(str)
+        Info: str
     
     Version 0.0.1.0
     """
@@ -250,14 +253,15 @@ class ExceptionTraceback(StackTraceback):
         Signature:
             /int, int, int/ -> None
         
-        Input:
-            iSkip - optional non-negative integer, number of the deepest (inner)
-                frames to 'hide' in the traceback (default is None -> zero)
-            iContext - optional non-negative integer, total number of lines of
+        Args:
+            iSkip: (optional) non-negative integer, number of the deepest
+                (inner) frames to 'hide' in the traceback (default is None ->
+                zero)
+            iContext: (optional) non-negative integer, total number of lines of
                 the source code to retrieve around and including the one, there
                 a call was made (default is None -> the value of the class field
                 ContextLenght)
-            iWidth - optional non-negative integer, width to which the source
+            iWidth: (optional) non-negative integer, width to which the source
                 code lines must be truncated, including the line's number + 2
                 extra characters (default is None -> the value of the class
                 field ConsoleWidth)

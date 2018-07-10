@@ -22,6 +22,10 @@ __status__ = "Development"
 import abc
 import inspect
 
+#+ this library modules
+
+from pos.utils.attr_info import FieldInfo, MethodInfo
+
 #classes
 
 #+metaclasses
@@ -53,10 +57,9 @@ class DescriptedABC_Meta(abc.ABCMeta):
         Signature:
             str, type A -> None
         
-        Input:
-            strAttr - string, name of the attribute to be changed in value
-            
-            gValue - any type, value to be assigned to the attribute
+        Args:
+            strAttr: string, name of the attribute to be changed in value
+            gValue: any type, value to be assigned to the attribute
         
         Version 0.0.1.1
         """
@@ -92,8 +95,8 @@ class DescriptedABC_Meta(abc.ABCMeta):
         Signature:
             str -> None
         
-        Input:
-            strAttr - string, name of the attribute to be deleted.
+        Args:
+            strAttr: string, name of the attribute to be deleted.
         
         Version 0.0.1.0
         """
@@ -141,7 +144,7 @@ class DescriptedABC(object):
         positional and keyword arguments into the method onInit().
         
         Signature:
-            *args, **kwargs -> None
+            /*args, **kwargs/ -> None
         
         Version 0.0.1.0
         """
@@ -156,7 +159,7 @@ class DescriptedABC(object):
         all positional and keyword arguments from the initialization method.
         
         Signature:
-            *args, **kwargs -> None
+            /*args, **kwargs/ -> None
         
         Version 0.0.1
         """
@@ -171,8 +174,8 @@ class DescriptedABC(object):
         Signature:
             str -> type A
         
-        Input:
-            strAttr - string, name of the attribute to be deleted.
+        Args:
+            strAttr: string, name of the attribute to be deleted.
         
         Version 0.0.1.1
         """
@@ -197,10 +200,9 @@ class DescriptedABC(object):
         Signature:
             str, type A -> None
         
-        Input:
-            strAttr - string, name of the attribute to be changed in value
-            
-            gValue - any type, value to be assigned to the attribute
+        Args:
+            strAttr: string, name of the attribute to be changed in value
+            gValue: any type, value to be assigned to the attribute
         
         Version 0.0.1.1
         """
@@ -233,8 +235,8 @@ class DescriptedABC(object):
         Signature:
             str -> None
         
-        Input:
-            strAttr - string, name of the attribute to be deleted.
+        Args:
+            strAttr: string, name of the attribute to be deleted.
         
         Version 0.0.1.1
         """
@@ -328,6 +330,14 @@ class DescriptedABC(object):
                 if bCond:
                     strlstTemp.append(strAttr)
         return list(sorted(strlstTemp))
+    
+    @classmethod
+    def inspectClassAttribute(cls, strAttr):
+        """
+        """
+        for clsBase in cls.__mro__:
+            for strAttr, objValue in clsBase.__dict__.items():
+                pass
     
     #public instance methods
     
