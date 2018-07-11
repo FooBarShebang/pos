@@ -3,9 +3,11 @@
 Module pos.utils.traceback
 
 Implements classes to obtain, store and analyze the stack and exception
-traceback:
+traceback.
+
+Classes:
     StackTraceback
-        <|- ExceptionTraceback
+        ExceptionTraceback
 """
 
 __version__ = "0.0.1.0"

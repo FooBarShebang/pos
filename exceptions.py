@@ -6,43 +6,37 @@ Custom exceptions with the added functionality of the exception traceback and
 'IS A' relations build on the direct / indirect subclasses as well as virtual
 subclasses.
 
-Implemented classes (real inheritance):
-    CustomError(StandardError --|> Exception)
-        <|-- DesignContractError
-        <|-- ConstantAssignment
-    #
-    CustomAttributeError(AttributeError --|> StandardError --|> Exception)
-        <|-- ConstantAttributeAssignment
-        <|-- NotExistingAttribute
-        <|-- PrivateAttributeAccess
-    #
-    NotInDCError(SyntaxError --|> StandardError --|> Exception)
-    #
-    CustomTypeError(TypeError --|> StandardError --|> Exception)
-        <|-- DCArgumentType
-        <|-- DCReturnType
-    #
-    CustomValueError(ValueError --|> StandardError --|> Exception)
-        <|-- DCArgumentValue
-        <|-- DCReturnValue
-
-Added 'virtual subclass' relations:
+Classes:
+    ErrorMixin
+        CustomError(StandardError --|> Exception)
+            DesignContractError
+            ConstantAssignment
+        CustomAttributeError(AttributeError --|> StandardError --|> Exception)
+            ConstantAttributeAssignment
+            NotExistingAttribute
+            PrivateAttributeAccess
+        NotInDCError(SyntaxError --|> StandardError --|> Exception)
+        CustomTypeError(TypeError --|> StandardError --|> Exception)
+            DCArgumentType
+            DCReturnType
+        CustomValueError(ValueError --|> StandardError --|> Exception)
+            DCArgumentValue
+            DCReturnValue
+Added 'virtual subclass' relations (not real inheritance):
     CustomError
         <|.. CustomAttributeError
         <|.. CustomTypeError
         <|.. CustomValueError
-    #
     DesignContractError
         <|.. DCArgumentType
         <|.. DCArgumentValue
         <|.. DCReturnType
         <|.. DCReturnValue
         <|.. NotInDCError
-    #
     ConstantAssignment
         <|.. ConstantAttributeAssignment
 
-The exception traceback functionality is implemented via composition wuth the
+The exception traceback functionality is implemented via composition with the
 mix-in class ErrorMixin.
 """
 

@@ -5,8 +5,8 @@ Module pos.base_classes
 Abstract Base Classes implementing the modified attributes access scheme and
 the classes introspection functionality.
 
-Defined classes:
-    DescriptedABC - support for the data descriptors access methods in the case
+Classes:
+    DescriptedABC: support for the data descriptors access methods in the case
         of the instance attributes and the class attributes accessed from a
         class without instantiation; also implements the basic introspection
 """
@@ -334,6 +334,13 @@ class DescriptedABC(object):
     @classmethod
     def inspectClassAttribute(cls, strAttr):
         """
+        
+        
+        Signature:
+            str -> pos.utils.attr_info.FieldInfo
+                    OR pos.utils.attr_info.MethodInfo
+        
+        Version 0.0.1.0
         """
         for clsBase in cls.__mro__:
             for strAttr, objValue in clsBase.__dict__.items():
