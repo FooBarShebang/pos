@@ -146,6 +146,12 @@ class DescriptedABC(object):
         Signature:
             /*args, **kwargs/ -> None
         
+        Args:
+            *args: (optional), any amount of arguments of any types, passed into
+                the method onInit()
+            **kwargs: (optional), keyword, any amount of arguments of any types,
+                passed into the method onInit()
+        
         Version 0.0.1.0
         """
         self.onInit(*args, **kwargs)
@@ -160,6 +166,10 @@ class DescriptedABC(object):
         
         Signature:
             /*args, **kwargs/ -> None
+        
+            *args: (optional), any amount of arguments of any types, not used
+            **kwargs: (optional), keyword, any amount of arguments of any types,
+                not used
         
         Version 0.0.1
         """
@@ -339,6 +349,9 @@ class DescriptedABC(object):
         Signature:
             str -> pos.utils.attr_info.FieldInfo
                     OR pos.utils.attr_info.MethodInfo
+        
+        Args:
+            strAttr: string, name of the class attribute to be inspected
         
         Version 0.0.1.0
         """

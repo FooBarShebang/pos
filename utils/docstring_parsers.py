@@ -2,15 +2,16 @@
 """
 Module pos.utils.docstring_parsers
 
-Implements classes to parse the docstrings, i.e. extract / remove the signature
-of the method / function from the docstring, remove the extra indentation,
-extract explicitly defined signature and arguments names.
+Implements classes to parse the docstrings, i.e. extract / remove the signature,
+arguments list, return value(s) and exceptions to be raised list of the method
+/ function from the docstring; remove the extra indentation; extract explicitly
+defined signature and arguments names.
 
 Supported formats (if adhere to the style guidelines) are:
     * Epytext
     * reST
     * Google format for the Python docstrings
-    * Numpydoc
+    * NumPydoc
     * Slightly modified Google format with the explicit signature definition
         in the Haskell style and explicit indication of the optional arguments
         in the Args part adopted by AA (library's author)
@@ -26,11 +27,13 @@ Classes:
 Functions:
     guess_docstyle(strDocstring):
         str -> class 'GenericParser
+    indent_docstring(strDocString):
+        str/, int >= 0/ -> str
 """
 
-__version__ = "0.0.1.1"
-__date__ = "11-07-2018"
-__status__ = "Testing"
+__version__ = "0.0.1.2"
+__date__ = "18-07-2018"
+__status__ = "Production"
 
 #imports
 
@@ -96,6 +99,9 @@ class GenericParser(object):
         Signature:
             str -> str
         
+        Args:
+            strDocstring: string
+        
         Raises:
             pos.exceptions.CustomTypeError: input is not a string
             pos.exceptions.CustomValueError: input string contains only the
@@ -157,6 +163,9 @@ class GenericParser(object):
         
         Signature:
             str -> str
+        
+        Args:
+            strDocstring: string
         
         Raises:
             pos.exceptions.CustomTypeError: input is not a string
@@ -236,6 +245,9 @@ class GenericParser(object):
         Signature:
             str -> str OR None
         
+        Args:
+            strDocstring: string
+            
         Raises:
             pos.exceptions.CustomTypeError: input is not a string
             pos.exceptions.CustomValueError: input string contains only the
@@ -294,6 +306,9 @@ class GenericParser(object):
         
         Signature:
             str -> list(str)
+        
+        Args:
+            strDocstring: string
         
         Raises:
             pos.exceptions.CustomTypeError: input is not a string
@@ -515,6 +530,9 @@ class AAParser(GoogleParser):
         Signature:
             str -> list(str)
         
+        Args:
+            strDocstring: string
+        
         Raises:
             pos.exceptions.CustomTypeError: input is not a string
             pos.exceptions.CustomValueError: input string contains only the
@@ -605,6 +623,9 @@ def guess_docstyle(strDocstring):
     Signature:
         str -> class 'GenericParser
     
+    Args:
+        strDocstring: string
+    
     Raises:
         pos.exceptions.CustomTypeError: input is not a string
         pos.exceptions.CustomValueError: input string contains only the
@@ -625,129 +646,38 @@ def guess_docstyle(strDocstring):
         clsFoundParser = AAParser
     return clsFoundParser
 
-#testing - temporary
-
-def epytext_style(Name, *args, **kwargs):
+def indent_docstring(strDocstring, iTabs = 1):
     """
-    Epytext / javadoc style docstring
-    
-    @param Name: string, name of something
-    @param *args: (optional), any amount of arguments of any types, not really
-    used
-    @param **kwargs: (optional), any amount of arguments of any types, not
-    really used
-    @return: None
-    @raise None: no exceptions
-    
-    >>>epytext_style('whatever')
-    None
-    
-    Version 0.0.1.0
-    """
-    return None
-
-def rest_style(Name, *args, **kwargs):
-    """
-    reST style docstring
-    
-    :param Name: string, name of something
-    :param *args: (optional), any amount of arguments of any types, not really
-        used
-    :param **kwargs: (optional), any amount of arguments of any types, not
-        really used
-    :returns: None
-    :raises None: no exceptions
-    
-    >>>rest_style('whatever')
-    None
-    
-    Version 0.0.1.0
-    """
-    return None
-
-def google_style(Name, *args, **kwargs):
-    """
-    Google / AA style docstring
+    Prepends each line in the passed docstring (may be already trimmed) with the
+    4 times the specified number (second, optional argument) number of spaces.
     
     Signature:
-        str, /type A, type B/ -> None
+        str/, int >= 0/ -> str
     
     Args:
-        Name: string, name of something
-        *args: (optional), any amount of arguments of any types, not really used
-        **kwargs: (optional), keyword, any amount of arguments of any types, not
-            really used
-    
-    Returns:
-        None
+        strDocstring: string
+        iTabs: (optional), non negative integer, amount of 'tabs' to be inserted
+            into the beginning of each line (each 'tab' is replaced by 4 space
+            characters); default value is 1 (-> 4 spaces)
     
     Raises:
-        no exceptions
-    
-    >>>google_style('whatever')
-    None
-    
-    Version 0.0.1.0
-    """
-    return None
-
-def numpydoc_style(Name, *args, **kwargs):
-    """
-    NumPydoc style docstring
-    
-    Parameters
-    ----------
-    Name : string, name of something
-    *args : (optional), any amount of arguments of any types
-        not really used
-    **kwargs : (optional), keyword, any amount of arguments of any types
-        not really used
-    
-    Returns
-    -------
-    None
-        nothing is returned
-    
-    Raises
-    ------
-    None
-        no exceptions
-    
-    Usage
-    -----
-    >>>numpydoc_style('whatever')
-    None
+        pos.exceptions.CustomTypeError: the first argument is not a string, or
+            the second argument is not an integer
+        pos.exceptions.CustomValueError: the first argument is an empty string,
+            or the second argument is a negative integer
     
     Version 0.0.1.0
     """
-    return None
-
-
-if __name__ == '__main__':
-    try:
-        #Epytext / javadoc
-        #strDocstring = epytext_style.__doc__
-        #rest
-        #strDocstring = rest_style.__doc__
-        #Google /AA
-        strDocstring = google_style.__doc__
-        #Numpydoc
-        #strDocstring = numpydoc_style.__doc__
-        print 'Original docstring\n'
-        print strDocstring
-        clsParser = guess_docstyle(strDocstring)
-        print '\nProposed parser is {}\n'.format(clsParser.__name__)
-        strPass1 =  clsParser.trimDocstring(strDocstring)
-        print '\nTrimmed docstring\n'
-        print strPass1
-        strPass2 = clsParser.reduceDocstring(strPass1)
-        print '\nReduced docstring\n'
-        print strPass2
-        gSign = clsParser.extractSignature(strPass1)
-        print '\nSignature\n'
-        print gSign
-        strlstArgs = clsParser.extractArguments(strPass1)
-        print '\nArguments\n'
-        print strlstArgs
-    except (CustomTypeError, CustomValueError) as err:
-        print err.message
+    if not isinstance(strDocstring, basestring):
+        raise CustomTypeError(strDocstring, basestring)
+    elif not len(strDocstring):
+        raise CustomValueError(strDocstring, "'not empty string'")
+    if not isinstance(iTabs, int):
+        raise CustomTypeError(iTabs, int)
+    elif iTabs < 0:
+        raise CustomValueError(iTabs, "'not negative'")
+    strlstTemp = strDocstring.split('\n')
+    strPrefix = " " * (4 * iTabs)
+    strResult = '\n'.join([''.join([strPrefix, strLine])
+                                                    for strLine in strlstTemp])
+    return strResult

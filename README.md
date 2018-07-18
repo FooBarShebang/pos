@@ -54,6 +54,15 @@ Besides, I have some personal grudges with these implementations and my own wish
   - module **traceback**
     * class StackTraceback
     * class ExceptionTraceback
+  - module **docstring_parsers**
+    * class GenericParser
+    * class EpytextParser
+    * class reSTParser
+    * class GoogleParser
+    * class AAParser
+    * class NumPydocParser
+    * function guess_docstyle()
+    * function indent_docstring()
 * module **exceptions**
   - class ErrorMixin
   - class CustomError
@@ -97,3 +106,17 @@ The **ExceptionTraceback** provides the traceback in the same order as **inspect
 
 With the both classes a specified number of the last elements can be 'hidden' / removed from the traceback.
 
+#### Module docstring_parsers
+
+Provides 6 classes: **GenericParser** - prototype class for the specific docstring style parsers, **EpytextParser** - specific parser for the Epytext style (similar to javadoc), **reSTParser** - specific parser for the reStructured Text format of the docstrings, **GoogleParser** - specific parser for the Google style of the docstrings, **AAParser** - specific parser for the 'extended' version of the Google style with the extra tokens and explicit signature recognition as well as with the recognition of the optional arguments, **NumPydocParser** - specific parser for the NumPy docstring style.
+
+All these classes are Singleton-like, i.e. there is no need for their instantiation, since all defined methods are class methods. All these classes have the same set of methods
+
+- trimDocstring(): removes extra indentation, heading and tailing empty lines, tailing whitespaces in each line
+- reduceDocstring(): same as above plus removal of all lines related to the auto-generation of the documentation, according to the defined standard tokens
+- extractSignature(): extracts the explicitly defined signature of the method / function; currently is meaningful only for the AA docstyle (extended Google style); for other formats returns None
+- extractArguments(): extracts the names (as a list of strings) of all explicitly defined arguments in the docstring; in the case of the AA docstyle also recognizes the optional arguments, those names are escaped with '/'.
+
+Implements the function **guess_docstyle**(), which 'guesses' the most suitable parser (returns a class) by the most efficient removal of the lines related to the auto-generation of the documentation; AAParser class is the default option, when none of the parsers is able to remove any line.
+
+Provides the function **indent_docstring**(), which adds the required number (times 4) of the spaces in front of each line.
