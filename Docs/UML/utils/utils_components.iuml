@@ -10,6 +10,46 @@ package(utils) {
         
         class(ExceptionTraceback)
         
-        StackTraceback <|-- ExceptionTraceback
+        StackTraceback <|- ExceptionTraceback
     }
+    
+    module(docstring_parsers) {
+        class(GenericParser)
+        
+        class(EpytextParser)
+        
+        class(reSTParser)
+        
+        class(GoogleParser)
+        
+        class(NumPydocParser)
+        
+        GenericParser <|-- EpytextParser
+        
+        GenericParser <|-- reSTParser
+        
+        GenericParser <|-- GoogleParser
+        
+        GenericParser <|-- NumPydocParser
+        
+        class(AAPraser)
+        
+        GoogleParser <|-- AAPraser
+        
+        function("guess_docstyle()", gds)
+        
+        AAPraser <. gds
+        
+        EpytextParser <.. gds
+        
+        reSTParser <.. gds
+        
+        NumPydocParser <.. gds
+        
+        function("indent_docstring()", ids)
+        
+        ids -[hidden] gds
+    }
+    
+    traceback -[hidden]- docstring_parsers
 }

@@ -1,0 +1,17 @@
+!define UTILS_DOCSTRING_PARSERS_EPYTEXTPARSER
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+class EpytextParser <<SINGLETON>> {
+    + static_field(SkipTokens) : list(str)
+    + static_field(ArgsToken) : str = '@param'
+    __
+    __
+    Recognized tokens are:
+    "@param", "@return", "@raise", "@author",
+    "@version", "@exception", "@throws", "@see",
+    "@since", "@serial", "@serialField",
+    "@serialData", "@deprecated", ">>>"
+}

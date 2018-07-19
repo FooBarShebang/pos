@@ -11,7 +11,7 @@ module(exceptions) {
     
     class(SpecificCustomExceptions)
     
-    ErrorMixin <|-- CustomError
+    ErrorMixin <|- CustomError
     
-    CustomError <|-left- SpecificCustomExceptions
+    CustomError <|-d- SpecificCustomExceptions
 }

@@ -109,20 +109,21 @@ class GenericParser(object):
         
         Version 0.0.1.0
         """
-        strResult = ''
         if isinstance(strDocstring, basestring):
             if len(strDocstring):
                 strlstBuffer = [strLine.expandtabs(4).rstrip()
                                     for strLine in strDocstring.split('\n')]
                 #define minimum indentation (will be removed from all strings
                 #but the first)
+                iIndent= sys.maxint
                 if len(strlstBuffer) > 1:
-                    iIndent= sys.maxint
                     for strLine in strlstBuffer[1:]:
                         strStripped = strLine.lstrip()
                         if len(strStripped):
                             iIndent = min(iIndent,
                                                 len(strLine) - len(strStripped))
+                if iIndent == sys.maxint:
+                    iIndent = 0
                 #append the first line if it is not empty
                 strLine = strlstBuffer[0].lstrip()
                 if len(strLine):
@@ -131,13 +132,10 @@ class GenericParser(object):
                     strlstNewBuffer = []
                 #remove excessive indentation
                 for strLine in strlstBuffer[1:]:
-                    if iIndent < sys.maxint:
-                        if len(strLine) > iIndent:
-                            strlstNewBuffer.append(strLine[iIndent:])
-                        else:
-                            strlstNewBuffer.append('')
+                    if len(strLine) > iIndent:
+                        strlstNewBuffer.append(strLine[iIndent:])
                     else:
-                        strlstNewBuffer.append(strLine)
+                        strlstNewBuffer.append('')
                 #remove tailing empty strings
                 while len(strlstNewBuffer) and not len(strlstNewBuffer[-1]):
                     strlstNewBuffer.pop()
@@ -208,21 +206,21 @@ class GenericParser(object):
                                         cls.SkipTokens)) #another token
                             bCond3 = not len(strNewLine) #empty line
                             bCond4 = bCond2 or bCond3
-                        else:
-                            bCond4 = True
-                        while not (bCond4): #skipping lines
-                            iIndex += 1
-                            if iIndex < iLength:
-                                strNewLine=strlstTrimmed[iIndex].strip().lower()
-                                bCond2 = any(map(
-                                    lambda x: strNewLine.startswith(x.lower()),
-                                        cls.SkipTokens)) #another token
-                                bCond3 = not len(strNewLine) #empty line
-                                bCond4 = bCond2 or bCond3
-                            else:
-                                bCond4 = True
-                        if not len(strNewLine):
-                            iIndex += 1
+                            while not (bCond4): #skipping lines
+                                iIndex += 1
+                                if iIndex < iLength:
+                                    strNewLine = (
+                                        strlstTrimmed[iIndex].strip().lower())
+                                    bCond2 = any(map(
+                                        lambda x: strNewLine.startswith(
+                                            x.lower()),
+                                                cls.SkipTokens)) #another token
+                                    bCond3 = not len(strNewLine) #empty line
+                                    bCond4 = bCond2 or bCond3
+                                else:
+                                    bCond4 = True
+                            if not len(strNewLine):
+                                iIndex += 1
                     else:
                         strlstReduced.append(strLine)
                         iIndex += 1

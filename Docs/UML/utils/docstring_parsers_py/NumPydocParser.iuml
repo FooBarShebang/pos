@@ -1,0 +1,16 @@
+!define UTILS_DOCSTRING_PARSERS_NUMPYDOCPARSER
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+class NumPydocParser <<SINGLETON>> {
+    + static_field(SkipTokens) : list(str)
+    + static_field(SecondLineSymbol) : str = '-'
+    + static_field(ArgsToken) : str = 'Parameters'
+    __
+    __
+    The recognized tokens are:
+    "Parameters", "Returns", "Raises", "Usage",
+    "Yields", "See Also", "Attributes", ">>>"
+}

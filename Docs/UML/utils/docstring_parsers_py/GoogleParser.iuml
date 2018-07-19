@@ -1,0 +1,15 @@
+!define UTILS_DOCSTRING_PARSERS_GOOGLEPARSER
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+class GoogleParser <<SINGLETON>> {
+    + static_field(SkipTokens) : list(str)
+    + static_field(ArgsToken) : str = 'Args:'
+    __
+    __
+    Recognized tokens are:
+    "Args:", "Returns:", "Raises",
+    "Attributes:", ">>>"
+}

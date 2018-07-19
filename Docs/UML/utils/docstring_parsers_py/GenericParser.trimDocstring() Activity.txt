@@ -1,0 +1,62 @@
+@startuml
+
+title Activity Diagram of the Method utils.docstring_parsers.GenericParser.trimDocstring()
+
+start
+
+:<b>DocString</b> - string, the doc-string to be 'trimmed'<
+
+if (<b>DocString</b> is a string?) then (True)
+    if (<b>DocString</b> is not empty?) then (True)
+        :Split into lines by new-line character,
+        expand all tabs into 4 spaces, strip all
+        tailing whitespaces, so
+        <b>DocString</b>::str -> <b>Buffer</b>::list(str)]
+        
+        :find minimum indentation by counting
+        the heading spaces in each line except
+        the first line -> <b>Indent</b> ]
+        
+        :create new buffer <b>NewBuffer</b> as an empty list;
+        
+        if (the 1st line in <b>Buffer</b> is not empty?) then (True)
+            :add it into <b>NewBuffer</b> ;
+        endif
+        
+        while (for each line in <b>Buffer</b> starting with the second)
+            if (length of the line > <b>Indent</b>?) then (True)
+                :add line into <b>NewBuffer</b> skipping
+                first <b>Indent</b> characters;
+            else (False)
+                :add line into <b>NewBuffer</b> as it is;
+            endif
+        end while
+        
+        :remove all empty lines from the start of <b>NewBuffer</b> ]
+        
+        :remove all empty lines from the end of <b>NewBuffer</b> ]
+        
+        :merge all lines in <b>NewBuffer</b> into a single string
+        <b>Result</b> using new-line characters in between;
+        
+        if (length of <b>Result</b> > 0?) then (True)
+            :return <b>Result</b> string>
+            
+            stop
+        else (False)
+            :raise exceptions.CustomValueError;
+            
+            stop
+        endif
+    else (False)
+        :raise exceptions.CustomValueError;
+        
+        stop
+    endif
+else (False)
+    :raise exceptions.CustomTypeError;
+    
+    stop
+endif
+
+@enduml

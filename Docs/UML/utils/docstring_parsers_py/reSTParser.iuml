@@ -1,0 +1,14 @@
+!define UTILS_DOCSTRING_PARSERS_RESTPARSER
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+class reSTParser <<SINGLETON>> {
+    + static_field(SkipTokens) : list(str)
+    + static_field(ArgsToken) : str = ':param'
+    __
+    __
+    Recognized tokens are:
+    ":param", ":returns:", ":raises", ">>>"
+}

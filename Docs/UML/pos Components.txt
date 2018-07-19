@@ -15,7 +15,7 @@ library(pos) {
     !include ./exceptions_py/exceptions_Components.iuml
     !endif
     
-    ExceptionTraceback --o ErrorMixin : gerenerates
+    ExceptionTraceback -o ErrorMixin : gerenerates
 }
 
 library(builtins) {
@@ -24,17 +24,17 @@ library(builtins) {
             
             function(trace, trace_b)
             
-            stack_b -[hidden]- trace_b
+            stack_b -[hidden] trace_b
         }
         
         class(StandardError)
         
-        trace_b -[hidden]- StandardError
+        trace_b -[hidden] StandardError
     }
 
-StackTraceback -left-> stack_b : uses
+stack_b <-- StackTraceback : uses
 
-ExceptionTraceback -left-> trace_b : uses
+trace_b <-- ExceptionTraceback : uses
 
 StandardError <|-- CustomError
 

@@ -1,0 +1,19 @@
+!define UTILS_DOCSTRING_PARSERS_GENERICPARSER
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+class GenericParser <<PROTOTYPE>> {
+    + static_field(SkipTokens) : list(str)
+    + static_field(SecondLineSymbol) : None
+    + static_field(SignatureToken) : None
+    + static_field(ArgsToken) : None
+    __
+    + static_method(trimDocstring) : str -> str
+    + static_method(reduceDocstring) : str -> str
+    + static_method(extractSignature) : str -> str OR None
+    + static_method(extractArguments) : str -> list(str)
+    __
+    The only recognized token is '>>>'
+}
