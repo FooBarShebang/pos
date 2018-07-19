@@ -31,8 +31,8 @@ Functions:
         str/, int >= 0/ -> str
 """
 
-__version__ = "0.0.1.2"
-__date__ = "18-07-2018"
+__version__ = "0.0.1.3"
+__date__ = "19-07-2018"
 __status__ = "Production"
 
 #imports
@@ -107,7 +107,7 @@ class GenericParser(object):
             pos.exceptions.CustomValueError: input string contains only the
                 whitespace characters (including tabs and new lines) or is empty
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         if isinstance(strDocstring, basestring):
             if len(strDocstring):
@@ -170,7 +170,7 @@ class GenericParser(object):
             pos.exceptions.CustomValueError: input string contains only the
                 whitespace characters (including tabs and new lines) or is empty
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         strlstTrimmed = cls.trimDocstring(strDocstring).split('\n')
         iLength = len(strlstTrimmed)
