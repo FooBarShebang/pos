@@ -55,9 +55,9 @@ salt
         ++ <&folder> UML
         +++ <&folder> exceptions_py
         ++++ <&code> ConstantAssignment.iuml
-        ++++ <&code> CustmAttributeError.iuml
-        ++++ <&image>CustomError._ _subclasshook_ _() Activity.png
-        ++++ <&code>CustomError._ _subclasshook_ _() Activity.txt
+        ++++ <&code> CustomAttributeError.iuml
+        ++++ <&image> CustomError._ _subclasshook_ _() Activity.png
+        ++++ <&code> CustomError._ _subclasshook_ _() Activity.txt
         ++++ <&code> CustomError.iuml
         ++++ <&image> Custom Exception Instantiation.png
         ++++ <&code> Custom Exception Instantiation.txt
@@ -85,6 +85,21 @@ salt
         ++++ <&code> Classes.cuml
         ++++ <&code> Components.cuml
         +++ <&folder> utils
+        ++++ <&folder> docstring_parsers_py
+        +++++ <&code> AAParser.iuml
+        +++++ <&image> docstring_parsers Classes.png
+        +++++ <&code> docstring_parsers Classes.txt
+        +++++ <&code> EpytextParser.iuml
+        +++++ <&code> GenericParser.iuml
+        +++++ <&image> GenericParser.reduceDocstring() Activity.png
+        +++++ <&code> GenericParser.reduceDocstring() Activity.txt
+        +++++ <&image> GenericParser.trimDocstring() Activity.png
+        +++++ <&code> GenericParser.trimDocstring() Activity.txt
+        +++++ <&code> GoogleParser.iuml
+        +++++ <&image> indent_docstring() Activity.png
+        +++++ <&code> indent_docstring() Activity.txt
+        +++++ <&code> NumPydocParser.iuml
+        +++++ <&code> reSTParser.iuml
         ++++ <&folder> traceback_py
         +++++ <&image> ExceptionTraceback._ _init_ _() Activity.png
         +++++ <&code> ExceptionTraceback._ _init_ _() Activity.txt

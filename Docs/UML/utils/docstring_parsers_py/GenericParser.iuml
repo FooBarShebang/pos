@@ -12,6 +12,7 @@ class GenericParser <<PROTOTYPE>> {
     __
     + static_method(trimDocstring) : str -> str
     + static_method(reduceDocstring) : str -> str
+    + static_method(extractLinesByTokens) : str, str OR seq(str) OR None -> list(str)
     + static_method(extractSignature) : str -> str OR None
     + static_method(extractArguments) : str -> list(str)
     __

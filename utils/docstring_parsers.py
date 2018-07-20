@@ -31,15 +31,16 @@ Functions:
         str/, int >= 0/ -> str
 """
 
-__version__ = "0.0.1.3"
-__date__ = "19-07-2018"
-__status__ = "Production"
+__version__ = "0.0.1.4"
+__date__ = "20-07-2018"
+__status__ = "Development"
 
 #imports
 
 #+ standard libraries
 
 import sys
+import collections
 
 #+ library's modules
 
@@ -69,12 +70,14 @@ class GenericParser(object):
             str -> str
         reduceDocstring(strDocstring):
             str -> str
+        extractLinesByTokens(strDocstring, Tokens):
+            str, str OR seq(str) OR None -> list(str)
         extractSignature(strDocstring):
             str -> str OR None
         extractArguments(strDocstring):
             str -> list(str)
     
-    Version 0.0.1.1
+    Version 0.0.2.0
     """
     
     #class attributes
@@ -234,6 +237,84 @@ class GenericParser(object):
         return strResult
     
     @classmethod
+    def extractLinesByTokens(cls, strDocstring, Tokens):
+        """
+        Extracts the lines from the docstring, which are part of the
+        documentation auto-generation for the specified token(s). The tokens
+        themselves are removed.
+        
+        Signature:
+            str, str OR seq(str) OR None -> list(str)
+        
+        Args:
+            strDocstring: string
+            
+        Raises:
+            pos.exceptions.CustomTypeError: the first argument is not a string
+            pos.exceptions.CustomValueError: input docstring contains only the
+                whitespace characters (including tabs and new lines) or is empty
+            TypeError: the second argument is neither None, nor string, nor a
+                sequence of strings
+        
+        Version 0.0.1.0
+        """
+        
+        strlstTrimmed = [strLine.strip()
+                    for strLine in cls.trimDocstring(strDocstring).split('\n')]
+        iLength = len(strlstTrimmed)
+        strlstResult = []
+        if not (Tokens is None):
+            bCond1 = isinstance(Tokens, basestring)
+            bCond2 = (isinstance(Tokens, collections.Sequence) and
+                        all(map(lambda x: isinstance(x, basestring), Tokens)))
+            if not (bCond1 or bCond2):
+                strMessage = ' '.join(['Tokens must be either None, string,',
+                                        'or sequence of strings; got',
+                                        str(type(Tokens)), 'instead'])
+                raise TypeError(strMessage)
+            elif bCond1:
+                strlstTokens = [Tokens.lower()]
+            else:
+                strlstTokens = map(lambda x: x.lower(), Tokens)
+            bFlag = False
+            for iIdx, strLine in enumerate(strlstTrimmed):
+                for strToken in strlstTokens:
+                    if strLine.lower().startswith(strToken):
+                        bCond1 = True
+                        strFoundToken = strToken
+                        break
+                else:
+                    bCond1 = False
+                    strFoundToken = None
+                bCond2 = not len(strLine)
+                bCond3 = any(map(lambda x: strLine.startswith(x.lower()),
+                                                                cls.SkipTokens))
+                if bCond1:
+                    if cls.SecondLineSymbol is None:
+                        bFlag = True
+                        strRest = strLine[len(strFoundToken):].strip()
+                        if len(strRest):
+                            strlstResult.append(strRest)
+                    else:
+                        if iIdx < iLength - 2:
+                            if strlstTrimmed[iIdx + 1].startswith(
+                                                        cls.SecondLineSymbol):
+                                bFlag = True
+                            else:
+                                bFlag = False
+                        else:
+                            bFlag = False
+                elif bCond2 or bCond3:
+                    if bFlag:
+                        break
+                elif bFlag:
+                    if cls.SecondLineSymbol is None:
+                        strlstResult.append(strLine)
+                    elif not strLine.startswith(cls.SecondLineSymbol):
+                        strlstResult.append(strLine)
+        return strlstResult
+    
+    @classmethod
     def extractSignature(cls, strDocstring):
         """
         Attempts to extract the explicit definition of a method's or function's
@@ -251,48 +332,13 @@ class GenericParser(object):
             pos.exceptions.CustomValueError: input string contains only the
                 whitespace characters (including tabs and new lines) or is empty
         
-        Version 0.0.1.0
+        Version 0.0.2.0
         """
-        strlstTrimmed = [strLine.strip()
-                    for strLine in cls.trimDocstring(strDocstring).split('\n')]
-        iLength = len(strlstTrimmed)
-        if cls.SignatureToken is None:
-            gResult = None
+        strlstBuffer =cls.extractLinesByTokens(strDocstring, cls.SignatureToken)
+        if len(strlstBuffer):
+            gResult = ' '.join(strlstBuffer)
         else:
-            strlstBuffer = []
-            bFlag = False
-            for iIdx, strLine in enumerate(strlstTrimmed):
-                bCond1 = strLine.lower().startswith(cls.SignatureToken.lower())
-                bCond2 = not len(strLine)
-                bCond3 = any(map(lambda x: strLine.startswith(x.lower()),
-                                                                cls.SkipTokens))
-                if bCond1:
-                    if cls.SecondLineSymbol is None:
-                        bFlag = True
-                        strRest = strLine[len(cls.SignatureToken):].strip()
-                        if len(strRest):
-                            strlstBuffer.append(strRest)
-                    else:
-                        if iIdx < iLength - 2:
-                            if strlstTrimmed[iIdx + 1].startswith(
-                                                        cls.SecondLineSymbol):
-                                bFlag = True
-                            else:
-                                bFlag = False
-                        else:
-                            bFlag = False
-                elif bCond2 or bCond3:
-                    if bFlag:
-                        break
-                elif bFlag:
-                    if cls.SecondLineSymbol is None:
-                        strlstBuffer.append(strLine)
-                    elif not strLine.startswith(cls.SecondLineSymbol):
-                        strlstBuffer.append(strLine)
-            if len(strlstBuffer):
-                gResult = ' '.join(strlstBuffer)
-            else:
-                gResult = None
+            gResult = None
         return gResult
     
     @classmethod
@@ -313,48 +359,11 @@ class GenericParser(object):
             pos.exceptions.CustomValueError: input string contains only the
                 whitespace characters (including tabs and new lines) or is empty
         
-        Version 0.0.1.0
+        Version 0.0.2.0
         """
-        strlstTrimmed = [strLine.strip()
-                    for strLine in cls.trimDocstring(strDocstring).split('\n')]
-        iLength = len(strlstTrimmed)
-        if cls.ArgsToken is None:
-            lstResult = []
-        else:
-            strlstBuffer = []
-            bFlag = False
-            for iIdx, strLine in enumerate(strlstTrimmed):
-                bCond1 = strLine.lower().startswith(cls.ArgsToken.lower())
-                bCond2 = not len(strLine)
-                bCond3 = any(map(lambda x: strLine.startswith(x.lower()),
-                                                                cls.SkipTokens))
-                if bCond1:
-                    if cls.SecondLineSymbol is None:
-                        bFlag = True
-                        strRest = strLine[len(cls.ArgsToken):].strip()
-                        if len(strRest): #reST, Epytext and alike - in same line
-                            strlstBuffer.append(strRest)
-                            bFlag = False
-                    else:
-                        if iIdx < iLength - 2:
-                            if strlstTrimmed[iIdx + 1].startswith(
-                                                        cls.SecondLineSymbol):
-                                bFlag = True
-                            else:
-                                bFlag = False
-                        else:
-                            bFlag = False
-                elif bCond2 or bCond3:
-                    bFlag = False
-                elif bFlag: #Google, Numpydoc and alike
-                    if cls.SecondLineSymbol is None:
-                        if ':' in strLine:
-                            strlstBuffer.append(strLine)
-                    elif not strLine.startswith(cls.SecondLineSymbol):
-                        if ':' in strLine:
-                            strlstBuffer.append(strLine)
-            strlstBuffer = filter(lambda x: ':' in x, strlstBuffer)
-            lstResult = [strLine.split(':')[0].strip()
+        strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.ArgsToken)
+        strlstBuffer = filter(lambda x: ':' in x, strlstBuffer)
+        lstResult = [strLine.split(':')[0].strip()
                                                     for strLine in strlstBuffer]
         return lstResult
 
@@ -498,7 +507,7 @@ class AAParser(GoogleParser):
         extractArguments(strDocstring):
             str -> list(str)
     
-    Version 0.0.1.1
+    Version 0.0.1.2
     """
     
     #class attributes
@@ -536,33 +545,19 @@ class AAParser(GoogleParser):
             pos.exceptions.CustomValueError: input string contains only the
                 whitespace characters (including tabs and new lines) or is empty
         
-        Version 0.0.1.0
+        Version 0.0.2.0
         """
-        strlstTrimmed = [strLine.strip()
-                    for strLine in cls.trimDocstring(strDocstring).split('\n')]
+        strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.ArgsToken)
+        strlstBuffer = filter(lambda x: ':' in x, strlstBuffer)
         lstResult = []
-        if not (cls.ArgsToken is None):
-            strlstBuffer = []
-            bFlag = False
-            for strLine in strlstTrimmed:
-                bCond1 = strLine.lower().startswith(cls.ArgsToken.lower())
-                bCond2 = not len(strLine)
-                bCond3 = any(map(lambda x: strLine.startswith(x.lower()),
-                                                                cls.SkipTokens))
-                if bCond1:
-                    bFlag = True
-                elif bCond2 or bCond3:
-                    bFlag = False
-                elif bFlag and (':' in strLine):
-                    strlstBuffer.append(strLine)
-            for strLine in strlstBuffer:
-                strlstTemp = strLine.split(':')
-                strName = strlstTemp[0].strip()
-                strRest = strlstTemp[1].strip().lower()
-                if strRest.startswith('(optional)'):
-                    lstResult.append('/{}/'.format(strName))
-                else:
-                    lstResult.append(strName)
+        for strLine in strlstBuffer:
+            strlstTemp = strLine.split(':')
+            strName = strlstTemp[0].strip()
+            strRest = strlstTemp[1].strip().lower()
+            if strRest.startswith('(optional)'):
+                lstResult.append('/{}/'.format(strName))
+            else:
+                lstResult.append(strName)
         return lstResult
 
 class NumPydocParser(GenericParser):

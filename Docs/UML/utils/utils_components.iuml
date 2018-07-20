@@ -16,39 +16,17 @@ package(utils) {
     module(docstring_parsers) {
         class(GenericParser)
         
-        class(EpytextParser)
+        class(SpecificParsers)
         
-        class(reSTParser)
-        
-        class(GoogleParser)
-        
-        class(NumPydocParser)
-        
-        GenericParser <|-- EpytextParser
-        
-        GenericParser <|-- reSTParser
-        
-        GenericParser <|-- GoogleParser
-        
-        GenericParser <|-- NumPydocParser
-        
-        class(AAPraser)
-        
-        GoogleParser <|-- AAPraser
+        SpecificParsers -|> GenericParser
         
         function("guess_docstyle()", gds)
         
-        AAPraser <. gds
-        
-        EpytextParser <.. gds
-        
-        reSTParser <.. gds
-        
-        NumPydocParser <.. gds
+        SpecificParsers <.. gds
         
         function("indent_docstring()", ids)
         
-        ids -[hidden] gds
+        gds -[hidden] ids
     }
     
     traceback -[hidden]- docstring_parsers
