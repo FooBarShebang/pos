@@ -1,0 +1,23 @@
+@startuml
+
+title Activity Diagram of the Method utils.docstring_parsers.GenericParser.extractSignature()
+
+start
+
+:<b>DocString</b> - string, the doc-string to be parsed<
+
+:call <b>extractLinesByTokens</b>() method with <b>DocString</b> and class attribute <b>SignatureToken</b> as arguments
+-> <b>Buffer</b>::list(str)|
+
+if (<b>Buffer</b> is empty?) then (True)
+    :return None>
+else (False)
+    :strip all lines in <b>Buffer</b> from the leading and tailing whitespaces, and
+    join them into a single string <b>Result</b> using a single space between;
+    
+    :return <b>Result</b> string>
+endif
+
+stop
+
+@enduml

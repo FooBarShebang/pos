@@ -86,10 +86,22 @@ salt
         ++++ <&code> Components.cuml
         +++ <&folder> utils
         ++++ <&folder> docstring_parsers_py
+        +++++ <&image> AAParser.extractArguments() Activity.png
+        +++++ <&code> AAParser.extractArguments() Activity.txt
         +++++ <&code> AAParser.iuml
         +++++ <&image> docstring_parsers Classes.png
         +++++ <&code> docstring_parsers Classes.txt
         +++++ <&code> EpytextParser.iuml
+        +++++ <&image> GenericParser.extractArguments() Activity.png
+        +++++ <&code> GenericParser.extractArguments() Activity.txt
+        +++++ <&image> GenericParser.extractLinesByTokens() Activity.png
+        +++++ <&code> GenericParser.extractLinesByTokens() Activity.txt
+        +++++ <&image> GenericParser.extractRaises() Activity.png
+        +++++ <&code> GenericParser.extractRaises() Activity.txt
+        +++++ <&image> GenericParser.extractReturnedValues() Activity.png
+        +++++ <&code> GenericParser.extractReturnedValues() Activity.txt
+        +++++ <&image> GenericParser.extractSignature() Activity.png
+        +++++ <&code> GenericParser.extractSignature() Activity.txt
         +++++ <&code> GenericParser.iuml
         +++++ <&image> GenericParser.reduceDocstring() Activity.png
         +++++ <&code> GenericParser.reduceDocstring() Activity.txt

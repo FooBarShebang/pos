@@ -7,10 +7,15 @@
 class NumPydocParser <<SINGLETON>> {
     + static_field(SkipTokens) : list(str)
     + static_field(SecondLineSymbol) : str = '-'
-    + static_field(ArgsToken) : str = 'Parameters'
+    + static_field(ArgsToken) : list(str) = ['Parameters', "Other Parameters"]
+    + static_field(ReturnTokens) : list(str) = ["Returns", "Yields"]
+    + static_field(RaisesTokens) : list(str) = ["Raises", "Warns", "Warnings"]
     __
+    # static_method(_filterLines) : seq(str) -> list(str)
+    + static_method(extractReturnedValues) : str -> list(str)
+    + static_method(extractRaises) : str -> list(str)
     __
     The recognized tokens are:
-    "Parameters", "Returns", "Raises", "Usage",
-    "Yields", "See Also", "Attributes", ">>>"
+    "Parameters", "Returns", "Raises", "Usage", "Yields", "See Also",
+    "Attributes", "Warns", "Warnings", "Other Parameters"
 }

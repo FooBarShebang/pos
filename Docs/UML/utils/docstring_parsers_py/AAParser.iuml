@@ -8,12 +8,16 @@ class AAParser <<SINGLETON>> {
     + static_field(SkipTokens) : list(str)
     + static_field(SignatureToken) : str = 'Signature:'
     + static_field(ArgsToken) : str = 'Args:'
+    + static_field(ReturnTokens) : list(str) = ["Returns:", "Yields:"]
+    + static_field(RaisesTokens) : str = "Raises:"
     __
     + static_method(extractArguments) : str -> list(str)
     __
     Recognized tokens are:
-    "Args:", "Returns:", "Raises", "Attributes:",
-    "Signature:", "Classes:", "Properties:", "Methods:",
-    "Class methods:", "Read-only properties:", "Functions:",
-    "Class attributes:", "Packages:", "Modules:", ">>>"
+    "Args:", "Returns:", "Raises:", "Yields:",
+    "Attributes:", "Todo:", "Note:", "Example:",
+    "Examples:", "Signature:", "Classes:", "Properties:",
+    "Methods:", "Class methods:", "Read-only properties:",
+    "Functions:", "Class attributes:", "Packages:",
+    "Modules:", ">>>"
 }

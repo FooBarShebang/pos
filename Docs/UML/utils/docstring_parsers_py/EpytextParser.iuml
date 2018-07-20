@@ -7,6 +7,8 @@
 class EpytextParser <<SINGLETON>> {
     + static_field(SkipTokens) : list(str)
     + static_field(ArgsToken) : str = '@param'
+    + static_field(ReturnTokens) : str = "@return"
+    + static_field(RaisesTokens) : list(str) = ["@raise", "@exception", "@throws"]
     __
     __
     Recognized tokens are:

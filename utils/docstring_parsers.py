@@ -5,7 +5,8 @@ Module pos.utils.docstring_parsers
 Implements classes to parse the docstrings, i.e. extract / remove the signature,
 arguments list, return value(s) and exceptions to be raised list of the method
 / function from the docstring; remove the extra indentation; extract explicitly
-defined signature and arguments names.
+defined signature and arguments names, returned types and exceptions, which can
+be raised.
 
 Supported formats (if adhere to the style guidelines) are:
     * Epytext
@@ -31,9 +32,9 @@ Functions:
         str/, int >= 0/ -> str
 """
 
-__version__ = "0.0.1.4"
+__version__ = "0.0.1.5"
 __date__ = "20-07-2018"
-__status__ = "Development"
+__status__ = "Production"
 
 #imports
 
@@ -76,8 +77,12 @@ class GenericParser(object):
             str -> str OR None
         extractArguments(strDocstring):
             str -> list(str)
+        extractReturnedValues(strDocstring):
+            str -> list(str)
+        extractRaises(strDocstring):
+            str -> list(str)
     
-    Version 0.0.2.0
+    Version 0.0.2.1
     """
     
     #class attributes
@@ -89,6 +94,10 @@ class GenericParser(object):
     SignatureToken = None
     
     ArgsToken = None
+    
+    ReturnTokens = None
+    
+    RaisesTokens = None
     
     #public class methods
     
@@ -248,6 +257,7 @@ class GenericParser(object):
         
         Args:
             strDocstring: string
+            Tokens: str OR seq(str) OR None
             
         Raises:
             pos.exceptions.CustomTypeError: the first argument is not a string
@@ -259,8 +269,8 @@ class GenericParser(object):
         Version 0.0.1.0
         """
         
-        strlstTrimmed = [strLine.strip()
-                    for strLine in cls.trimDocstring(strDocstring).split('\n')]
+        strlstBuffer = cls.trimDocstring(strDocstring).split('\n')
+        strlstTrimmed = [strLine.strip() for strLine in strlstBuffer]
         iLength = len(strlstTrimmed)
         strlstResult = []
         if not (Tokens is None):
@@ -305,13 +315,12 @@ class GenericParser(object):
                         else:
                             bFlag = False
                 elif bCond2 or bCond3:
-                    if bFlag:
-                        break
+                    bFlag = False
                 elif bFlag:
                     if cls.SecondLineSymbol is None:
-                        strlstResult.append(strLine)
+                        strlstResult.append(strlstBuffer[iIdx])
                     elif not strLine.startswith(cls.SecondLineSymbol):
-                        strlstResult.append(strLine)
+                        strlstResult.append(strlstBuffer[iIdx])
         return strlstResult
     
     @classmethod
@@ -336,7 +345,7 @@ class GenericParser(object):
         """
         strlstBuffer =cls.extractLinesByTokens(strDocstring, cls.SignatureToken)
         if len(strlstBuffer):
-            gResult = ' '.join(strlstBuffer)
+            gResult = ' '.join(map(lambda x: x.strip(), strlstBuffer))
         else:
             gResult = None
         return gResult
@@ -363,9 +372,60 @@ class GenericParser(object):
         """
         strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.ArgsToken)
         strlstBuffer = filter(lambda x: ':' in x, strlstBuffer)
-        lstResult = [strLine.split(':')[0].strip()
+        strlstResult = [strLine.split(':')[0].strip()
                                                     for strLine in strlstBuffer]
-        return lstResult
+        return strlstResult
+    
+    @classmethod
+    def extractReturnedValues(cls, strDocstring):
+        """
+        Attempts to extract the names of the types of the returned values of a
+        method or function from its docstring. Returns an empty list if such
+        information is not found within a proper docstring.
+        
+        Signature:
+            str -> list(str)
+        
+        Args:
+            strDocstring: string
+        
+        Raises:
+            pos.exceptions.CustomTypeError: input is not a string
+            pos.exceptions.CustomValueError: input string contains only the
+                whitespace characters (including tabs and new lines) or is empty
+        
+        Version 0.0.1.0
+        """
+        strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.ReturnTokens)
+        strlstResult = [strLine.split(':')[0].strip()
+                                                    for strLine in strlstBuffer]
+        return strlstResult
+    
+    @classmethod
+    def extractRaises(cls, strDocstring):
+        """
+        Attempts to extract the names of the exceptions which can be raised by a
+        method or function from its docstring. Returns an empty list if such
+        information is not found within a proper docstring.
+        
+        Signature:
+            str -> list(str)
+        
+        Args:
+            strDocstring: string
+        
+        Raises:
+            pos.exceptions.CustomTypeError: input is not a string
+            pos.exceptions.CustomValueError: input string contains only the
+                whitespace characters (including tabs and new lines) or is empty
+        
+        Version 0.0.1.0
+        """
+        strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.RaisesTokens)
+        strlstBuffer = filter(lambda x: ':' in x, strlstBuffer)
+        strlstResult = [strLine.split(':')[0].strip()
+                                                    for strLine in strlstBuffer]
+        return strlstResult
 
 class EpytextParser(GenericParser):
     """
@@ -380,15 +440,23 @@ class EpytextParser(GenericParser):
         SecondLineSymbol: None
         SignatureToken: None
         ArgsToken: str
+        ReturnTokens: str
+        RaisesTokens: list(str)
     
     Class methods:
         trimDocstring(strDocstring):
             str -> str
         reduceDocstring(strDocstring):
             str -> str
+        extractLinesByTokens(strDocstring, Tokens):
+            str, str OR seq(str) OR None -> list(str)
         extractSignature(strDocstring):
             str -> str OR None
         extractArguments(strDocstring):
+            str -> list(str)
+        extractReturnedValues(strDocstring):
+            str -> list(str)
+        extractRaises(strDocstring):
             str -> list(str)
     
     Version 0.0.1.1
@@ -396,7 +464,7 @@ class EpytextParser(GenericParser):
     
     #class attributes
     
-    SkipTokens = ['@param', '@return', '@raise', '@author', '@version',
+    SkipTokens = ['@param', '@return:', '@raise', '@author', '@version',
                     '@exception', '@throws', '@see', '@since', '@serial',
                     '@serialField', '@serialData', '@deprecated', '>>>']
     
@@ -405,6 +473,10 @@ class EpytextParser(GenericParser):
     SignatureToken = None
     
     ArgsToken = '@param'
+    
+    ReturnTokens = '@return:'
+    
+    RaisesTokens = ['@raise', '@exception', '@throws']
 
 class reSTParser(GenericParser):
     """
@@ -420,15 +492,23 @@ class reSTParser(GenericParser):
         SecondLineSymbol: None
         SignatureToken: None
         ArgsToken: str
+        ReturnTokens: str
+        RaisesTokens: str
     
     Class methods:
         trimDocstring(strDocstring):
             str -> str
         reduceDocstring(strDocstring):
             str -> str
+        extractLinesByTokens(strDocstring, Tokens):
+            str, str OR seq(str) OR None -> list(str)
         extractSignature(strDocstring):
             str -> str OR None
         extractArguments(strDocstring):
+            str -> list(str)
+        extractReturnedValues(strDocstring):
+            str -> list(str)
+        extractRaises(strDocstring):
             str -> list(str)
     
     Version 0.0.1.1
@@ -443,6 +523,10 @@ class reSTParser(GenericParser):
     SignatureToken = None
     
     ArgsToken = ':param'
+    
+    ReturnTokens = ':returns:'
+    
+    RaisesTokens = ':raises'
 
 class GoogleParser(GenericParser):
     """
@@ -457,15 +541,23 @@ class GoogleParser(GenericParser):
         SecondLineSymbol: None
         SignatureToken: None
         ArgsToken: str
+        ReturnTokens: list(str)
+        RaisesTokens: str
     
     Class methods:
         trimDocstring(strDocstring):
             str -> str
         reduceDocstring(strDocstring):
             str -> str
+        extractLinesByTokens(strDocstring, Tokens):
+            str, str OR seq(str) OR None -> list(str)
         extractSignature(strDocstring):
             str -> str OR None
         extractArguments(strDocstring):
+            str -> list(str)
+        extractReturnedValues(strDocstring):
+            str -> list(str)
+        extractRaises(strDocstring):
             str -> list(str)
     
     Version 0.0.1.1
@@ -473,13 +565,18 @@ class GoogleParser(GenericParser):
     
     #class attributes
     
-    SkipTokens = ['Args:', 'Returns:', 'Raises:', 'Attributes:', '>>>']
+    SkipTokens = ['Args:', 'Returns:', 'Raises:', 'Attributes:', 'Note:',
+                  'Yields:', 'Todo:', 'Example:','Examples:', '>>>']
     
     SecondLineSymbol = None
     
     SignatureToken = None
     
     ArgsToken = 'Args:'
+    
+    ReturnTokens = ['Returns:', 'Yields']
+    
+    RaisesTokens = 'Raises:'
 
 class AAParser(GoogleParser):
     """
@@ -496,15 +593,23 @@ class AAParser(GoogleParser):
         SecondLineSymbol: None
         SignatureToken: None
         ArgsToken: str
+        ReturnTokens: list(str)
+        RaisesTokens: str
     
     Class methods:
         trimDocstring(strDocstring):
             str -> str
         reduceDocstring(strDocstring):
             str -> str
+        extractLinesByTokens(strDocstring, Tokens):
+            str, str OR seq(str) OR None -> list(str)
         extractSignature(strDocstring):
             str -> str OR None
         extractArguments(strDocstring):
+            str -> list(str)
+        extractReturnedValues(strDocstring):
+            str -> list(str)
+        extractRaises(strDocstring):
             str -> list(str)
     
     Version 0.0.1.2
@@ -522,6 +627,10 @@ class AAParser(GoogleParser):
     SignatureToken = 'Signature:'
     
     ArgsToken = 'Args:'
+    
+    ReturnTokens = ['Returns:', 'Yields:']
+    
+    RaisesTokens = 'Raises:'
     
     #public class methods - overriden
     
@@ -574,31 +683,122 @@ class NumPydocParser(GenericParser):
         SkipTokens: list(str)
         SecondLineSymbol: None
         SignatureToken: None
-        ArgsToken: str
+        ArgsToken: list(str)
+        ReturnTokens: list(str)
+        RaisesTokens: list(str)
     
     Class methods:
         trimDocstring(strDocstring):
             str -> str
         reduceDocstring(strDocstring):
             str -> str
+        extractLinesByTokens(strDocstring, Tokens):
+            str, str OR seq(str) OR None -> list(str)
         extractSignature(strDocstring):
             str -> str OR None
         extractArguments(strDocstring):
             str -> list(str)
+        extractReturnedValues(strDocstring):
+            str -> list(str)
+        extractRaises(strDocstring):
+            str -> list(str)
     
-    Version 0.0.1.1
+    Version 0.0.1.2
     """
     
     #class attributes
     
     SkipTokens = ['Parameters', 'Returns', 'Raises', 'Usage', 'Examples',
-                  'Yields', 'See Also', 'Attributes']
+                  'Yields', 'See Also', 'Attributes', 'Other Parameters',
+                  'Warns', 'Warnings']
     
     SecondLineSymbol = '-'
     
     SignatureToken = None
     
-    ArgsToken = 'Parameters'
+    ArgsToken = ['Parameters', 'Other Parameters']
+    
+    ReturnTokens = ['Returns', 'Yields']
+    
+    RaisesTokens = ['Raises', 'Warns', 'Warnings']
+    
+    #'private' / helper class methods
+    
+    @classmethod
+    def _filterLines(cls, strlstBuffer):
+        """
+        Returns a copy of the passed lines' buffer (as sequence of strings) with
+        the lines having greater indentation than the first one being removed.
+        If the buffer is empty, an empty list is returned.
+        
+        Signature:
+            seq(str) -> list(str)
+        
+        Args:
+            strlstBuffer: a sequence of strings
+        
+        Version 0.0.1.0
+        """
+        strlstResult = []
+        if len(strlstBuffer):
+            iIndent = len(strlstBuffer[0]) - len(strlstBuffer[0].lstrip())
+            strlstResult = filter(
+                            lambda x: (len(x) - len(x.lstrip())) <= iIndent,
+                                strlstBuffer)
+        return strlstResult
+    
+    #public class methods
+    
+    @classmethod
+    def extractReturnedValues(cls, strDocstring):
+        """
+        Attempts to extract the names of the types of the returned values of a
+        method or function from its docstring. Returns an empty list if such
+        information is not found within a proper docstring.
+        
+        Signature:
+            str -> list(str)
+        
+        Args:
+            strDocstring: string
+        
+        Raises:
+            pos.exceptions.CustomTypeError: input is not a string
+            pos.exceptions.CustomValueError: input string contains only the
+                whitespace characters (including tabs and new lines) or is empty
+        
+        Version 0.0.1.0
+        """
+        strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.ReturnTokens)
+        strlstBuffer = cls._filterLines(strlstBuffer)
+        strlstResult = [strLine.split(':')[0].strip()
+                                                    for strLine in strlstBuffer]
+        return strlstResult
+    
+    @classmethod
+    def extractRaises(cls, strDocstring):
+        """
+        Attempts to extract the names of the exceptions which can be raised by a
+        method or function from its docstring. Returns an empty list if such
+        information is not found within a proper docstring.
+        
+        Signature:
+            str -> list(str)
+        
+        Args:
+            strDocstring: string
+        
+        Raises:
+            pos.exceptions.CustomTypeError: input is not a string
+            pos.exceptions.CustomValueError: input string contains only the
+                whitespace characters (including tabs and new lines) or is empty
+        
+        Version 0.0.1.0
+        """
+        strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.RaisesTokens)
+        strlstBuffer = cls._filterLines(strlstBuffer)
+        strlstResult = [strLine.strip() for strLine in strlstBuffer]
+        return strlstResult
 
 #functions
 

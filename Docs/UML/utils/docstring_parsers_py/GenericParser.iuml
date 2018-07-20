@@ -9,12 +9,16 @@ class GenericParser <<PROTOTYPE>> {
     + static_field(SecondLineSymbol) : None
     + static_field(SignatureToken) : None
     + static_field(ArgsToken) : None
+    + static_field(ReturnTokens) : None
+    + static_field(RaisesTokens) : None
     __
     + static_method(trimDocstring) : str -> str
     + static_method(reduceDocstring) : str -> str
     + static_method(extractLinesByTokens) : str, str OR seq(str) OR None -> list(str)
     + static_method(extractSignature) : str -> str OR None
     + static_method(extractArguments) : str -> list(str)
+    + static_method(extractReturnedValues) : str -> list(str)
+    + static_method(extractRaises) : str -> list(str)
     __
     The only recognized token is '>>>'
 }

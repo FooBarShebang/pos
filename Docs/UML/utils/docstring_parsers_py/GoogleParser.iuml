@@ -7,9 +7,12 @@
 class GoogleParser <<SINGLETON>> {
     + static_field(SkipTokens) : list(str)
     + static_field(ArgsToken) : str = 'Args:'
+    + static_field(ReturnTokens) : list(str) = ["Returns:", "Yields:"]
+    + static_field(RaisesTokens) : str = "Raises:"
     __
     __
     Recognized tokens are:
-    "Args:", "Returns:", "Raises",
-    "Attributes:", ">>>"
+    "Args:", "Returns:", "Raises:", "Yields:",
+    "Attributes:", "Todo:", "Note:", "Example:",
+    "Examples:", ">>>"
 }

@@ -1,0 +1,65 @@
+@startuml
+
+title Activity Diagram of the Method utils.docstring_parsers.GenericParser.extractLinesByTokens()
+
+start
+
+:<b>DocString</b> - string, the doc-string to be parsed
+<b>Tokens</b> - None OR string OR sequence of strings, the tokens to extract<
+
+:trim the <b>DocString</b> using the method <b>trimDocstring</b>() and split the result into lines by the new-line characters
+-> <b>Buffer</b>::list(str)|
+
+:create second list <b>Trimmed</b> from the strings from <b>Buffer</b> with all heading and tailing whitespaces stripped;
+
+:initialize <b>Result</b> as an empty list;
+
+if (<b>Tokens</b> is not None?) then (True)
+    if (<b>Tokens</b> is a string?) then (True)
+        :<b>CheckTokens</b> = [<b>Tokens</b>];
+    elseif (<b>Tokens</b> is a sequence of string?) then (True)
+        :<b>CheckTokens</b> = list(<b>Tokens</b>);
+    else (False)
+        :raise exceptions.CustomTypeError;
+        
+        stop
+    endif
+    
+    :set <b>SelectFlag</b> to False;
+    
+    while (for <b>Index</b>, <b>Line</b> in enumerate(<b>Trimmed</b>))
+        if (<b>Line</b> starts with one of the\ntokens in <b>CheckTokens</b>?) then (Yes)
+            if (Second line not required by token?) then (True)
+                :set <b>SelectFlag</b> to True;
+                
+                if (<b>Line</b> has other text\nafter the token?) then (True)
+                    :append the rest of the line,\nexcept token into the\n<b>Result</b> list;
+                endif
+            else (False)
+                if (<b>Index</b> < len(<b>Trimmed</b>) - 2?) then (True)
+                    :<b>NexLine</b> = <b>Trimmed</b>[<b>Index</b> + 1];
+                    
+                    if (<b>NexLine</b> starts with\n'second line token'?) then (True)
+                        :set <b>SelectFlag</b> to True;
+                    else (False)
+                        :set <b>SelectFlag</b> to False;
+                    endif
+                else (False)
+                    :set <b>SelectFlag</b> to False;
+                endif
+            endif
+        elseif (<b>Line</b> is empty string or starts\nwith any other token?) then (Yes)
+            :set <b>SelectFlag</b> to False;
+        elseif(<b>SelectFlag</b> is True?) then (Yes)
+            if (Second line not required by token\nOR <b>Line</b> does not start with\n'second line token'?) then (True)
+                :append <b>Buffer</b>[<b>Index</b>]\nline into the <b>Result</b> list;
+            endif
+        endif
+    end while
+endif
+
+:return <b>Result</b> list>
+
+stop
+
+@enduml

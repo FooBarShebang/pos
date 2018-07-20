@@ -1,5 +1,9 @@
 # pos Library Release Log
 
+## 2018-07-20
+
+Finished implementation and testing of the module pos.utils.docstring_parsers
+
 ## 2018-07-18
 
 Added module pos.utils.docstring_parsers, which provides Singleton-like classes for parsing of the docstrings of 4 (5) the most used formats: Epytext, reST, Google and NumPydoc.

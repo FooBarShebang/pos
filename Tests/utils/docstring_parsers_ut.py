@@ -79,7 +79,7 @@ def google_style(Name, *args, **kwargs):
         None
     
     Raises:
-        no exceptions
+        None: no exceptions
     
     >>>google_style('whatever')
     None
@@ -143,6 +143,8 @@ dictTests = {
             ]),
         "signature" : None,
         "arguments" : ['Name', '*args', '**kwargs'],
+        "returns" : ['None'],
+        "raises" : ['None'],
         "parser" : testmodule.EpytextParser
         },
     "reST" : {
@@ -166,6 +168,8 @@ dictTests = {
             ]),
         "signature" : None,
         "arguments" : ['Name', '*args', '**kwargs'],
+        "returns" : ['None'],
+        "raises" : ['None'],
         "parser" : testmodule.reSTParser
         },
     "Google" : {
@@ -182,7 +186,7 @@ dictTests = {
             "Returns:",
             "    None", "",
             "Raises:",
-            "    no exceptions", "",
+            "    None: no exceptions", "",
             ">>>google_style('whatever')",
             "None", "",
             "Version 0.0.1.0"
@@ -194,6 +198,8 @@ dictTests = {
             ]),
         "signature" : None,
         "arguments" : ['Name', '*args', '**kwargs'],
+        "returns" : ['None'],
+        "raises" : ['None'],
         "parser" : testmodule.AAParser
         },
     "AA" : {
@@ -210,7 +216,7 @@ dictTests = {
             "Returns:",
             "    None", "",
             "Raises:",
-            "    no exceptions", "",
+            "    None: no exceptions", "",
             ">>>google_style('whatever')",
             "None", "",
             "Version 0.0.1.0"
@@ -221,6 +227,8 @@ dictTests = {
             ]),
         "signature" : "str, /type A, type B/ -> None",
         "arguments" : ['Name', '/*args/', '/**kwargs/'],
+        "returns" : ['None'],
+        "raises" : ['None'],
         "parser" : testmodule.AAParser
         },
     "NumPy" : {
@@ -248,6 +256,8 @@ dictTests = {
             ]),
         "signature" : None,
         "arguments" : ['Name', '*args', '**kwargs'],
+        "returns" : ['None'],
+        "raises" : ['None'],
         "parser" : testmodule.NumPydocParser
         }
     }
@@ -358,8 +368,8 @@ class Test_EpytextParser(Test_GenericParser):
     def test_extractArguments(self):
         """
         Test the method extractArguments() inherited from the GenericParser
-        class - i.e. extraction of the explicitly defined signature (not for
-        all formats).
+        class - i.e. extraction of the names of the parameters / arguments of
+        the method / function.
         Also tests that the proper exceptions are raised with the wrong input.
         """
         for strCase in self.TestCases:
@@ -376,6 +386,52 @@ class Test_EpytextParser(Test_GenericParser):
                 self.TestClass.extractArguments('') #empty string
             with self.assertRaises(CustomValueError):
                 self.TestClass.extractArguments(' \n\t\n')
+                #string with only whitespaces
+    
+    def test_extractReturnedValues(self):
+        """
+        Test the method extractReturnedValues() inherited from the GenericParser
+        class - i.e. extraction of the names of the types of the returned
+        value(s) of the method / function.
+        Also tests that the proper exceptions are raised with the wrong input.
+        """
+        for strCase in self.TestCases:
+            funcSource = dictTests[strCase]["function"]
+            strSource = funcSource.__doc__
+            strResult = dictTests[strCase]["returns"]
+            strMessage = ' '.join(['Wrong result of extractReturnedValues()',
+                                   'method for', strCase, 'format'])
+            strTest = self.TestClass.extractReturnedValues(strSource)
+            self.assertEqual(strTest, strResult, strMessage)
+            with self.assertRaises(CustomTypeError):
+                self.TestClass.extractReturnedValues(1) #not a string
+            with self.assertRaises(CustomValueError):
+                self.TestClass.extractReturnedValues('') #empty string
+            with self.assertRaises(CustomValueError):
+                self.TestClass.extractReturnedValues(' \n\t\n')
+                #string with only whitespaces
+    
+    def test_extractRaises(self):
+        """
+        Test the method extractRaises() inherited from the GenericParser
+        class - i.e. extraction of the names of the exceptions, which can be
+        raised by the method / function.
+        Also tests that the proper exceptions are raised with the wrong input.
+        """
+        for strCase in self.TestCases:
+            funcSource = dictTests[strCase]["function"]
+            strSource = funcSource.__doc__
+            strResult = dictTests[strCase]["raises"]
+            strMessage = ' '.join(['Wrong result of extractRaises()',
+                                   'method for', strCase, 'format'])
+            strTest = self.TestClass.extractRaises(strSource)
+            self.assertEqual(strTest, strResult, strMessage)
+            with self.assertRaises(CustomTypeError):
+                self.TestClass.extractRaises(1) #not a string
+            with self.assertRaises(CustomValueError):
+                self.TestClass.extractRaises('') #empty string
+            with self.assertRaises(CustomValueError):
+                self.TestClass.extractRaises(' \n\t\n')
                 #string with only whitespaces
 
 class Test_reSTParser(Test_EpytextParser):
