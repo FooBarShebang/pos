@@ -3,8 +3,8 @@
 Utility / helper modules of the pos library.
 """
 
-__version__ = "0.0.1.1"
-__date__ = "18-07-2018"
+__version__ = "0.0.1.2"
+__date__ = "25-07-2018"
 __status__ = "Development"
 
-__all__ = ['traceback', 'attr_info', 'docstring_parsers']
+__all__ = ['traceback', 'attr_info', 'docstring_parsers', 'dynamic_import']

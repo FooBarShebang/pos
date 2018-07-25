@@ -32,8 +32,8 @@ Functions:
         str/, int >= 0/ -> str
 """
 
-__version__ = "0.0.1.5"
-__date__ = "20-07-2018"
+__version__ = "0.0.1.6"
+__date__ = "25-07-2018"
 __status__ = "Production"
 
 #imports
@@ -372,8 +372,11 @@ class GenericParser(object):
         """
         strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.ArgsToken)
         strlstBuffer = filter(lambda x: ':' in x, strlstBuffer)
-        strlstResult = [strLine.split(':')[0].strip()
-                                                    for strLine in strlstBuffer]
+        strlstResult = []
+        for strLine in strlstBuffer:
+            strTemp = strLine.split(':')[0].strip()
+            if not (strTemp in strlstResult):
+                strlstResult.append(strTemp)
         return strlstResult
     
     @classmethod
@@ -491,9 +494,9 @@ class reSTParser(GenericParser):
         SkipTokens: list(str)
         SecondLineSymbol: None
         SignatureToken: None
-        ArgsToken: str
+        ArgsToken: list(str)
         ReturnTokens: str
-        RaisesTokens: str
+        RaisesTokens: list(str)
     
     Class methods:
         trimDocstring(strDocstring):
@@ -511,22 +514,85 @@ class reSTParser(GenericParser):
         extractRaises(strDocstring):
             str -> list(str)
     
-    Version 0.0.1.1
+    Version 0.0.1.2
     """
     
     #class attributes
     
-    SkipTokens = [':param', ':returns:', ':raises', '>>>']
+    SkipTokens = [':param', ':parameter', ':arg', ':argument', ':key',
+                    ':keyword', ':type',':returns:', ':return:', ':rtype:',
+                    ':raises', ':raise', ':except', ':exception', ':var',
+                    ':ivar', ':cvar', ':Example:', '>>>', '.. seealso::',
+                    '.. warning::', '.. note::', '.. todo::', '.. automodule::',
+                    ':members:', ':undoc-members:', ':inherited-members:',
+                    ':show-inheritance:']
     
     SecondLineSymbol = None
     
     SignatureToken = None
     
-    ArgsToken = ':param'
+    ArgsToken = [':param', ':parameter', ':arg', ':argument', ':key',
+                    ':keyword', ':type']
     
-    ReturnTokens = ':returns:'
+    ReturnTokens = ':rtype:'
     
-    RaisesTokens = ':raises'
+    RaisesTokens = [':raises', ':raise', ':except', ':exception']
+    
+    #public class methods
+    
+    @classmethod
+    def extractSignature(cls, strDocstring):
+        """
+        Attempts to extract the implicit definition of a method's or function's
+        signature from its docstring, based on the found tokens :type and the
+        'hinted' lists of the parameters' names and returned type(s), see the
+        methods extractArguments() and extactReturnedValues(). Returns None if
+        the information on the arguments names is not found.
+        
+        Signature:
+            str -> str OR None
+        
+        Args:
+            strDocstring: string
+            
+        Raises:
+            pos.exceptions.CustomTypeError: input is not a string
+            pos.exceptions.CustomValueError: input string contains only the
+                whitespace characters (including tabs and new lines) or is empty
+        
+        Version 0.0.1.0
+        """
+        strlstArgs = cls.extractArguments(strDocstring)
+        strlstReturns = cls.extractReturnedValues(strDocstring)
+        strlstTypes = cls.extractLinesByTokens(strDocstring, ':type')
+        strlstTypes = filter(lambda x: ':' in x, strlstTypes)
+        strlstTypes = map(lambda x: x.strip(), strlstTypes)
+        strlstTypes = filter(lambda x: any(map(
+                        lambda y: x.lower().startswith(y.lower()), strlstArgs)),
+                            strlstTypes)
+        strlstNames = [strLine.split(':')[0].strip() for strLine in strlstTypes]
+        strlstTypes = [''.join(strLine.split(':')[1:]).strip()
+                                                    for strLine in strlstTypes]
+        if len(strlstArgs):
+            if len(strlstNames):
+                strlstTemp = []
+                for strName in strlstArgs:
+                    try:
+                        iIdx = strlstNames.index(strName)
+                        strlstTemp.append(strlstTypes[iIdx])
+                    except ValueError:
+                        strlstTemp.append('type A')
+                gResult = ', '.join(strlstTemp)
+            else:
+                gResult = ', '.join(['type A'] * len(strlstArgs))
+            if len(strlstReturns):
+                strReturns = ', '.join(strlstReturns)
+            else:
+                strReturns = 'None'
+            gResult = '{} -> {}'.format(gResult, strReturns)
+        else:
+            gResult = None
+        return gResult
 
 class GoogleParser(GenericParser):
     """
@@ -720,7 +786,7 @@ class NumPydocParser(GenericParser):
     
     ReturnTokens = ['Returns', 'Yields']
     
-    RaisesTokens = ['Raises', 'Warns', 'Warnings']
+    RaisesTokens = ['Raises', 'Warns']
     
     #'private' / helper class methods
     

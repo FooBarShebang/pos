@@ -11,8 +11,8 @@ Classes:
         class without instantiation; also implements the basic introspection
 """
 
-__version__ = "0.0.1.2"
-__date__ = "06-07-2018"
+__version__ = "0.0.1.3"
+__date__ = "23-07-2018"
 __status__ = "Development"
 
 #imports
@@ -35,9 +35,12 @@ class DescriptedABC_Meta(abc.ABCMeta):
     Meta-class for DescriptedABC. Ensures the usage of the __set__() and
     __delete__() methods upon assignment and deletion of the class attributes
     being data descriptors when the action is performed on the class itself
-    without its instantiation.
+    without its instantiation. Also ensures that the class attributes (as well
+    as any methods) marked as 'private' or 'magic' (i.e. starting with, at
+    least, one underscore) are ignored by the built-in functions dir() and
+    help().
     
-    Version 0.0.1.1
+    Version 0.0.1.2
     """
     
     def __setattr__(self, strAttr, gValue):
@@ -109,6 +112,31 @@ class DescriptedABC_Meta(abc.ABCMeta):
                 type.__delattr__(self, strAttr)
         else: #not in the class dictionary -> will lead to AttributeError
             type.__delattr__(self, strAttr)
+    
+    def __dir__(self):
+        """
+        Special (magic) method. Ensures that the class attributes (fields as
+        well as any methods) marked as 'private' or 'magic' (i.e. starting with,
+        at least, one underscore) are ignored by the built-in functions dir()
+        and help(). Returns the sorted alphabetically list of ALL 'public' class
+        data fields and class / static / instance methods available at the class
+        level (without instantiation), including all inherited ones, but
+        excluding the special 'public' instance method onInit().
+        
+        Signature:
+            None -> None
+        
+        Version 0.0.1.0
+        """
+        strlstAttributes = []
+        for objBase in type.__getattribute__(self, '__mro__'): #go through MRO
+            for strName in type.__getattribute__(objBase, '__dict__').keys():
+                bCond1 = not strName.startswith('_')
+                bCond2 = not (strName in strlstAttributes)
+                bCond3 = strName != 'onInit'
+                if bCond1 and bCond2 and bCond3:
+                    strlstAttributes.append(strName)
+        return list(sorted(strlstAttributes))
 
 #+ ABCs
 
@@ -129,7 +157,24 @@ class DescriptedABC(object):
     getClassInfo() and getInfo() - for non-abstract subclasses only - in order
     to get more detailed information on the class / instance.
     
-    Version 0.0.1.2
+    Note: the class / instance attributes (fields and methods) considered to
+    be 'private' or special / magic (i.e. with the names starting with, at
+    least, one underscore), are hidden from all introspection methods, including
+    the built-in functions dir() and help().
+    
+    Class methods:
+        getClassFields(): None -> list(str)
+        getClassInfo(): None -> str
+        getClassMethods(): None -> list(str)
+        inspectClassAttribute(): str -> ???
+    
+    Methods:
+        getFields(): None -> list(str)
+        getInfo(): None -> str
+        getMethods(): None -> list(str)
+        inspectAttribute(): str -> ???
+    
+    Version 0.0.1.3
     """
     
     #class fields
@@ -287,6 +332,29 @@ class DescriptedABC(object):
         del strlstTemp
         del dictDict
     
+    def __dir__(self):
+        """
+        Special (magic) method. Ensures that the class and instance attributes
+        (fields as well as any methods) marked as 'private' or 'magic' (i.e.
+        starting with, at least, one underscore) are ignored by the built-in
+        functions dir() and help(). Returns the sorted alphabetically list of
+        ALL 'public' class and instance data fields and class / static /
+        instance methods available at the instance level, including all the
+        inherited ones, excluding the special 'public' method onInit()
+        
+        Signature:
+            None -> None
+        
+        Version 0.0.1.0
+        """
+        strlstAttributes = DescriptedABC_Meta.__dir__(self.__class__)
+        for strName in object.__getattribute__(self, '__dict__').keys():
+            bCond1 = not strName.startswith('_')
+            bCond2 = not (strName in strlstAttributes)
+            if bCond1 and bCond2:
+                strlstAttributes.append(strName)
+        return list(sorted(strlstAttributes))
+    
     #public class methods
     
     @classmethod
@@ -425,7 +493,7 @@ class DescriptedABC(object):
                 bCond1 = isinstance(objValue, (staticmethod, classmethod))
                 bCond2 = inspect.ismethod(objValue)
                 bCond3 = inspect.isfunction(objValue)
-                bCond4 = not strAttr.startswith('_')
+                bCond4 = not (strAttr.startswith('_') or strAttr == 'onInit')
                 bCond5 = not (strAttr in strlstTemp)
                 bCond = (bCond1 or bCond2 or bCond3) and bCond4 and bCond5
                 if bCond:

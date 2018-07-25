@@ -10,8 +10,8 @@ Classes:
         ExceptionTraceback
 """
 
-__version__ = "0.0.1.0"
-__date__ = "19-06-2018"
+__version__ = "0.0.1.1"
+__date__ = "25-07-2018"
 __status__ = "Production"
 
 #imports
@@ -37,7 +37,7 @@ class StackTraceback(object):
         CallChain: list(str)
         Info: str
     
-    Version 0.0.1.0
+    Version 0.0.1.1
     """
     
     #class data attributes
@@ -128,13 +128,17 @@ class StackTraceback(object):
         Signature:
             None -> list(str)
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         strlstCallers = []
         if not (self._tblstTraceback is None):
             for tupItem in self._tblstTraceback:
                 objFrame = tupItem[0]
-                strModule = inspect.getmodule(objFrame).__name__
+                objModule = inspect.getmodule(objFrame)
+                if not (objModule is None):
+                    strModule = objModule.__name__
+                else:
+                    strModule = '<console input>'
                 strCaller = tupItem[3]
                 if strCaller == '<module>':
                     strlstCallers.append(strModule)
@@ -176,7 +180,7 @@ class StackTraceback(object):
         Signature:
             None -> str
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         strInfo = ''
         strlstCallers = self.CallChain
@@ -188,32 +192,38 @@ class StackTraceback(object):
                 strFullCaller = strlstCallers[iIdx]
                 strlstCodeLines = tupItem[4]
                 iLineIndex = tupItem[5]
-                iMaxDigits = len(str(iLineNum + iLineIndex))
-                if strCaller == '<module>':
-                    strCallerInfo = 'In module {}'.format(strFullCaller)
-                else:
-                    strCallerInfo = 'Caller {}()'.format(strFullCaller)
-                strFileInfo = 'Line {} in {}'.format(iLineNum, strFilePath)
-                strlstCodeInfo = []
-                for iLineIdx, _strLine in enumerate(strlstCodeLines):
-                    strLine = _strLine.rstrip()
-                    iRealLineNum = iLineNum - iLineIndex + iLineIdx
-                    strLineNum = str(iRealLineNum)
-                    while len(strLineNum) < iMaxDigits:
-                        strLineNum = '0{}'.format(strLineNum)
-                    if iRealLineNum == iLineNum:
-                        strLineNum = '>{} '.format(strLineNum)
+                if strFullCaller == '<top level>':
+                    print tupItem
+                if not (strlstCodeLines is None):
+                    iMaxDigits = len(str(iLineNum + iLineIndex))
+                    if strCaller == '<module>':
+                        strCallerInfo = 'In module {}'.format(strFullCaller)
                     else:
-                        strLineNum = ' {} '.format(strLineNum)
-                    if len(strLine) > (self.ConsoleWidth - 2 - iMaxDigits):
-                        strFullLine = '{}{}...'.format(strLineNum,
+                        strCallerInfo = 'Caller {}()'.format(strFullCaller)
+                    strFileInfo = 'Line {} in {}'.format(iLineNum, strFilePath)
+                    strlstCodeInfo = []
+                    for iLineIdx, _strLine in enumerate(strlstCodeLines):
+                        strLine = _strLine.rstrip()
+                        iRealLineNum = iLineNum - iLineIndex + iLineIdx
+                        strLineNum = str(iRealLineNum)
+                        while len(strLineNum) < iMaxDigits:
+                            strLineNum = '0{}'.format(strLineNum)
+                        if iRealLineNum == iLineNum:
+                            strLineNum = '>{} '.format(strLineNum)
+                        else:
+                            strLineNum = ' {} '.format(strLineNum)
+                        if len(strLine) > (self.ConsoleWidth - 2 - iMaxDigits):
+                            strFullLine = '{}{}...'.format(strLineNum,
                                 strLine[ : self.ConsoleWidth - 5 - iMaxDigits])
-                    else:
-                        strFullLine = '{}{}'.format(strLineNum, strLine)
-                    strlstCodeInfo.append(strFullLine)
-                strCodeInfo = '\n'.join(strlstCodeInfo)
-                strInfo = '\n'.join([strInfo, strCallerInfo, strFileInfo,
+                        else:
+                            strFullLine = '{}{}'.format(strLineNum, strLine)
+                        strlstCodeInfo.append(strFullLine)
+                    strCodeInfo = '\n'.join(strlstCodeInfo)
+                    strInfo = '\n'.join([strInfo, strCallerInfo, strFileInfo,
                                                                 strCodeInfo])
+                else:
+                    strInfo = '\n'.join([strInfo, '<console input>',
+                                'Line {} in console input'.format(iLineNum)])
         if len(strInfo):
             strInfo = strInfo.lstrip()
         return strInfo

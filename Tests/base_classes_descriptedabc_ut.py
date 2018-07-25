@@ -6,8 +6,8 @@ Implements unit testing of the module base_classes concerning the class
 DescriptedABC.
 """
 
-__version__ = "0.0.1.2"
-__date__ = "06-07-2018"
+__version__ = "0.0.1.3"
+__date__ = "23-07-2018"
 __status__ = "Testing"
 
 #imports
@@ -271,7 +271,10 @@ class Test_DescriptedABC(unittest.TestCase):
         cls.TestClass = testmodule.DescriptedABC
         cls.PublicClassFields = []
         cls.PublicClassMethods = list(sorted(['getClassFields',
-                                                'getClassMethods']))
+                                                'getClassMethods',
+                                                'inspectClassAttribute']))
+        cls.DirList = list(sorted(cls.PublicClassMethods + cls.PublicClassFields
+                                    + ['getFields', 'getMethods']))
     
     def test_IsAbstract(self):
         """
@@ -295,6 +298,14 @@ class Test_DescriptedABC(unittest.TestCase):
         """
         self.assertEqual(self.TestClass.getClassMethods(),
                                                         self.PublicClassMethods)
+    
+    def test_dirClass(self):
+        """
+        Checks that the built-in function dir() returns the proper list of the
+        names of ALL 'public' attributes visible at the class level.
+        """
+        strlstTest = dir(self.TestClass)
+        self.assertEqual(strlstTest, self.DirList)
 
 class Test_ClassTest1(Test_DescriptedABC):
     """
@@ -332,8 +343,12 @@ class Test_ClassTest1(Test_DescriptedABC):
                                              'ClassSimpleInt']))
         cls.PublicClassMethods = list(sorted(['getClassFields',
                                                 'getClassMethods',
+                                                'inspectClassAttribute',
                                                 'TestClassMethod',
                                                 'TestStaticMethod']))
+        cls.DirList = list(sorted(cls.PublicClassMethods + cls.PublicClassFields
+                                    + ['getFields', 'getMethods', 'TestMethod']
+                                    + [Item[0] for Item in cls.Getters]))
     
     def test_HasClassFields(self):
         """
@@ -581,16 +596,16 @@ class Test_ClassTest2(Test_ClassTest1):
                               ['_string1', str, str],
                               ['_string2', str, str]]
         cls.ConstantInstanceFields = ['InstConstInt']
-        cls.PublicFields = list(sorted(['ClassInt', 'ClassConstFloat',
-                                        'ClassSimpleInt', 'InstFloat',
-                                        'InstConstInt', 'SimpleInt',
-                                        'RO_String', 'RW_String',
-                                        'RWD_String']))
         cls.PublicMethods = list(sorted(['getClassFields','getClassMethods',
+                                        'inspectClassAttribute',
                                         'TestClassMethod', 'TestStaticMethod',
                                         'getFields', 'getMethods',
-                                        'TestMethod', 'onInit', 'funcAbs',
+                                        'TestMethod', 'funcAbs',
                                         'funcAbsBuiltin']))
+        cls.PublicFields = list(sorted(['ClassInt', 'ClassConstFloat',
+                                        'ClassSimpleInt', 'RO_String',
+                                        'RW_String', 'RWD_String', 'SimpleInt',
+                                        'InstFloat', 'InstConstInt']))
     
     def test_IsAbstract(self):
         """
@@ -1021,6 +1036,17 @@ class Test_ClassTest2(Test_ClassTest1):
         """
         objTest = self.TestClass()
         self.assertEqual(objTest.getMethods(), self.PublicMethods)
+        del objTest
+    
+    def test_dir(self):
+        """
+        Checks that the built-in function dir() returns the proper list of the
+        names of ALL 'public' attributes visible at the instance level.
+        """
+        objTest = self.TestClass()
+        strlstTest = dir(objTest)
+        strlstExpected = sorted(self.PublicMethods + self.PublicFields)
+        self.assertEqual(strlstTest, strlstExpected)
         del objTest
 
 class Test_ClassTest3(Test_ClassTest2):

@@ -47,13 +47,19 @@ def rest_style(Name, *args, **kwargs):
     """
     reST style docstring
     
-    :param Name: string, name of something
+    :param Name: name of something
+    :type Name: str
     :param *args: (optional), any amount of arguments of any types, not really
         used
+    :type *args: /type A/
     :param **kwargs: (optional), any amount of arguments of any types, not
         really used
-    :returns: None
+    :type **kwargs: /type B/
+    :returns: nothing is returned
+    :rtype: None
     :raises None: no exceptions
+    
+    :Example:
     
     >>>rest_style('whatever')
     None
@@ -81,8 +87,10 @@ def google_style(Name, *args, **kwargs):
     Raises:
         None: no exceptions
     
-    >>>google_style('whatever')
-    None
+    Example:
+    
+        >>>google_style('whatever')
+        None
     
     Version 0.0.1.0
     """
@@ -151,13 +159,18 @@ dictTests = {
         "function" : rest_style,
         "trimmed" : '\n'.join([
             "reST style docstring", "",
-            ":param Name: string, name of something",
+            ":param Name: name of something",
+            ":type Name: str",
             ":param *args: (optional), any amount of arguments of any types, not really",
             "    used",
+            ":type *args: /type A/",
             ":param **kwargs: (optional), any amount of arguments of any types, not",
             "    really used",
-            ":returns: None",
+            ":type **kwargs: /type B/",
+            ":returns: nothing is returned",
+            ":rtype: None",
             ":raises None: no exceptions", "",
+            ":Example:", "",
             ">>>rest_style('whatever')",
             "None", "",
             "Version 0.0.1.0"
@@ -166,7 +179,7 @@ dictTests = {
             "reST style docstring", "",
             "Version 0.0.1.0"
             ]),
-        "signature" : None,
+        "signature" : 'str, /type A/, /type B/ -> None',
         "arguments" : ['Name', '*args', '**kwargs'],
         "returns" : ['None'],
         "raises" : ['None'],
@@ -187,8 +200,9 @@ dictTests = {
             "    None", "",
             "Raises:",
             "    None: no exceptions", "",
-            ">>>google_style('whatever')",
-            "None", "",
+            "Example:", "",
+            "    >>>google_style('whatever')",
+            "    None", "",
             "Version 0.0.1.0"
             ]),
         "reduced" : '\n'.join([
@@ -217,8 +231,9 @@ dictTests = {
             "    None", "",
             "Raises:",
             "    None: no exceptions", "",
-            ">>>google_style('whatever')",
-            "None", "",
+            "Example:", "",
+            "    >>>google_style('whatever')",
+            "    None", "",
             "Version 0.0.1.0"
             ]),
         "reduced" : '\n'.join([

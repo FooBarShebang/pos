@@ -1,5 +1,9 @@
 # pos Library Release Log
 
+## 2018-07-25
+
+Implemented dynamic import of modules and objects. Fixed bug in traceback classes, when exception is raised from the console.
+
 ## 2018-07-20
 
 Finished implementation and testing of the module pos.utils.docstring_parsers

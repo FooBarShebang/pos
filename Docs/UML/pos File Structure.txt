@@ -91,6 +91,8 @@ salt
         +++++ <&code> AAParser.iuml
         +++++ <&image> docstring_parsers Classes.png
         +++++ <&code> docstring_parsers Classes.txt
+        +++++ <&image> docstring_parsers Use Cases.png
+        +++++ <&code> docstring_parsers Use Cases.txt
         +++++ <&code> EpytextParser.iuml
         +++++ <&image> GenericParser.extractArguments() Activity.png
         +++++ <&code> GenericParser.extractArguments() Activity.txt
@@ -110,6 +112,10 @@ salt
         +++++ <&code> GoogleParser.iuml
         +++++ <&image> indent_docstring() Activity.png
         +++++ <&code> indent_docstring() Activity.txt
+        +++++ <&image> NumPydocParser.extractRaises() Activity.png
+        +++++ <&code> NumPydocParser.extractRaises() Activity.txt
+        +++++ <&image> NumPydocParser.extractReturnedValues() Activity.png
+        +++++ <&code> NumPydocParser.extractReturnedValues() Activity.txt
         +++++ <&code> NumPydocParser.iuml
         +++++ <&code> reSTParser.iuml
         ++++ <&folder> traceback_py
@@ -137,6 +143,7 @@ salt
         ++ <&folder> User Documentation
         +++ <&document> UD001 Module pos.utils.traceback Reference.odt
         +++ <&document> UD002 Module pos.exceptions Reference.odt
+        +++ <&document> UD003 Module pos.utils.docstring_parsers Reference.odt
         + <&folder> Tests
         ++ <&folder> utils
         +++ <&script> _ _init_ _.py
@@ -151,6 +158,7 @@ salt
         ++ <&script> _ _init_ _.py
         ++ <&script> attr_info.py
         ++ <&script> docstring_parsers.py
+        ++ <&script> dynamic_import.py
         ++ <&script> traceback.py
         + <&script> _ _init_ _.py
         + <&script> base_classes.py
