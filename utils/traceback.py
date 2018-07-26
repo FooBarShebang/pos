@@ -192,8 +192,6 @@ class StackTraceback(object):
                 strFullCaller = strlstCallers[iIdx]
                 strlstCodeLines = tupItem[4]
                 iLineIndex = tupItem[5]
-                if strFullCaller == '<top level>':
-                    print tupItem
                 if not (strlstCodeLines is None):
                     iMaxDigits = len(str(iLineNum + iLineIndex))
                     if strCaller == '<module>':

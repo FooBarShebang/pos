@@ -21,7 +21,9 @@ else (False)
         
         :take the first element and strip the leading and tailing whitespaces;
         
-        :add the resulting string as an element into <b>Result</b> list;
+        if (this argument name string is not in <b>Result</b> list?) then (True)
+            :add the argument name as an element into <b>Result</b> list;
+        endif
     end while
     
     :return <b>Result</b> list>

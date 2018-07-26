@@ -117,7 +117,14 @@ salt
         +++++ <&image> NumPydocParser.extractReturnedValues() Activity.png
         +++++ <&code> NumPydocParser.extractReturnedValues() Activity.txt
         +++++ <&code> NumPydocParser.iuml
+        +++++ <&image> reSTParser.extractSignature() Activity.png
+        +++++ <&code> reSTParser.extractSignature() Activity.txt
         +++++ <&code> reSTParser.iuml
+        ++++ <&folder> dynamic_import_py
+        +++++ <&image> import_from_module() Activity.png
+        +++++ <&code> import_from_module() Activity.txt
+        +++++ <&image> import_module() Activity.png
+        +++++ <&code> import_module() Activity.txt
         ++++ <&folder> traceback_py
         +++++ <&image> ExceptionTraceback._ _init_ _() Activity.png
         +++++ <&code> ExceptionTraceback._ _init_ _() Activity.txt

@@ -368,7 +368,7 @@ class GenericParser(object):
             pos.exceptions.CustomValueError: input string contains only the
                 whitespace characters (including tabs and new lines) or is empty
         
-        Version 0.0.2.0
+        Version 0.0.2.1
         """
         strlstBuffer = cls.extractLinesByTokens(strDocstring, cls.ArgsToken)
         strlstBuffer = filter(lambda x: ':' in x, strlstBuffer)

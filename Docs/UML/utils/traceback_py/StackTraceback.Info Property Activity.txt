@@ -18,6 +18,7 @@ if (list of callers is empty?) then (No)
         
         :add line indicating the path to the module and line number;
         
+        if (<b>CodeLines</b> list is not empty?) then (Yes)
         :get the length of the string representation of the maximum line number (<b>LineNumber + LineIndex</b>);
         
         while (for each <b>Line</b> in <b>CodeLines</b>)
@@ -37,6 +38,7 @@ if (list of callers is empty?) then (No)
             
             :add the formed annotated source code line to the sting buffer;
         end while
+        endif
     end while
     
     :return the formed multi-line string;

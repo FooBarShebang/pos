@@ -8,7 +8,12 @@ start
 
 if (traceback is stored?) then (True)
     while (for each frame record in the traceback)
-        :extract module's name from the frame object in the record;
+        
+        if (frame corresponds to the console input?) then (Yes)
+            :use '<console input>' as the module's name;
+        else (No)
+            :extract module's name from the frame object in the record;
+         endif
         
         if ('caller' in the frame is 'module' ?) then (Yes)
             :append the extracted module name into <b>CallChain</b> list;

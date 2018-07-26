@@ -13,21 +13,33 @@ package(utils) {
         StackTraceback <|- ExceptionTraceback
     }
     
+    module(dynamic_import) {
+        function(import_module)
+        
+        function(import_from_module)
+        
+        import_module -[hidden] import_from_module
+    }
+    
     module(docstring_parsers) {
         class(GenericParser)
         
         class(SpecificParsers)
         
-        SpecificParsers -|> GenericParser
+        GenericParser <|- SpecificParsers
         
         function("guess_docstyle()", gds)
         
-        SpecificParsers <.. gds
+        SpecificParsers <-- gds
         
         function("indent_docstring()", ids)
         
-        gds -[hidden] ids
+        ids -[hidden] gds
+        
+        GenericParser -[hidden]- ids
     }
     
-    traceback -[hidden]- docstring_parsers
+    traceback -[hidden]- dynamic_import
+    
+    docstring_parsers -[hidden] traceback
 }

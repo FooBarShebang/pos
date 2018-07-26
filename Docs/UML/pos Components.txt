@@ -38,4 +38,8 @@ trace_b <-- ExceptionTraceback : uses
 
 StandardError <|-- CustomError
 
+import_from_module -> SpecificCustomExceptions : raises
+
+import_module -> SpecificCustomExceptions : raises
+
 @enduml

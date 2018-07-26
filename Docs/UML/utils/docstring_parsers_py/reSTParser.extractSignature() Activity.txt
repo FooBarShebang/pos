@@ -1,0 +1,61 @@
+@startuml
+
+title Activity Diagram of the Method utils.docstring_parsers.reSTParser.extractSignature()
+
+start
+
+:<b>DocString</b> - string, the doc-string to be parsed<
+
+:call <b>extractArguments</b>() method to get the names of arguments -> <b>Args</b> list|
+
+:call <b>extractReturnedValues</b>() method to get the returned type(s) -> <b>RTypes</b> list|
+
+:call <b>extractLinesByTokens</b>() method with <b>DocString</b> and ":rtype" value as arguments -> <b>Types</b>::list(str)|
+
+:filter <b>Types</b> list to contain only strings containing ':' character(s);
+
+:strip leading and tailing whitespaces from the remaining strings in <b>Types</b> list;
+
+:filter <b>Types</b> list to contain only strings starting with any of the names in <b>Args</b> list;
+
+:form <b>Names</b> list from the parts of the strings in <b>Types</b> list before the first ":" character,
+and the <b>Values</b> list from the parts after the first ":" character in the same strings]
+
+if (<b>Args</b> list is not empty?) then (True)
+    if (<b>Names</b> list is not empty?) then (True)
+        :create <b>Buffer</b> as an empty list;
+        while (for each <b>Name</b> in <b>Args</b> list)
+            if (<b>Name</b> is present in <b>Names</b> list?) then (Yes)
+                :add corresponding element
+                (same index) from <b>Values</b> list
+                into the <b>Buffer</b> list;
+            else (No)
+                :add 'type A' into
+                the <b>Buffer</b> list;
+            endif
+        end while
+        
+        :form <b>Result</b> string from the elements of the <b>Buffer</b> list
+        using ', ' as separators;
+    else (False)
+        :form <b>Result</b> string as 'type A'
+        copied as many times as there are
+        arguments, with ', ' as separators;
+    endif
+    
+    if (<b>RTypes</b> list is not empty?) then (True)
+        :add '-> ' to the <b>Result</b> string, followed
+        by each element in the <b>RTypes</b> list,
+        using ', ' as separators;
+    else (False)
+        :add '-> None' to the <b>Result</b> string;
+    endif
+else (False)
+    :<b>Result</b> is None;
+endif
+
+:return <b>Result</b> value>
+
+stop
+
+@enduml

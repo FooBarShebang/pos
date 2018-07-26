@@ -63,6 +63,9 @@ Besides, I have some personal grudges with these implementations and my own wish
     * class NumPydocParser
     * function guess_docstyle()
     * function indent_docstring()
+  - module **dynamic_import**
+    * function import_module()
+    * function import_from_module()
 * module **exceptions**
   - class ErrorMixin
   - class CustomError
@@ -120,3 +123,7 @@ All these classes are Singleton-like, i.e. there is no need for their instantiat
 Implements the function **guess_docstyle**(), which 'guesses' the most suitable parser (returns a class) by the most efficient removal of the lines related to the auto-generation of the documentation; AAParser class is the default option, when none of the parsers is able to remove any line.
 
 Provides the function **indent_docstring**(), which adds the required number (times 4) of the spaces in front of each line.
+
+#### Module dynamic_import
+
+Provides 2 functions to perform dynamic, i.e. 'on demand' at the runtime import of an entire module (**import_module**()) or of a single object like class or function from a module (**import\_from\_module**()). Both functions are based upon the built-in function **importlib.import_module**(). They return reference to the imported object (module, class, function, etc.) and can, optionally, use arbitrary alias string (passed as an optional argument) as the reference name instead of the actual name of the imported object. The global symbols table (dictionary) of the 'caller' module (see built-in function **globals**()) can be passed as another optional argument; so a reference can also be placed directly into it. If such a dictionary is not provided, the reference is placed into the global symbols table of the module **utils.dynamic_import** itself.

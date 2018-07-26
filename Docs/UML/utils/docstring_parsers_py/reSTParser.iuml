@@ -6,11 +6,20 @@
 
 class reSTParser <<SINGLETON>> {
     + static_field(SkipTokens) : list(str)
-    + static_field(ArgsToken) : str = ':param'
-    + static_field(ReturnTokens) : str = ":returns:"
-    + static_field(RaisesTokens) : str = ":raises"
+    + static_field(ArgsToken) : str = [":param", ":parameter", ":arg",
+    ":argument", ":key", ":keyword", ":type"]
+    + static_field(ReturnTokens) : str = ":rtype:"
+    + static_field(RaisesTokens) : list(str) = [":raises", ":raise",
+    ":except", ":exception"]
     __
+    + static_method(extractSignature) : str -> str OR None
     __
     Recognized tokens are:
-    ":param", ":returns:", ":raises", ">>>"
+    ":param", ":parameter", ":arg", ":argument", ":key",
+    ":keyword", ":type", ":returns:", ":return:", ":rtype:",
+    ":raises", ":raise", ":except", ":exception", ":var",
+    ":ivar", ":cvar", ":Example:", ">>>", ".. seealso::",
+    ".. warning::", ".. note::", ".. todo::",
+    ".. automodule::", ":members:", ":undoc-members:",
+    ":inherited-members:", ":show-inheritance:"
 }
