@@ -432,7 +432,7 @@ class GenericParser(object):
 
 class EpytextParser(GenericParser):
     """
-    Epytext format docstring parser. Subclass of  GenericParser. Supports the
+    Epytext format docstring parser. Subclass of GenericParser. Supports the
     removal of the doctest lines.
     
     Designed to be used without instantiation, since all methods are class
@@ -483,8 +483,7 @@ class EpytextParser(GenericParser):
 
 class reSTParser(GenericParser):
     """
-    reST format docstring parser - partial, only the method / function signature
-    related tokens are supported. Subclass of  GenericParser. Also supports the
+    reST format docstring parser. Subclass of  GenericParser. Also supports the
     removal of the doctest lines.
     
     Designed to be used without instantiation, since all methods are class
@@ -640,7 +639,7 @@ class GoogleParser(GenericParser):
     
     ArgsToken = 'Args:'
     
-    ReturnTokens = ['Returns:', 'Yields']
+    ReturnTokens = ['Returns:', 'Yields:']
     
     RaisesTokens = 'Raises:'
 

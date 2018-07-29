@@ -6,7 +6,7 @@
 
 class reSTParser <<SINGLETON>> {
     + static_field(SkipTokens) : list(str)
-    + static_field(ArgsToken) : str = [":param", ":parameter", ":arg",
+    + static_field(ArgsToken) : list(str) = [":param", ":parameter", ":arg",
     ":argument", ":key", ":keyword", ":type"]
     + static_field(ReturnTokens) : str = ":rtype:"
     + static_field(RaisesTokens) : list(str) = [":raises", ":raise",
