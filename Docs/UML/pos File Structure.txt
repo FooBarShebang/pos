@@ -151,6 +151,7 @@ salt
         +++ <&document> UD001 Module pos.utils.traceback Reference.odt
         +++ <&document> UD002 Module pos.exceptions Reference.odt
         +++ <&document> UD003 Module pos.utils.docstring_parsers Reference.odt
+        +++ <&document> UD004 Module pos.utils.dynamic_import Reference.odt
         + <&folder> Tests
         ++ <&folder> utils
         +++ <&script> _ _init_ _.py
