@@ -13,5 +13,5 @@ module(exceptions) {
     
     ErrorMixin <|- CustomError
     
-    CustomError <|-d- SpecificCustomExceptions
+    CustomError <|-- SpecificCustomExceptions
 }

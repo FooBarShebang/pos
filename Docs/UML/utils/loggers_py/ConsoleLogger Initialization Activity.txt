@@ -1,0 +1,30 @@
+@startuml
+
+title Activity Diagram of the Initialization Method of the class pos.utils.loggers.ConsoleLogger
+
+start
+
+:<b>Name</b> - string, name of the logger to use
+<b>Level</b> - optional integer, severity level for the logger, defaults to logging.DEBUG<
+
+:call logging.getLogger(Name) -> logging.Logger instance, and store its reference in self._logger]
+
+:set the logging level to <b>Level</b> severity;
+
+:store an instance of logging.Formatter class in the instance attribute <b>formatter</b> and set
+"<<%(levelname)s>> %(asctime)s @%(module)s.%(name)s.%(funcName)s
+Line %(lineno)d in %(pathname)s
+%(message)s"
+format with the date-time stamp in the form "%Y-%m-%d %H:%M:%S";
+
+:add hidden 'dummy' handler as an instance of logging.NullHandler;
+
+:create and instance of logging.StreamHandler class and store it within
+the instance attribute <b>console</b>, set <b>formatter</b> as the format for this handler
+and logging.INFO as the severity level;
+
+:call own method <b>enableConsoleLogging</b>()|
+
+stop
+
+@enduml

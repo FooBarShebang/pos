@@ -1,0 +1,22 @@
+@startuml
+
+title Activity Diagram of the Method pos.utils.loggers.DualLogger.enableFileLogging()
+
+start
+
+if (instance attribute <b>file_logging</b> stores logging.NullHandler instance?) then (True)
+    :get the current severity level stored in the handler;
+    
+    :delete handler's instance;
+    
+    :create an instance of logging.FileHandler and store it in the instance attribute <b>file_logging</b>,
+    use the value of the instance attribute <b>file_log</b> during handler's creation;
+    
+    :set handler's formatter to <b>formatter</b> instance attribute value, restore the previous severity level;
+endif
+
+:enable logging - add handler to the logger;
+
+stop
+
+@enduml

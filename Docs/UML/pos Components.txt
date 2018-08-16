@@ -6,40 +6,22 @@ title Components Diagram of the Library pos
 !include ./Templates/Components.cuml
 !endif
 
-library(pos) {
-    !ifndef UTILS
-    !include ./utils/utils_components.iuml
-    !endif
-    
-    !ifndef EXCEPTIONS_COMPONENTS
-    !include ./exceptions_py/exceptions_Components.iuml
-    !endif
-    
-    ExceptionTraceback -o ErrorMixin : gerenerates
-}
+!ifndef UTILS
+!include ./utils/utils_components.iuml
+!endif
 
-library(builtins) {
-        module(inspect, inspect_b) {
-            function(stack, stack_b)
-            
-            function(trace, trace_b)
-            
-            stack_b -[hidden] trace_b
-        }
-        
-        class(StandardError)
-        
-        trace_b -[hidden] StandardError
-    }
+!ifndef EXCEPTIONS_COMPONENTS
+!include ./exceptions_py/exceptions_Components.iuml
+!endif
 
-stack_b <-- StackTraceback : uses
+utils -[hidden]- exceptions
 
-trace_b <-- ExceptionTraceback : uses
+ExceptionTraceback o-- ErrorMixin: gerenerates
 
-StandardError <|-- CustomError
+ExceptionTraceback -[hidden] SpecificCustomExceptions
 
-import_from_module -> SpecificCustomExceptions : raises
+SpecificCustomExceptions <-- import_from_module: raises
 
-import_module -> SpecificCustomExceptions : raises
+SpecificCustomExceptions <-- import_module: raises
 
 @enduml

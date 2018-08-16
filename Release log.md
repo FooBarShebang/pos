@@ -1,5 +1,9 @@
 # pos Library Release Log
 
+## 2018-08-15
+
+Added console and dual (console and / or file) loggers with the dynamic suppression / re-enabling of the logging. 
+
 ## 2018-07-29
 
 Finished documentation on the utils.docstring_parsers module.

@@ -1,0 +1,31 @@
+@startuml
+
+title Activity Diagram of the Method pos.utils.loggers.ConsoleLogger._ _getattribute_ _()
+
+start
+
+:<b>Name</b> - string, name of the attribute to obtain<
+
+if (<b>Name</b> is '_ _dict_ _'?) then (True)
+    :obtain self._ _dict_ _ using object._ _getattribute_ _() method
+    and store in <b>Result</b> object;
+else (False)
+    :obtain self._logger using object._ _getattribute_ _() method
+    and store in <b>Temp</b> object;
+    
+    if (<b>Temp</b> has attribute <b>Name</b>?) then (True)
+        :obtain self._logger.Name (Temp.Name)
+        using object._ _getattribute_ _() method
+        -> <b>Result</b> object;
+    else (False)
+        :obtain self.Name using
+        object._ _getattribute_ _()
+        method -> <b>Result</b> object;
+    endif
+endif
+
+:return <b>Result</b> >
+
+stop
+
+@enduml

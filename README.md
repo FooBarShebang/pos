@@ -66,6 +66,9 @@ Besides, I have some personal grudges with these implementations and my own wish
   - module **dynamic_import**
     * function import_module()
     * function import_from_module()
+  - module **loggers**
+    * class ConsoleLogger
+    * class DualLogger
 * module **exceptions**
   - class ErrorMixin
   - class CustomError
@@ -127,3 +130,12 @@ Provides the function **indent_docstring**(), which adds the required number (ti
 #### Module dynamic_import
 
 Provides 2 functions to perform dynamic, i.e. 'on demand' at the runtime import of an entire module (**import_module**()) or of a single object like class or function from a module (**import\_from\_module**()). Both functions are based upon the built-in function **importlib.import_module**(). They return reference to the imported object (module, class, function, etc.) and can, optionally, use arbitrary alias string (passed as an optional argument) as the reference name instead of the actual name of the imported object. The global symbols table (dictionary) of the 'caller' module (see built-in function **globals**()) can be passed as another optional argument; so a reference can also be placed directly into it. If such a dictionary is not provided, the reference is placed into the global symbols table of the module **utils.dynamic_import** itself.
+
+#### Module loggers
+
+Provides 2 classes - derived from the **logging.Logger** class in the standard library - with the added functionality of the dynamic disabling and enabling of the logging at all severity levels and simultaneous logging into different streams using separate handlers.
+The class **ConsoleLogger** has two handlers: NULL ('black hole') and stdout output (console), whereas the second handler can be dynamically enabled or disabled.
+The class **DualLogger** also adds the third - file logging handler, with the ability to enable or disable the console and / or file logging independently.
+These classes emulate 'virtual inheritance' from the class logging.Logger by modifying the attributes resolution scheme; all attributes of an instance of logging.Logger class (which is stored by reference in the 'private' attribute \_logger) are accessible at the 'top' level of the instance, thus self.info() is the same as self._logger.info(). Furthermore, the loggers hierarchical relation implemented by the standard library is preserved; the logger created with the name 'parent.child' is a descendant of the logger created with the name 'parent'. The standard upward propagation of the message model is applied.
+The enabling / disabling of the console logging has an effect only on the the 'root' of the current hierarchy, and it affects all its descendants, because only the 'root' logger of the hierarchy actually created text stream handler. Thus a message issued by a descendant is printed (if enabled) into the console by its ultimate ascendant.
+The file logging enabling / disabling is independent for each logger (assuming separate log files). Thus, if both the parent and the child have file logging enabled into separate files, a message issued by the child will be logged in the both files.

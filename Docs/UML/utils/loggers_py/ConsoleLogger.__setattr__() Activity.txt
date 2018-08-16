@@ -1,0 +1,20 @@
+@startuml
+
+title Activity Diagram of the Method pos.utils.loggers.ConsoleLogger._ _setattr_ _()
+
+start
+
+:<b>Name</b> - string, name of the attribute to assign a value
+<b>Value</b> - any type, the value to assign<
+
+if (self._logger has attribute <b>Name</b>?) then (True)
+    :assign <b>Value</b> to self._logger.Name
+    using object._ _setattr_ _() method;
+else (False)
+    :assign <b>Value</b> to self.Name
+    using object._ _setattr_ _() method;
+endif
+
+stop
+
+@enduml

@@ -85,6 +85,9 @@ salt
         ++++ <&code> Classes.cuml
         ++++ <&code> Components.cuml
         +++ <&folder> utils
+        ++++ <&folder> contracts_py
+        +++++ <&image> contracts.py Use Cases.png
+        +++++ <&code> contracts.py Use Cases.txt
         ++++ <&folder> docstring_parsers_py
         +++++ <&image> AAParser.extractArguments() Activity.png
         +++++ <&code> AAParser.extractArguments() Activity.txt
@@ -125,6 +128,25 @@ salt
         +++++ <&code> import_from_module() Activity.txt
         +++++ <&image> import_module() Activity.png
         +++++ <&code> import_module() Activity.txt
+        ++++ <&folder> loggers_py
+        +++++ <&image> ConsoleLogger._ _getattribute_ _() Activity.png
+        +++++ <&code> ConsoleLogger._ _getattribute_ _() Activity.txt
+        +++++ <&image> ConsoleLogger._ _setattr_ _() Activity.png
+        +++++ <&code> ConsoleLogger._ _setattr_ _() Activity.txt
+        +++++ <&image> ConsoleLogger.enableConsoleLogging() Activity.png
+        +++++ <&code> ConsoleLogger.enableConsoleLogging() Activity.txt
+        +++++ <&code> ConsoleLogger.iuml
+        +++++ <&image> ConsoleLogger Initialization Activity.png
+        +++++ <&code> ConsoleLogger Initialization Activity.txt
+        +++++ <&image> DualLogger.changeLogFile() Activity.png
+        +++++ <&code> DualLogger.changeLogFile() Activity.txt
+        +++++ <&image> DualLogger.enableFileLogging() Activity.png
+        +++++ <&code> DualLogger.enableFileLogging() Activity.txt
+        +++++ <&code> DualLogger.iuml
+        +++++ <&image> DualLogger Initialization Activity.png
+        +++++ <&code> DualLogger Initialization Activity.txt
+        +++++ <&image> loggers.py Class Diagram.png
+        +++++ <&code> loggers.py Class Diagram.txt
         ++++ <&folder> traceback_py
         +++++ <&image> ExceptionTraceback._ _init_ _() Activity.png
         +++++ <&code> ExceptionTraceback._ _init_ _() Activity.txt
@@ -152,6 +174,7 @@ salt
         +++ <&document> UD002 Module pos.exceptions Reference.odt
         +++ <&document> UD003 Module pos.utils.docstring_parsers Reference.odt
         +++ <&document> UD004 Module pos.utils.dynamic_import Reference.odt
+        +++ <&document> UD005 Module pos.utils.loggers Reference.odt
         + <&folder> Tests
         ++ <&folder> utils
         +++ <&script> _ _init_ _.py
@@ -167,6 +190,7 @@ salt
         ++ <&script> attr_info.py
         ++ <&script> docstring_parsers.py
         ++ <&script> dynamic_import.py
+        ++ <&script> loggers.py
         ++ <&script> traceback.py
         + <&script> _ _init_ _.py
         + <&script> base_classes.py

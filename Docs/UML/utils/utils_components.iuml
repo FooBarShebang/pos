@@ -39,7 +39,25 @@ package(utils) {
         GenericParser -[hidden]- ids
     }
     
-    traceback -[hidden]- dynamic_import
+    SpecificParsers -[hidden] StackTraceback
+    
+    gds -[hidden] import_module
+    
+    StackTraceback -[hidden]- import_module
+    
+    ExceptionTraceback -[hidden]- import_from_module
     
     docstring_parsers -[hidden] traceback
+    
+    module(loggers) {
+        class(DualLogger)
+        
+        class(ConsoleLogger)
+        
+        DualLogger -|> ConsoleLogger
+    }
+    
+    ids -[hidden]- DualLogger
+    
+    gds -[hidden]- ConsoleLogger
 }

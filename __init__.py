@@ -1,6 +1,15 @@
 #usr/bin/python
 """
-Python on Steroids / Python of Steel Library
+Python on Steroids / Python of Steel Library.
+
+Packages:
+    utils - utility / helper modules
+
+Modules:
+    base_classes - Abstract Base Classes implementing the modified attributes
+        access scheme and the classes introspection functionality
+    exceptions - custom exceptions with the added functionality of the exception
+        traceback
 """
 
 __author__ = "Anton Azarov"
