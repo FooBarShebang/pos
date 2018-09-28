@@ -1,3 +1,6 @@
+# File Structure (Full) of the Package pos
+
+```plantuml
 @startuml
 
 salt
@@ -56,119 +59,117 @@ salt
         +++ <&folder> exceptions_py
         ++++ <&code> ConstantAssignment.iuml
         ++++ <&code> CustomAttributeError.iuml
-        ++++ <&image> CustomError._ _subclasshook_ _() Activity.png
         ++++ <&code> CustomError._ _subclasshook_ _() Activity.txt
+        ++++ <&image> CustomError._ _subclasshook_ _()_Activity.png
         ++++ <&code> CustomError.iuml
-        ++++ <&image> Custom Exception Instantiation.png
         ++++ <&code> Custom Exception Instantiation.txt
+        ++++ <&image> Custom_Exception_Instantiation.png
         ++++ <&code> CustomTypeError.iuml
         ++++ <&code> CustomValueError.iuml
-        ++++ <&image> ErrorMixin._ _del_ _() Activity.png
         ++++ <&code> ErrorMixin._ _del_ _() Activity.txt
+        ++++ <&image> ErrorMixin._ _del_ _()_Activity.png
         ++++ <&code> ErrorMixin.iuml
-        ++++ <&image> ErrorMixin.presetTraceback() Activity.png
         ++++ <&code> ErrorMixin.presetTraceback() Activity.txt
-        ++++ <&image> ErrorMixin.Traceback Activity.png
+        ++++ <&image> ErrorMixin.presetTraceback()_Activity.png
         ++++ <&code> ErrorMixin.Traceback Activity.txt
+        ++++ <&image> ErrorMixin.Traceback_Activity.png
         ++++ <&code> exceptions_Components.iuml
-        ++++ <&image> exceptions Class Diagram.png
         ++++ <&code> exceptions Class Diagram.txt
-        ++++ <&image> exceptions Class Diagram (Direct Only).png
         ++++ <&code> exceptions Class Diagram (Direct Only).txt
+        ++++ <&image> exceptions_Class_Diagram_(Direct_Only).png
+        ++++ <&image> exceptions_Class_Diagram.png
         ++++ <&code> NotInDCError.iuml
         +++ <&folder> Miscellaneous
-        ++++ <&image> Custom Exceptions tree.png
         ++++ <&code> Custom Exceptions tree.txt
-        ++++ <&image> Exceptions tree.png
+        ++++ <&image> Custom_Exceptions_tree.png
         ++++ <&code> Exceptions tree.txt
+        ++++ <&image> Exceptions_tree.png
         +++ <&folder> Templates
         ++++ <&code> Classes.cuml
         ++++ <&code> Components.cuml
         +++ <&folder> utils
         ++++ <&folder> contracts_py
-        +++++ <&image> contracts.py Use Cases.png
         +++++ <&code> contracts.py Use Cases.txt
+        +++++ <&image> contracts.py_Use_Cases.png
         ++++ <&folder> docstring_parsers_py
-        +++++ <&image> AAParser.extractArguments() Activity.png
         +++++ <&code> AAParser.extractArguments() Activity.txt
+        +++++ <&image> AAParser.extractArguments()_Activity.png
         +++++ <&code> AAParser.iuml
-        +++++ <&image> docstring_parsers Classes.png
         +++++ <&code> docstring_parsers Classes.txt
-        +++++ <&image> docstring_parsers Use Cases.png
         +++++ <&code> docstring_parsers Use Cases.txt
+        +++++ <&image> docstring_parsers_Classes.png
+        +++++ <&image> docstring_parsers_Use_Cases.png
         +++++ <&code> EpytextParser.iuml
-        +++++ <&image> GenericParser.extractArguments() Activity.png
         +++++ <&code> GenericParser.extractArguments() Activity.txt
-        +++++ <&image> GenericParser.extractLinesByTokens() Activity.png
+        +++++ <&image> GenericParser.extractArguments()_Activity.png
         +++++ <&code> GenericParser.extractLinesByTokens() Activity.txt
-        +++++ <&image> GenericParser.extractRaises() Activity.png
+        +++++ <&image> GenericParser.extractLinesByTokens()_Activity.png
         +++++ <&code> GenericParser.extractRaises() Activity.txt
-        +++++ <&image> GenericParser.extractReturnedValues() Activity.png
+        +++++ <&image> GenericParser.extractRaises()_Activity.png
         +++++ <&code> GenericParser.extractReturnedValues() Activity.txt
-        +++++ <&image> GenericParser.extractSignature() Activity.png
+        +++++ <&image> GenericParser.extractReturnedValues()_Activity.png
         +++++ <&code> GenericParser.extractSignature() Activity.txt
+        +++++ <&image> GenericParser.extractSignature()_Activity.png
         +++++ <&code> GenericParser.iuml
-        +++++ <&image> GenericParser.reduceDocstring() Activity.png
         +++++ <&code> GenericParser.reduceDocstring() Activity.txt
-        +++++ <&image> GenericParser.trimDocstring() Activity.png
+        +++++ <&image> GenericParser.reduceDocstring()_Activity.png
         +++++ <&code> GenericParser.trimDocstring() Activity.txt
+        +++++ <&image> GenericParser.trimDocstring()_Activity.png
         +++++ <&code> GoogleParser.iuml
-        +++++ <&image> indent_docstring() Activity.png
         +++++ <&code> indent_docstring() Activity.txt
-        +++++ <&image> NumPydocParser.extractRaises() Activity.png
+        +++++ <&image> indent_docstring()_Activity.png
         +++++ <&code> NumPydocParser.extractRaises() Activity.txt
-        +++++ <&image> NumPydocParser.extractReturnedValues() Activity.png
+        +++++ <&image> NumPydocParser.extractRaises()_Activity.png
         +++++ <&code> NumPydocParser.extractReturnedValues() Activity.txt
+        +++++ <&image> NumPydocParser.extractReturnedValues()_Activity.png
         +++++ <&code> NumPydocParser.iuml
-        +++++ <&image> reSTParser.extractSignature() Activity.png
         +++++ <&code> reSTParser.extractSignature() Activity.txt
+        +++++ <&image> reSTParser.extractSignature()_Activity.png
         +++++ <&code> reSTParser.iuml
         ++++ <&folder> dynamic_import_py
-        +++++ <&image> import_from_module() Activity.png
         +++++ <&code> import_from_module() Activity.txt
-        +++++ <&image> import_module() Activity.png
+        +++++ <&image> import_from_module()_Activity.png
         +++++ <&code> import_module() Activity.txt
+        +++++ <&image> import_module()_Activity.png
         ++++ <&folder> loggers_py
-        +++++ <&image> ConsoleLogger._ _getattribute_ _() Activity.png
-        +++++ <&code> ConsoleLogger._ _getattribute_ _() Activity.txt
-        +++++ <&image> ConsoleLogger._ _setattr_ _() Activity.png
-        +++++ <&code> ConsoleLogger._ _setattr_ _() Activity.txt
-        +++++ <&image> ConsoleLogger.enableConsoleLogging() Activity.png
-        +++++ <&code> ConsoleLogger.enableConsoleLogging() Activity.txt
-        +++++ <&code> ConsoleLogger.iuml
-        +++++ <&image> ConsoleLogger Initialization Activity.png
         +++++ <&code> ConsoleLogger Initialization Activity.txt
-        +++++ <&image> DualLogger.changeLogFile() Activity.png
-        +++++ <&code> DualLogger.changeLogFile() Activity.txt
-        +++++ <&image> DualLogger.enableFileLogging() Activity.png
-        +++++ <&code> DualLogger.enableFileLogging() Activity.txt
-        +++++ <&code> DualLogger.iuml
-        +++++ <&image> DualLogger Initialization Activity.png
+        +++++ <&image> ConsoleLogger_Initialization_Activity.png
+        +++++ <&code> ConsoleLogger._ _getattribute_ _() Activity.txt
+        +++++ <&image> ConsoleLogger._ _getattribute_ _()_Activity.png
+        +++++ <&code> ConsoleLogger._ _setattr_ _() Activity.txt
+        +++++ <&image> ConsoleLogger._ _setattr_ _()_Activity.png
+        +++++ <&code> ConsoleLogger.enableConsoleLogging() Activity.txt
+        +++++ <&image> ConsoleLogger.enableConsoleLogging()_Activity.png
+        +++++ <&code> ConsoleLogger.iuml
         +++++ <&code> DualLogger Initialization Activity.txt
-        +++++ <&image> loggers.py Class Diagram.png
+        +++++ <&image> DualLogger_Initialization_Activity.png
+        +++++ <&code> DualLogger.changeLogFile() Activity.txt
+        +++++ <&image> DualLogger.changeLogFile()_Activity.png
+        +++++ <&code> DualLogger.enableFileLogging() Activity.txt
+        +++++ <&image> DualLogger.enableFileLogging()_Activity.png
+        +++++ <&code> DualLogger.iuml
         +++++ <&code> loggers.py Class Diagram.txt
+        +++++ <&image> loggers.py_Class_Diagram.png
         ++++ <&folder> traceback_py
-        +++++ <&image> ExceptionTraceback._ _init_ _() Activity.png
         +++++ <&code> ExceptionTraceback._ _init_ _() Activity.txt
+        +++++ <&image> ExceptionTraceback._ _init_ _()_Activity.png
         +++++ <&code> ExceptionTraceback.iuml
-        +++++ <&image> StackTraceback._ _del_ _() Activity.png
         +++++ <&code> StackTraceback._ _del_ _() Activity.txt
-        +++++ <&image> StackTraceback._ _init_ _() Activity.png
+        +++++ <&image> StackTraceback._ _del_ _()_Activity.png
         +++++ <&code> StackTraceback._ _init_ _() Activity.txt
-        +++++ <&image> StackTraceback.CallChain Property Activity.png
+        +++++ <&image> StackTraceback._ _init_ _()_Activity.png
         +++++ <&code> StackTraceback.CallChain Property Activity.txt
-        +++++ <&image> StackTraceback.Info Property Activity.png
+        +++++ <&image> StackTraceback.CallChain_Property_Activity.png
         +++++ <&code> StackTraceback.Info Property Activity.txt
+        +++++ <&image> StackTraceback.Info_Property_Activity.png
         +++++ <&code> StackTraceback.iuml
-        +++++ <&image> traceback Classes.png
         +++++ <&code> traceback Classes.txt
-        ++++ <&code> utils_components.iuml
-        ++++ <&image> utils Components.png
+        +++++ <&image> traceback_Classes.png
         ++++ <&code> utils Components.txt
-        +++ <&image> pos Components.png
+        ++++ <&code> utils_components.iuml
+        ++++ <&image> utils_Components.png
         +++ <&code> pos Components.txt
-        +++ <&image> pos File Structure.png
-        +++ <&code> pos File Structure.txt
+        +++ <&image> pos_Components.png
         ++ <&folder> User Documentation
         +++ <&document> UD001 Module pos.utils.traceback Reference.odt
         +++ <&document> UD002 Module pos.exceptions Reference.odt
@@ -195,9 +196,11 @@ salt
         + <&script> _ _init_ _.py
         + <&script> base_classes.py
         + <&script> exceptions.py
+        + <&info> pos File Structure.md
         + <&info> README.md
         + <&info> Release log.md
     }
 }
 
 @enduml
+```
