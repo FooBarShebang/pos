@@ -299,7 +299,7 @@ class CustomError(StandardError, ErrorMixin):
             str/, pos.utils.traceback.ExceptionTraceback, int/ -> None
         
         Args:
-            strMessage: expected to be a string, but is not checked, will be
+            strMessage: string, but is not checked, will be
                 used as the exception message
             objTraceback: (optional), a replacement traceback object as an
                 instance of pos.utils.traceback.ExceptionTraceback class
