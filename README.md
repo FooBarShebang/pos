@@ -48,13 +48,40 @@ Besides, I have some personal grudges with these implementations and my own wish
   - be sure that the scheme works as expected even if the attributes resolution scheme is altered (for the data encapsulation)
   - seamlessly integrate the functionality into the unified framework / eco-system, including the exceptions convention
 
+## Documentation
+
+All documentation is placed in the sub-folder 'Docs' and is grouped by topics and types. All documents are written as text files using Markdown formatting.
+
+### Design and Requirements
+
+* [DE001 Core Features](./Docs/Design_and_Requirements/DE001_Core_Features.md)
+
+### Problem Analysis
+
+* [PA001 Descriptors](./Docs/Problem_Analysis/PA001_Descriptors/PA001_Descriptors.md)
+* [PA001 Decorators](./Docs/Problem_Analysis/PA002_Decorators/PA002_Decorators.md)
+* [PA001 Virtual Inheritance](./Docs/Problem_Analysis/PA003_Virtual_Inheritance_Exceptions/PA003_Virtual_Inheritance_Exceptions.md)
+* [PA001 Traceback](./Docs/Problem_Analysis/PA004_Traceback/PA004_Traceback_of_Exceptions.md)
+
+### User Documentation
+
+Here the documents are grouped according to the file structure, althoug they are all stored in a single sub-folder.
+
+* **utils**
+  - docstring_parsers module [UD003](./Docs/User_Documentation/UD003_pos.utils.docstring_parsers_Reference.md)
+  - dynamic_import module [UD004](./Docs/User_Documentation/UD004_pos.utils.dynamic_import_Reference.md)
+  - loggers module [UD005](./Docs/User_Documentation/UD005_pos.utils.loggers_Reference.md)
+  - traceback module [UD001](./Docs/User_Documentation/UD001_pos.utils.traceback_Reference.md)
+* exceptions module [UD002](./Docs/User_Documentation/UD002_pos.exceptions_Reference.md)
+
 ## Structure
 
 * package **utils**
-  - module **traceback**
-    * class StackTraceback
-    * class ExceptionTraceback
-  - module **docstring_parsers**
+  - module [**attr_info**](./utils/attr_info.py)
+    * class AttributeInfo
+    * class FieldInfo
+    * class MethodInfo(AttributeInfo):
+  - module [**docstring_parsers**](./utils/docstring_parsers.py)
     * class GenericParser
     * class EpytextParser
     * class reSTParser
@@ -63,13 +90,19 @@ Besides, I have some personal grudges with these implementations and my own wish
     * class NumPydocParser
     * function guess_docstyle()
     * function indent_docstring()
-  - module **dynamic_import**
+  - module [**dynamic_import**](./utils/dynamic_import.py)
     * function import_module()
     * function import_from_module()
-  - module **loggers**
+  - module [**loggers**](./utils/loggers.py)
     * class ConsoleLogger
     * class DualLogger
-* module **exceptions**
+  - module [**traceback**](./utils/traceback.py)
+    * class StackTraceback
+    * class ExceptionTraceback
+* module [**base_classes**](./base_classes.py)
+  - class DescriptedABC_Meta
+  - class DescriptedABC
+* module [**exceptions**](./exceptions.py)
   - class ErrorMixin
   - class CustomError
   - class DesignContractError
