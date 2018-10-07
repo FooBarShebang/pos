@@ -29,7 +29,7 @@ Warning:
     Due to the implementation of the 'virtual inheritance' the behavior of the
     function logging.getLogger() may be confusing. Suppose, that the class
     ConsoleLogger is instantiated as MyLoggger = ConsoleLogger('LoggerMy'). The
-    call logging.getLogger('LoggerMy') will return the reference to an instance
+    call logging.getLogger('MyLogger') will return the reference to an instance
     of logging.Logger class, namely the value of MyLogger._logger, and not the
     instance MyLogger itself.
 """
@@ -239,7 +239,7 @@ class ConsoleLogger(object):
         
         Args:
             level: non-negative integer, the logging level, e.g. logging.DEBUG,
-                logging.WARNING, etc.
+                logging.WARNING, etc
         
         Version 0.0.1.0
         """

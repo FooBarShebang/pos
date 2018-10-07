@@ -94,9 +94,9 @@ All documentation is placed in the sub-folder 'Docs' and is grouped by topics an
 ### Problem Analysis
 
 * [PA001 Descriptors](./Docs/Problem_Analysis/PA001_Descriptors/PA001_Descriptors.md)
-* [PA001 Decorators](./Docs/Problem_Analysis/PA002_Decorators/PA002_Decorators.md)
-* [PA001 Virtual Inheritance](./Docs/Problem_Analysis/PA003_Virtual_Inheritance_Exceptions/PA003_Virtual_Inheritance_Exceptions.md)
-* [PA001 Traceback](./Docs/Problem_Analysis/PA004_Traceback/PA004_Traceback_of_Exceptions.md)
+* [PA002 Decorators](./Docs/Problem_Analysis/PA002_Decorators/PA002_Decorators.md)
+* [PA003 Virtual Inheritance](./Docs/Problem_Analysis/PA003_Virtual_Inheritance_Exceptions/PA003_Virtual_Inheritance_Exceptions.md)
+* [PA004 Traceback](./Docs/Problem_Analysis/PA004_Traceback/PA004_Traceback_of_Exceptions.md)
 
 ### User Documentation
 

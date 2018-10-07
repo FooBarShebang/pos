@@ -192,8 +192,6 @@ The class **NumPydocParser** implements the NumPydoc doc-style format, which has
 
 ## API Reference
 
-### Classes
-
 ### Class GenericParser
 
 Prototype class for the docstrings parsing. Implements all required class methods generically. The specific format parsers as subclasses of this prototype must change the class attributes defining the tokens according to their specific format. As a prototype, only the doc-test lines removal is supported.
