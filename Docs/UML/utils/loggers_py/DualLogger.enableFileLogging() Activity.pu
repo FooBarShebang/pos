@@ -7,6 +7,8 @@ start
 if (instance attribute <b>file_logging</b> stores logging.NullHandler instance?) then (True)
     :get the current severity level stored in the handler;
     
+    :remove handler referenced by self.file_logging from\nthe self._logger referenced logger;
+    
     :delete handler's instance;
     
     :create an instance of logging.FileHandler and store it in the instance attribute <b>file_logging</b>,

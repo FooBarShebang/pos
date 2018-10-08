@@ -412,6 +412,7 @@ class DualLogger(ConsoleLogger):
         """
         if isinstance(self.file_logging, logging.NullHandler):
             iCurrentLevel = self.file_logging.level
+            self._logger.removeHandler(self.file_logging)
             del self.file_logging
             self.file_logging = logging.FileHandler(self.log_file, mode = 'w')
             self.file_logging.setLevel(iCurrentLevel)
