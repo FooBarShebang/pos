@@ -1,0 +1,22 @@
+@startuml
+
+
+[*] --> Execution : call (arguments)
+
+Execution --> Exception : unexpected\narguments
+
+state "Unexpected\nresult" as UResult
+
+Execution --> UResult : unexpected\narguments
+
+state "Expected\nresult" as EResult
+
+Execution --> EResult : expected\narguments
+
+Exception --> [*]
+
+UResult --> [*]
+
+EResult --> [*]
+
+@enduml

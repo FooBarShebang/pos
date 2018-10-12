@@ -1,0 +1,28 @@
+@startuml
+
+
+state "Input check" as Input
+
+[*] --> Input : call (arguments)
+
+Input --> Exception : unacceptable\narguments
+
+Input -> Execution
+
+state "Output check" as Output
+
+state "Expected\nresult" as EResult
+
+Execution --> Output
+
+Execution --> Exception : unexpected\narguments\nbad design
+
+Output --> EResult : expected\narguments
+
+Output -left-> Exception : unexpected\narguments\nbad design
+
+Exception --> [*]
+
+EResult -left-> [*]
+
+@enduml
