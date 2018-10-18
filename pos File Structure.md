@@ -133,7 +133,9 @@ salt
         +++++ <&image> import_module()_Activity.png
         ++++ <&folder> loggers_py
         +++++ <&code> ConsoleLogger Initialization Activity.pu
+        +++++ <&code> ConsoleLogger Logging Methods.pu
         +++++ <&image> ConsoleLogger_Initialization_Activity.png
+        +++++ <&image> ConsoleLogger_Logging_Methods.png
         +++++ <&code> ConsoleLogger._ _getattribute_ _() Activity.pu
         +++++ <&image> ConsoleLogger._ _getattribute_ _()_Activity.png
         +++++ <&code> ConsoleLogger._ _setattr_ _() Activity.pu

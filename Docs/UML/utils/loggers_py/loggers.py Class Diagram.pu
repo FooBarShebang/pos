@@ -52,6 +52,8 @@ namespace logging <<Standard Python Library>> {
      + info() : str -> None
      + warning() : str -> None
      + error() : str -> None
+     + exception() : str -> None
+     + critical() : str -> None
      ...
     }
     

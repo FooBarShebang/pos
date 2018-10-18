@@ -1,11 +1,22 @@
 # UD005 Module pos.utils.loggers Reference
 
+## Table of Content
+
+* [Scope](#scope)
+* [Intended Use and Functionality](#iuf)
+* [Design and Implementation](#di)
+* [API Reference](#api)
+  - [Class ConsoleLogger](#consolelogger)
+  - [Class DualLogger](#duallogger)
+
 ## Scope
 
-This doucment describes the design, intended usage, implementation details and API of the module utils.loggers, which implements two custom loggers: to the console or to the console and / or a file (simultaneously).
+This document describes the design, intended usage, implementation details and API of the module utils.loggers, which implements two custom loggers: to the console or to the console and / or a file (simultaneously).
 
 * **ConsoleLogger**
   - **DualLogger**
+
+<a id="iuf"></a>
 
 ## Intended Use and Functionality
 
@@ -20,7 +31,7 @@ The dynamic disabling / (re-) enabling of the logging can be easily done with th
 
 1. Obtain the current logging level of the handler to be suppressed and remember it
 2. Set the corresponding handler at the highest level, i.e. to no output
-3. Do some stuf, where the logging is to be suppressed
+3. Do some stuff, where the logging is to be suppressed
 4. Restore the corresponding handler to the previously remembered logging level
 
 The added functionality of the dynamic disabling / (re-) enabling of the logger output simply eliminates the necessity of obtaining, remembering and restoration of the handler's logging level, thus reducing the task to two instance methods without parameters.
@@ -36,6 +47,8 @@ For the rest, the functionality of these custom loggers should be the same as of
     + Otherwise, the handler must send a corresponding message to its bound stream
 * A hierarchy of the loggers, i.e. 'parent - child' relation should be supported. For instaance, if there are two logers: one with the name *SomeClassLogger*, and another - with the name *SomeClassLogger.SomeMethodLogger* - the second logger is a 'child' of the first one. A log entry issued to the 'child' logger should also be received and treated by the 'parent' logger (log entries propagation); but an entry issued to the 'parent' logger should not be visible to the 'child' logger.
   - In order to avoid the dubbling of the error entries, in such situation the log entry should be handled by the 'parent' logger and not the 'child' logger, which should let it simply propagate upwards.
+
+<a id="di"></a>
 
 ## Design and Implementation
 
@@ -57,57 +70,67 @@ Both classes store a reference to an actual instance of the **logging.Logger** c
 
 With this arrangement the calls like **MyLogger.error(Message)** or **MyLogger.setLevel(Level)**, etc. become *short-cuts* (syntax sugar) for the calls **MyLogger._logger.error(Message)** or **MyLogger._logger.setLevel(Level)**, etc. respectively, assuming that **MyLogger** is an instance of either **ConsoleLogger** or **DualLogger** class.
 
-These custom logger classes store a reference to an instance of **logging.Formater** class in the 'public' instance attribute. This formatter instance defines the format of each log entry, and it is applied to all handlers bound to this logger during the instantiation of the logger wrapper class, see [Illustration 4](#ill4) and [Illustration 5](#ill5). The handlers are created during the instantiation of the logger wrapper class as well, and they are stored (as references) in the public instance attributes: **console** (**stdout** handler - both classes) and **file_logging** (file output handler, only the **DualLogger** class). Note that the **file_logging** can reference either the **logging.FileHandler** (if the file logging is required / enabled) or the **logging.NullHandler** (if the file logging is suppressed). However, may be attached or not to the actual logger object depending on two factors: if that specific stream output is enabled or nor, and if this logger has a 'parent' or not. See furher in the text after the diagrams.
+Note that for the logging at the level WARNING and higher the **ConsoleLogger** class implements own wrapper methods **warning**(), **error**(), **exception**() and **critical**(), which temporary change the format of the log entry to 3 lines, including the code line number and module, from which the log entry is issued. Then the corresponding methods of the **logging.Logger** class are called, and the format of the log entry is reset to 2 lines. The methods **info**() and **debug**() are still redirected directly to the **logging.Logger** class within the **\_\_getattribute\_\_**() method. See [Illustration 4](#ill4).
 
 <a id="ill4">Illustration 4</a>
 
-![Illustration 4](../UML/utils/loggers_py/ConsoleLogger_Initialization_Activity.png)
+![Illustration 4](../UML/utils/loggers_py/ConsoleLogger_Logging_Methods.png)
+
+These custom logger classes store a reference to an instance of **logging.Formater** class in the 'public' instance attribute. This formatter instance defines the format of each log entry, and it is applied to all handlers bound to this logger during the instantiation of the logger wrapper class, see [Illustration 5](#ill5) and [Illustration 6](#ill6). The handlers are created during the instantiation of the logger wrapper class as well, and they are stored (as references) in the public instance attributes: **console** (**stdout** handler - both classes) and **file_logging** (file output handler, only the **DualLogger** class). Note that the **file_logging** can reference either the **logging.FileHandler** (if the file logging is required / enabled) or the **logging.NullHandler** (if the file logging is suppressed). However, may be attached or not to the actual logger object depending on two factors: if that specific stream output is enabled or nor, and if this logger has a 'parent' or not. See furher in the text after the diagrams.
 
 <a id="ill5">Illustration 5</a>
 
-![Illustration 5](../UML/utils/loggers_py/DualLogger_Initialization_Activity.png)
-
-The custom logger clases allow dynamic enabling and disabling of the output. They also support the loggers ancestor - descendant hierarchy: the names of the loggers with the dots are supposed to indicate such relation: logger 'parent.child.grandchild' is descendant of 'parent.child', which is descendant of 'parent' logger, even if it does not exist. The actual existence of the supposed ancestors affects only the message propagation, but not the creation of a logger, which can easily be an 'orphan'.
-
-Thus, upon the instantiation of the logger wrapper class, the console logging handler (field **console**) is always created, but it is attached to the actual logger object only if the logger object has no 'parent', i.e. the field **parent** of the logger object references an instance of **logging.RootLogger** class. See [Illustration 4](#ill4) and [Illustration 6](#ill6) for details.
+![Illustration 5](../UML/utils/loggers_py/ConsoleLogger_Initialization_Activity.png)
 
 <a id="ill6">Illustration 6</a>
 
-![Illustration 6](../UML/utils/loggers_py/ConsoleLogger.enableConsoleLoging()_Activity.png)
+![Illustration 6](../UML/utils/loggers_py/DualLogger_Initialization_Activity.png)
 
-With this arrangement the 'descendant' loggers, e.g. **SomeClassLogger.SomeMethodLogger** (as a 'child' of **SomeClassLogger**), do not have a console handler attached to them. Even if the console output has been disable and re-enabled afterwards (see [Illustration 6](#ill6)), the console handler remains not attached as long as the logger has direct a 'parent'.
+The custom logger clases allow dynamic enabling and disabling of the output. They also support the loggers ancestor - descendant hierarchy: the names of the loggers with the dots are supposed to indicate such relation: logger 'parent.child.grandchild' is descendant of 'parent.child', which is descendant of 'parent' logger, even if it does not exist. The actual existence of the supposed ancestors affects only the message propagation, but not the creation of a logger, which can easily be an 'orphan'.
+
+Thus, upon the instantiation of the logger wrapper class, the console logging handler (field **console**) is always created, but it is attached to the actual logger object only if the logger object has no 'parent', i.e. the field **parent** of the logger object references an instance of **logging.RootLogger** class. See [Illustration 5](#ill5) and [Illustration 7](#ill7) for details.
+
+<a id="ill7">Illustration 7</a>
+
+![Illustration 7](../UML/utils/loggers_py/ConsoleLogger.enableConsoleLoging()_Activity.png)
+
+With this arrangement the 'descendant' loggers, e.g. **SomeClassLogger.SomeMethodLogger** (as a 'child' of **SomeClassLogger**), do not have a console handler attached to them. Even if the console output has been disable and re-enabled afterwards (see [Illustration 7](#ill7)), the console handler remains not attached as long as the logger has direct a 'parent'.
 
 _**Note**_: the dynamic disabling of the console logging is performed via the instance method **disableConsoleLogging**(), which simply removes the console handler from the list of the active handlers of the logging object using the method **logging.Logger.removeHandler**(). This **removeHandler**() is intelligent enough to ignore the handlers passed as the argument, which are not registered as active handlers of this logger object.
 
 This approach ensures, that there is no 'dubbling' of the console log entries; a log entry issued to a 'child' logger is printed out only by the 'root' logger (at the top of the hierarchy). The dynamic enabling / disabling of the *console* logging has an effect only on the 'root' logger of the hierarchy and affects all its descendant; whereas enabling / disabling of the console logging of a descendant logger has no effect at all, because they console handlers are never attached.
 
-With the *file output handler* another approach is taken, see [Illustration 5](#ill5), [Illustration 7](#ill7) and [Illustration 8](#ill8).
-
-<a id="ill7">Illustration 7</a>
-
-![Illustration 7](../UML/utils/loggers_py/DualLogger.enableFileLogging()_Activity.png)
-
-Upon instantiation of the **DualLogger** class either an instance of the **logging.FileHandler** or an instance of the **logging.NullHandler** class is referenced by the instance attribute **file_logging** and is attached to the actual logger object, depending on if the file logging must be enabled or disabled. When the file logging is explicitely (re-) enabled (see [Illustration 7](#ill7)) the instance of the **logging.NullHandler** class referenced by the **file_logging** attribute (if this is the case) is replaced by an instance of the **logging.FileHandler** class (also in the list of the active handlers of the actual logger object). Otherwise, if the **file_logging** attribute references an isntance of the **logging.FileHandler** class already, this handler is simply re-attached to the logger object.
-
-When the file logging is disabled at the 'run-time', the handler referenced by the attribute **file_logging** is detached from the logger object only if it is an intance of the **logging.FileHandler** class, since the **logging.NullHandler** class does not output any log entries anyway, see [Illustration 8](#ill8).
+With the *file output handler* another approach is taken, see [Illustration 6](#ill6), [Illustration 8](#ill8) and [Illustration 9](#ill9).
 
 <a id="ill8">Illustration 8</a>
 
-![Illustration 8](../UML/utils/loggers_py/DualLogger.disableFileLogging()_Activity.png)
+![Illustration 8](../UML/utils/loggers_py/DualLogger.enableFileLogging()_Activity.png)
 
-The file logging can be enabled / disabled for each of the logger in the hierarchy independently, since the expected '*modus operandi*' is that each instance of the **DualLogger** class uses own file to log in. It is convenient that each 'child' logger maintains own log file, where specific events are registered, for instance, originating from a specific class / method or function, whereas the 'parent' logger aggregates all relevant events in a single log file.
+Upon instantiation of the **DualLogger** class either an instance of the **logging.FileHandler** or an instance of the **logging.NullHandler** class is referenced by the instance attribute **file_logging** and is attached to the actual logger object, depending on if the file logging must be enabled or disabled. When the file logging is explicitely (re-) enabled (see [Illustration 7](#ill7)) the instance of the **logging.NullHandler** class referenced by the **file_logging** attribute (if this is the case) is replaced by an instance of the **logging.FileHandler** class (also in the list of the active handlers of the actual logger object). Otherwise, if the **file_logging** attribute references an isntance of the **logging.FileHandler** class already, this handler is simply re-attached to the logger object.
 
-Finally, the log file can be changed at any time using the instance method **changeLogFile**(), see [Illustration 9](#ill9). As in the case of the instantiation, the desired name of the file can be passed as the optional argument; otherwise the file name is constructed automatically form the current date-time stamp and the name assigned to the logger object.
+When the file logging is disabled at the 'run-time', the handler referenced by the attribute **file_logging** is detached from the logger object only if it is an intance of the **logging.FileHandler** class, since the **logging.NullHandler** class does not output any log entries anyway, see [Illustration 9](#ill9).
 
 <a id="ill9">Illustration 9</a>
 
-![Illustration 9](../UML/utils/loggers_py/DualLogger.changeLogFile()_Activity.png)
+![Illustration 9](../UML/utils/loggers_py/DualLogger.disableFileLogging()_Activity.png)
+
+The file logging can be enabled / disabled for each of the logger in the hierarchy independently, since the expected '*modus operandi*' is that each instance of the **DualLogger** class uses own file to log in. It is convenient that each 'child' logger maintains own log file, where specific events are registered, for instance, originating from a specific class / method or function, whereas the 'parent' logger aggregates all relevant events in a single log file.
+
+Finally, the log file can be changed at any time using the instance method **changeLogFile**(), see [Illustration 10](#ill10). As in the case of the instantiation, the desired name of the file can be passed as the optional argument; otherwise the file name is constructed automatically form the current date-time stamp and the name assigned to the logger object.
+
+<a id="ill10">Illustration 10</a>
+
+![Illustration 10](../UML/utils/loggers_py/DualLogger.changeLogFile()_Activity.png)
 
 ### Warning
 
 Due to the implementation of the 'virtual inheritance' the behavior of the function **logging.getLogger**() may be confusing. Suppose, that the class **ConsoleLogger** is instantiated as **MyLoggger = ConsoleLogger**('LoggerMy'). The call **logging.getLogger**('MyLogger') will return the reference to an instance of **logging.Logger** class, namely the value of **MyLogger._logger**, and not the instance **MyLogger** itself.
 
+<a id="api"></a>
+
 ## API Reference
+
+<a id="consolelogger"></a>
 
 ### Class ConsoleLogger
 
@@ -121,11 +144,15 @@ By default, the logger event logging level is set to logging.DEBUG, but it can b
 
 Any class instance has a hidden 'dummy' handler of NullHandler class, thus the real console logging handler can be disabled without complains from the logging module.
 
-The default format of a log entry is a 3-lines string:
+The default format is:
 
-* logging level, date and time in ASCII format, name of the module, name of the logger (not its class), name of the calling function
-* line number within and the path to the module, where the logging entry is issued
-* actual message sent the logger
+* For the level below WARNING - 2 lines:
+  - logging level, date and time in ASCII format, name of the module, name of the logger (not its class), name of the calling function
+  - actual message sent the logger
+* For the level of WARNING and above - 3 lines:
+  - logging level, date and time in ASCII format, name of the module, name of the logger (not its class), name of the calling function
+  - line number within and the path to the module, where the logging entry is issued
+  - actual message sent the logger
 
 Virtually 'inherits' all API from the class logging.Logger by attribute resolution redirection, and adds new data fields and methods.
 
@@ -193,6 +220,92 @@ Description:
 
 Method to change the logging level of the handler for the logging into the console. Basically, an alias for **self.console.setLevel**(level).
 
+**setLevel**(level)
+
+Signature:
+
+int -> None
+
+Args:
+
+* *level*: non-negative integer, the logging level, e.g. logging.DEBUG, logging.WARNING, etc.
+
+Description:
+
+Method to change the logging level of the logger. Basically, an alias for **self._Logger.setLevel**(level).
+
+**debug**(strMessage)
+
+Signature:
+
+str -> None
+
+Args:
+
+* *strMessage*: str, the message to log (before the formatting) - will form the last line of the actual log entry
+
+Description:
+
+Method to issue a log entry at DEBUG level. Alias for **self._Logger.debug**().
+
+**info**(strMessage)
+
+Signature:
+
+str -> None
+
+Args:
+
+* *strMessage*: str, the message to log (before the formatting) - will form the last line of the actual log entry
+
+Description:
+
+Method to issue a log entry at INFO level. Alias for **self._Logger.info**().
+
+**warning**(strMessage)
+
+Signature:
+
+str -> None
+
+Args:
+
+* *strMessage*: str, the message to log (before the formatting) - will form the last line of the actual log entry
+
+Description:
+
+Method to issue a log entry at WARNING level. Alias for **self._Logger.warning**(). Note, that the message is formed as the 3 lines, the module and line number of the issuer is added as the second line.
+
+**error**(strMessage)
+
+Signature:
+
+str -> None
+
+Args:
+
+* *strMessage*: str, the message to log (before the formatting) - will form the last line of the actual log entry
+
+Description:
+
+Method to issue a log entry at ERROR level. Alias for **self._Logger.error**(). Note, that the message is formed as the 3 lines, the module and line number of the issuer is added as the second line.
+
+**critical**(strMessage)
+
+Signature:
+
+str -> None
+
+Args:
+
+* *strMessage*: str, the message to log (before the formatting) - will form the last line of the actual log entry
+
+Description:
+
+Method to issue a log entry at CRITICAL level. Alias for **self._Logger.critical**(). Note, that the message is formed as the 3 lines, the module and line number of the issuer is added as the second line.
+
+<a id="duallogger"></a>
+
 ### Class DualLogger
 
 Custom logger class implementing logging into the console and / or into a file, which can be suppressed or re-enabled dynamically.
@@ -212,11 +325,15 @@ Implementation details:
 * call to the method changeLogFile() automatically enables the file logging, thus log file is created / re-opened
 * the log files are created / re-opened in the 'w' mode, thus clearing their previous content, but disabling / suppressing of the file logging doesn't actually closes the log file, therefore the reenabling of the file logging doesn't delete the previously made entries
 
-The default format of a log entry is a 3-lines string:
+The default format is:
 
-* logging level, date and time in ASCII format, name of the module, name of the logger (not its class), name of the calling function
-* line number within and the path to the module, where the logging entry is issued
-* actual message sent the logger
+* For the level below WARNING - 2 lines:
+  - logging level, date and time in ASCII format, name of the module, name of the logger (not its class), name of the calling function
+  - actual message sent the logger
+* For the level of WARNING and above - 3 lines:
+  - logging level, date and time in ASCII format, name of the module, name of the logger (not its class), name of the calling function
+  - line number within and the path to the module, where the logging entry is issued
+  - actual message sent the logger
 
 Virtually 'inherits' all API from the class logging.Logger by attribute resolution redirection via its direct super class **ConsoleLogger**, and adds new data fields and methods.
 
@@ -250,26 +367,6 @@ Note that due to the support of the loggers ancestor - descendant hierarchy the 
 If optional file name is not passed during instantiation of the class, it is defined automatically from the current date and time as well as the 'name' of the logger instance with the extension '.log'. Otherwise, the file name passed during instantiation of the class is remembered with the standard convention on absolute / relative to the current working directory path being applied.
 
 Note that the log file is not created / opened immediately if the second (optional) argument - boolean flag - is False, i.e. the logging into a file is suppressed. However, if the file logging s enabled, the actual log file is created or re-opened in 'w' mode using the filename passed into this method or automatically defined during the instantiation.
-
-#### Instance Methods - Inhertited
-
-**enableConsoleLogging**()
-
-Signature:
-
-None -> None
-
-**disableConsoleLogging**()
-
-Signature:
-
-None -> None
-
-**setConsoleLoggingLevel**(level)
-
-Signature:
-
-int -> None
 
 #### Instance Methods - Added
 
@@ -328,3 +425,60 @@ Description:
 Method to change the active log file. If logging to a file was disabled this method automatically enables it. Otherwise, the log file used before is closed, and the new log file is created.
 
 If optional file name is not passed, it is defined automatically from the current date and time as well as the 'name' of the logger instance with the extension '.log'. Note that in this case the log file is created in the current working directory.
+
+#### Instance Methods - Inhertited
+
+**enableConsoleLogging**()
+
+Signature:
+
+None -> None
+
+**disableConsoleLogging**()
+
+Signature:
+
+None -> None
+
+**setConsoleLoggingLevel**(level)
+
+Signature:
+
+int -> None
+
+
+**setLevel**(level)
+
+Signature:
+
+int -> None
+
+**debug**(strMessage)
+
+Signature:
+
+str -> None
+
+**info**(strMessage)
+
+Signature:
+
+str -> None
+
+**warning**(strMessage)
+
+Signature:
+
+str -> None
+
+**error**(strMessage)
+
+Signature:
+
+str -> None
+
+**critical**(strMessage)
+
+Signature:
+
+str -> None

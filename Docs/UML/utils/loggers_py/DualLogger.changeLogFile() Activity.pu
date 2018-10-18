@@ -1,6 +1,6 @@
 @startuml
 
-title Activity Diagram of the Method pos.utils.logging.DualLogger.changeLogFile()
+title Activity Diagram of the Method DualLogger.changeLogFile()
 
 start
 

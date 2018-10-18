@@ -1,6 +1,6 @@
 @startuml
 
-title Activity Diagram of the Initialization Method of the class pos.utils.loggers.DualLogger
+title Activity Diagram of the Initialization Method of the class DualLogger
 
 start
 
@@ -9,7 +9,6 @@ start
 <b>LogFileName</b> - optional string, relative or absolute path to a log file to use, defaults to None
 <b>Level</b> - optional integer, severity level for the logger, defaults to logging.DEBUG<
 
-:call _ _init_ _() method of the super class (ConsoleLogger) and pass <b>Name</b> and <b>Level</b> into it|
 
 if (<b>LogFileName</b> is not None?) then (True)
     :copy <b>LogFileName</b> into the
@@ -31,7 +30,9 @@ else (No)
     in the instance attribute <b>file_logging</b> ;
 endif
 
-:set the severity level of the <b>file_logging</b> handler to logging.WARNING and its formatter to <b>formatter</b> ;
+:set the severity level of the <b>file_logging</b> handler to logging.WARNING;
+
+:call _ _init_ _() method of the super class (ConsoleLogger) and pass <b>Name</b> and <b>Level</b> into it|
 
 if (<b>FileLogging</b> is True?) then (Yes)
     :enable file logging, see method <b>enableFileLogging</b>()|

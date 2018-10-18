@@ -1,6 +1,6 @@
 @startuml
 
-title Activity Diagram of the Method pos.utils.logger.DualLogger.disableFileLogging()
+title Activity Diagram of the Method DualLogger.disableFileLogging()
 
 start
 

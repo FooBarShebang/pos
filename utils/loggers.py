@@ -34,8 +34,8 @@ Warning:
     instance MyLogger itself.
 """
 
-__version__ = "0.0.1.0"
-__date__ = "15-08-2018"
+__version__ = "0.0.1.1"
+__date__ = "17-10-2018"
 __status__ = "Production"
 
 #imports
@@ -74,12 +74,17 @@ class ConsoleLogger(object):
     the real console logging handler can be disabled without complains from the
     logging module.
     
-    The default format of a log entry is a 3-lines string:
-        * logging level, date and time in ASCII format, name of the module, name
-            of the logger (not its class), name of the calling function
-        * line number within and the path to the module, where the logging entry
-            is issued
-        * actual message sent the logger
+    The default format is:
+        * For the level below WARNING - 2 lines:
+            - logging level, date and time in ASCII format, name of the module,
+                name of the logger (not its class), name of the calling function
+            - actual message sent the logger
+        * For the level of WARNING and above - 3 lines:
+            - logging level, date and time in ASCII format, name of the module,
+                name of the logger (not its class), name of the calling function
+            - line number within and the path to the module, where the logging
+                entry is issued
+            - actual message sent the logger
     
     Virtually 'inherits' all API from the class logging.Logger by attribute
     resolution redirection, and adds new data fields and methods.
@@ -97,8 +102,20 @@ class ConsoleLogger(object):
             None -> None
         disableConsoleLogging()
             None -> None
+        setLevel()
+            int -> None
+        debug()
+            str -> None
+        info()
+            str  -> None
+        error()
+            str -> None
+        warning()
+            str -> None
+        critical()
+            str -> None
     
-    Version 0.0.1.0
+    Version 0.0.1.1
     """
     
     #special methods
@@ -123,18 +140,14 @@ class ConsoleLogger(object):
             level: (optional) non-negative integer, the logging level, e.g.
                 logging.DEBUG, logging.WARNING, etc.
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
         self.__dict__['_logger'] = logging.getLogger(strName)
         self._logger.setLevel(level)
-        self.formatter = logging.Formatter('\n'.join([
-            '<<%(levelname)s>> %(asctime)s @%(module)s.%(name)s.%(funcName)s',
-                'Line %(lineno)d in %(pathname)s', '%(message)s']),
-                                                        '%Y-%m-%d %H:%M:%S')
         self.addHandler(logging.NullHandler()) #dummy
         self.console = logging.StreamHandler()
         self.console.setLevel(logging.INFO)
-        self.console.setFormatter(self.formatter)
+        self._setFormatNoLineCode()
         self.enableConsoleLogging()
     
     def __getattribute__(self, strName):
@@ -160,18 +173,26 @@ class ConsoleLogger(object):
                 the current object (or its ancestors) nor within the attribute
                 _logger of the current object
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
-        if strName == '__dict__':
-            #walk around for the initial assignment to self._logger via
-            #+ self.__dict__['_logger'] = ...
-            objResult = object.__getattribute__(self, '__dict__')
+        if strName in ['__dict__', '__class__']:
+            objResult = object.__getattribute__(self, strName)
         else:
-            objTemp = object.__getattribute__(self, '_logger')
-            if hasattr(objTemp, strName):
-                objResult = object.__getattribute__(self._logger, strName)
-            else:
+            bCond1 = strName in self.__dict__
+            bCond2 = any(map(lambda x: strName in x.__dict__,
+                                                        self.__class__.__mro__))
+            if bCond1 or bCond2:
                 objResult = object.__getattribute__(self, strName)
+            else:
+                try:
+                    objTemp = object.__getattribute__(self, '_logger')
+                    if hasattr(objTemp, strName):
+                        objResult=object.__getattribute__(self._logger, strName)
+                    else: #should result in AttributeError exception
+                        objResult = object.__getattribute__(self, strName)
+                except AttributeError:
+                    #should still result in AttributeError exception
+                    objResult = object.__getattribute__(self, strName)
         return objResult
     
     def __setattr__(self, strName, gValue):
@@ -189,12 +210,57 @@ class ConsoleLogger(object):
             strName: string, name of an attribute to assign to
             gValue: any type, the value to be assigned
         
+        Version 0.0.1.1
+        """
+        try:
+            objTemp = object.__getattribute__(self, '_logger')
+            if hasattr(objTemp, strName):
+                object.__setattr__(objTemp, strName, gValue)
+            else:
+                object.__setattr__(self, strName, gValue)
+        except AttributeError:
+            object.__setattr__(self, strName, gValue)
+    
+    def _setFormatWithLineCode(self):
+        """
+        Helper method.
+        
+        Sets the  format of a log entry is a 3-lines string:
+            * logging level, date and time in ASCII format, name of the module,
+                name of the logger (not its class), name of the calling function
+            * line number within and the path to the module, where the logging
+                entry is issued
+            * actual message sent the logger
+        
+        Signature:
+            None -> None
+        
         Version 0.0.1.0
         """
-        if hasattr(self._logger, strName):
-            object.__setattr__(self._logger, strName, gValue)
-        else:
-            object.__setattr__(self, strName, gValue)
+        self.formatter = logging.Formatter('\n'.join([
+            '<<%(levelname)s>> %(asctime)s @%(module)s.%(name)s.%(funcName)s',
+                'Line %(lineno)d in %(pathname)s', '%(message)s']),
+                                                        '%Y-%m-%d %H:%M:%S')
+        self.console.setFormatter(self.formatter)
+    
+    def _setFormatNoLineCode(self):
+        """
+        Helper method.
+        
+        Sets the  format of a log entry is a 2-lines string:
+            * logging level, date and time in ASCII format, name of the module,
+                name of the logger (not its class), name of the calling function
+            * actual message sent the logger
+        
+        Signature:
+            None -> None
+        
+        Version 0.0.1.0
+        """
+        self.formatter = logging.Formatter('\n'.join([
+            '<<%(levelname)s>> %(asctime)s @%(module)s.%(name)s.%(funcName)s',
+                '%(message)s']), '%Y-%m-%d %H:%M:%S')
+        self.console.setFormatter(self.formatter)
     
     #public instance methods
     
@@ -244,6 +310,98 @@ class ConsoleLogger(object):
         Version 0.0.1.0
         """
         self.console.setLevel(level)
+    
+    def warning(self, strMessage, *args, **kwargs):
+        """
+        Wrapper for the logging.Logger.warning() method, which also temporary
+        changes the format of the log entries.
+        
+        Signature:
+            str/, type A/, ... // -> None
+        
+        Args:
+            strMessage: str, (supposedly), the message body to be logged
+            *args: type A, any number of the positional argumens, not really
+                used, just kept for the compatibility with the wrapped method
+                logging.Logger.warning()
+            *kwargs: type A, any number of the keyword argumens, not really
+                used, just kept for the compatibility with the wrapped method
+                logging.Logger.warning()
+        
+        Version 0.0.1.0
+        """
+        self._setFormatWithLineCode()
+        self._logger.warning(strMessage, *args, **kwargs)
+        self._setFormatNoLineCode()
+    
+    def error(self, strMessage, *args, **kwargs):
+        """
+        Wrapper for the logging.Logger.error() method, which also temporary
+        changes the format of the log entries.
+        
+        Signature:
+            str/, type A/, ... // -> None
+        
+        Args:
+            strMessage: str, (supposedly), the message body to be logged
+            *args: type A, any number of the positional argumens, not really
+                used, just kept for the compatibility with the wrapped method
+                logging.Logger.error()
+            *kwargs: type A, any number of the keyword argumens, not really
+                used, just kept for the compatibility with the wrapped method
+                logging.Logger.error()
+        
+        Version 0.0.1.0
+        """
+        self._setFormatWithLineCode()
+        self._logger.error(strMessage, *args, **kwargs)
+        self._setFormatNoLineCode()
+    
+    def exception(self, strMessage, *args, **kwargs):
+        """
+        Wrapper for the logging.Logger.error() method, which also temporary
+        changes the format of the log entries.
+        
+        Signature:
+            str/, type A/, ... // -> None
+        
+        Args:
+            strMessage: str, (supposedly), the message body to be logged
+            *args: type A, any number of the positional argumens, not really
+                used, just kept for the compatibility with the wrapped method
+                logging.Logger.error()
+            *kwargs: type A, any number of the keyword argumens, not really
+                used, just kept for the compatibility with the wrapped method
+                logging.Logger.error()
+        
+        Version 0.0.1.0
+        """
+        self._setFormatWithLineCode()
+        self._logger.exception(strMessage, *args, **kwargs)
+        self._setFormatNoLineCode()
+    
+    def critical(self, strMessage, *args, **kwargs):
+        """
+        Wrapper for the logging.Logger.critical() method, which also temporary
+        changes the format of the log entries.
+        
+        Signature:
+            str/, type A/, ... // -> None
+        
+        Args:
+            strMessage: str, (supposedly), the message body to be logged
+            *args: type A, any number of the positional argumens, not really
+                used, just kept for the compatibility with the wrapped method
+                logging.Logger.critical()
+            *kwargs: type A, any number of the keyword argumens, not really
+                used, just kept for the compatibility with the wrapped method
+                logging.Logger.critical()
+        
+        Version 0.0.1.0
+        """
+        self._setFormatWithLineCode()
+        self._logger.critical(strMessage, *args, **kwargs)
+        self._setFormatNoLineCode()
 
 class DualLogger(ConsoleLogger):
     """
@@ -290,12 +448,17 @@ class DualLogger(ConsoleLogger):
             enabling of the file logging doesn't delete the previously made
             entries
     
-    The default format of a log entry is a 3-lines string:
-        * logging level, date and time in ASCII format, name of the module, name
-            of the logger (not its class), name of the calling function
-        * line number within and the path to the module, where the logging entry
-            is issued
-        * actual message sent the logger
+    The default format is:
+        * For the level below WARNING - 2 lines:
+            - logging level, date and time in ASCII format, name of the module,
+                name of the logger (not its class), name of the calling function
+            - actual message sent the logger
+        * For the level of WARNING and above - 3 lines:
+            - logging level, date and time in ASCII format, name of the module,
+                name of the logger (not its class), name of the calling function
+            - line number within and the path to the module, where the logging
+                entry is issued
+            - actual message sent the logger
     
     Virtually 'inherits' all API from the class logging.Logger by attribute
     resolution redirection via its direct super class ConsoleLogger, and adds
@@ -324,8 +487,20 @@ class DualLogger(ConsoleLogger):
             None -> None
         changeLogFile()
             /str/ -> None
+        setLevel()
+            int -> None
+        debug()
+            str -> None
+        info()
+            str  -> None
+        error()
+            str -> None
+        warning()
+            str -> None
+        critical()
+            str -> None
     
-    Version 0.0.1.0
+    Version 0.0.1.1
     """
     
     #special methods
@@ -370,9 +545,8 @@ class DualLogger(ConsoleLogger):
             level: (optional) non-negative integer, the logging level, e.g.
                 logging.DEBUG, logging.WARNING, etc.
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
-        super(DualLogger, self).__init__(strName, level = level)
         if strFileName is None:
             self.log_file = '{}_{}.log'.format(
                 datetime.datetime.now().strftime('%Y-%m-%d %H_%M_%S'), strName)
@@ -383,7 +557,7 @@ class DualLogger(ConsoleLogger):
         else:
             self.file_logging = logging.NullHandler()
         self.file_logging.setLevel(logging.WARNING)
-        self.file_logging.setFormatter(self.formatter)
+        super(DualLogger, self).__init__(strName, level = level)
         if bLogToFile and isinstance(self.parent, logging.RootLogger):
             self.enableFileLogging()
     

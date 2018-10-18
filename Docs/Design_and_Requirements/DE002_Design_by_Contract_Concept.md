@@ -442,8 +442,9 @@ With thorough and systematic unit testing during the development, the 'execution
 At the most basic level, a Design Contract must include a (reference to) function, to which it is to be applied, and the input or output checks definitions, or both.
 
 ```abnf
-design-contract         = function-name SEP input-checks *1(SEP output-checks)
-design-contract         =/ function-name SEP output-checks
+design-contract-f-check = function-name SEP arguments SEP input-checks
+                            *1(SEP output-checks)
+design-contract-f-check  =/ function-name SEP output-checks
 
 SEP                     = <separator between the contract definition parts>
                             ; implementation specific
@@ -670,6 +671,151 @@ proper-func-def-dbc     =/ "*" identifier, "**" identifier
                             ; *args, **kwargs
 ```
 
+The check on the number of the received arguments, exluding keyword ones, is defined as:
+
+```abnf
+number-of-args-check    = length-of 1*2(SEP logic-comparison^NEQ SEP 1*DIGIT)
+                            SEP
+                            ; applied to the received positional arguments
+
+length-of               = <len() function>
+
+logic-comparison        = ">" / "<" / "==" / ">=" / "<=" / "<>" / "!="
+
+NEQ                     = "<>" / "!="
+```
+
+The number of the positional arguments recieved (length of **args**) must be compared with the pre-defined non-negative integer. There mey be more than one comparison, e.g. min and max allowed number. The 'not equal' comparison does not make sense for the number of the received arguments, therefore, it is removed.
+
+##### Names of the Keyword Arguments
+
+If this check is defined, all names encountered amongst the received keyword arguments must be present in the 'control' list as well:
+
+```abnf
+kwargs-names-check      = in-check 1*(SEP DQUOTE arg-name DQUOTE) SEP
+                            ; applied to each of the received keyword arguments
+                            ; and compared with the defined list of names
+
+in-check                = <some value in some set / list>
+```
+
+##### Argument Checks
+
+The argument checks must be defined and performed separately for each argument to be controlled. The mandatory and default parameters` values are mapped to their names using **args** and **kwargs** passed arguments, so they can be addressed by these names. The optional positional arguments (the remaining of the unmapped **args** arguments) can be addressed by their index.
+
+For each argument the check may be:
+
+* a number of values checks using AND conjunction of the results
+* a number of types checks using OR conjunction of the results
+* a number of complex type + value checks using OR conjunction of the results; for each of the type check a number of the value checks can be defined using AND conjunction
+* a 'callable' check, i.e. the argument is a reference to a function / method (optionally) with a specific signature
+
+The value check is either a logical comparison with a specific value, excluding 'equal to', or a check that the value of the argument is within a set of the defined values, or that the value is within or outside a specific range of the values.
+
+```abnf
+argument-check          = (DQUOTE arg-name DQUOTE / 1*DIGIT) SEP
+                            (1*((type-check / value-check) *(SEP value-check)) /
+                            callable-check) SEP
+
+value-check             = (logic-comparison^"==" SEP arg-value)
+value-check             =\ (in-check / not-in-check) 1*(SEP arg-value)
+
+value-check             =\ (in-range / in-lrange / in-rrange / in-drange /
+                            not-in-range / not-in-lrange / not-in-rrange /
+                            not-in-drange) 2(SEP arg-value)
+
+not-in-check            = <logical negation (NOT) of in-check>
+
+in-range                = <some value within (a,b) range, i.e. > a and < b>
+
+in-lrange                = <some value within [a,b) range, i.e. >= a and < b>
+
+in-rrange                = <some value within (a,b] range, i.e. > a and <= b>
+
+in-drange                = <some value within [a,b] range, i.e. >= a and <= b>
+
+not-in-range            = <logical negation (NOT) of in-range>
+
+not-in-lrange            = <logical negation (NOT) of in-lrange>
+
+not-in-rrange            = <logical negation (NOT) of in-rrange>
+
+not-in-drange            = <logical negation (NOT) of in-drange>
+```
+
+The inside range checks can be defined as 2 simple logical comparisons with the AND conjunction, thus they can be considered as a syntax sugar. The outside range checks, however, can be replaced by 2 simple logical comparisons with OR conjuction, which contradicts the convention above. Therefore, they MUST be defined as separate rules / operations. On the implementation level they can be simply negation of the inside range checks.
+
+The type check can be of two types: 'IS A' (instance or subclass check) or 'HAS A' (duck typing check).
+
+For the 'IS A' check the argument can be compared with one or more possible options, in which case the OR conjunction is applied for the boolean results of the individual results. With the multiple options - the argument being checked is allowed to be a subclass / instance of any of the options. The 'is an instance' or 'is a subclass' checks can also be negated (logical NOT applied to the result). All values checks following this type check and before the next type check definition or the end of this argument contract are combined using AND conjuction.
+
+Example. An argument can be a positive number or None, thus the type + value checks can be formulated as:
+
+* argument is an instance of **int** OR **long** OR **float**; AND argument is > 0 - type + value check
+* OR; argument is an instance of **NoneType** - type check
+
+In the case of the sequence type check, i.e. list, tuple, etc., but not a string, instead of value check(s) the number of elements check and type / value check on all elements or type / value checks on individual elements (by index) can be added.
+
+This arrangement allows compex checks on the container objects, for instance:
+
+* that an argument is a list or tuple of, at least, given length and contains only positive numbers
+* that an argument is a 2-elements tuple with the first element being a string and the second - integer
+
+The 'IS A' check can be complemented by any number of the 'HAS A' checks. The type checks on the specific argument can also consist of only 'HAS A' checks.
+
+The 'HAS A' check includes mandatory check on that an attribute with the given name is present within the attributes of the argument being checked, and it may be followed by an arbitrary amount of the type / value checks or a single callable check applied to this attribute.
+
+The callable check includes mandatory check on that an attribute is a callable object, e.g. function or method, or an object with the \_\_call\_\_() method defined, followed by an optional input and / or output checks.
+
+```abnf
+type-check              = [NOT] (is-instance / is-subclass) 1*(SEP class-name)
+                            *(SEP has-attribute-check)
+type-check              =/ has-attribute-check *(SEP has-attribute-check)
+type-check              =/ is-instance SEP sequence [SEP sequence-length-check] 
+                            ((SEP (type-check / value-check) *(SEP value-check))
+                            / (1*(SEP 1*DIGIT (1*((type-check / value-check)
+                            *(SEP value-check)) / callable-check)))
+
+NOT                     = <logical NOT negation of the next rule`s bool result>
+
+is-instance             = <isinstance() function based check>
+
+is-subclass             = <issubclass() function based check>
+
+class-name              = DQUOTE identifier DQUOTE
+                            ; built-in type or custom class name in quotes
+
+has-attribute-check     = DQUOTE identifier DQUOTE SEP is-present-check SEP
+                            1*(SEP attr-name (1*((type-check / value-check)
+                            *(SEP value-check)) / callable-check))
+
+sequence                = <list, tuple or any compatible container class>
+                            ; excluding stings!
+
+sequence-length-check   = length-of 1*2(SEP logic-comparison^NEQ SEP 1*DIGIT)
+                            SEP
+                            ; applied to the sequence type
+
+callable-check          = is-callable [SEP input-checks] [SEP output-checks]
+
+is-present-check        = <hasattr() function based check>
+
+attr-name               = DQUOTE identifier DQUOTE
+```
+
+The type check definition is recursive, which reflects the fact that a type check contract for a single compound argument (container, or class instance, etc.) of a function can include nested type checks and even nested other functions` contract checks.
+
+Finally, the definition of the input checks is:
+
+```abnf
+input-checks            = |(number-of-args-check kwargs-names-check
+                            *(argument-check))
+```
+
+#### Ouput Checks
+
+foo
+
 ### Summary
 
 The concept of the Design by Contract approach to be implemented can be summarized as:
@@ -728,9 +874,91 @@ proper-func-def-dbc     =/ ["*" ["*"] identifier]
 proper-func-def-dbc     =/ "*" identifier, "**" identifier
                             ; *args, **kwargs
 
-design-contract         = function-name SEP input-checks *1(SEP output-checks)
-design-contract         =/ function-name SEP output-checks
+design-contract-f-check = function-name SEP arguments SEP input-checks
+                            *1(SEP output-checks)
+design-contract-f-check  =/ function-name SEP output-checks
 
 SEP                     = <separator between the contract definition parts>
                             ; implementation specific
+
+input-checks            = |(number-of-args-check kwargs-names-check
+                            *(argument-check))
+
+number-of-args-check    = length-of 1*2(SEP logic-comparison^NEQ SEP 1*DIGIT)
+                            SEP
+                            ; applied to the received positional arguments
+
+kwargs-names-check      = in-check 1*(SEP DQUOTE arg-name DQUOTE) SEP
+                            ; applied to each of the received keyword arguments
+                            ; and compared with the defined list of names
+
+argument-check          = (DQUOTE arg-name DQUOTE / 1*DIGIT) SEP
+                            (1*((type-check / value-check) *(SEP value-check)) /
+                            callable-check) SEP
+
+length-of               = <len() function>
+
+logic-comparison        = ">" / "<" / "==" / ">=" / "<=" / "<>" / "!="
+
+NEQ                     = "<>" / "!="
+
+in-check                = <some value in some set / list>
+
+type-check              = [NOT] (is-instance / is-subclass) 1*(SEP class-name)
+                            *(SEP has-attribute-check)
+type-check              =/ is-instance SEP sequence [SEP sequence-length-check] 
+                            ((SEP (type-check / value-check) *(SEP value-check))
+                            / (1*(SEP 1*DIGIT (1*((type-check / value-check)
+                            *(SEP value-check)) / callable-check)))
+
+value-check             = (logic-comparison^"==" SEP arg-value)
+value-check             =\ (in-check / not-in-check) 1*(SEP arg-value)
+
+value-check             =\ (in-range / in-lrange / in-rrange / in-drange /
+                            not-in-range / not-in-lrange / not-in-rrange /
+                            not-in-drange) 2(SEP arg-value)
+
+not-in-check            = <logical negation (NOT) of in-check>
+
+in-range                = <some value within (a,b) range, i.e. > a and < b>
+
+in-lrange                = <some value within [a,b) range, i.e. >= a and < b>
+
+in-rrange                = <some value within (a,b] range, i.e. > a and <= b>
+
+in-drange                = <some value within [a,b] range, i.e. >= a and <= b>
+
+not-in-range            = <logical negation (NOT) of in-range>
+
+not-in-lrange            = <logical negation (NOT) of in-lrange>
+
+not-in-rrange            = <logical negation (NOT) of in-rrange>
+
+not-in-drange            = <logical negation (NOT) of in-drange>
+
+NOT                     = <logical NOT negation of the next rule`s bool result>
+
+is-instance             = <isinstance() function based check>
+
+is-subclass             = <issubclass() function based check>
+
+class-name              = DQUOTE identifier DQUOTE
+                            ; built-in type or custom class name in quotes
+
+has-attribute-check     = DQUOTE identifier DQUOTE SEP is-present-check SEP
+                            1*(SEP attr-name (1*((type-check / value-check)
+                            *(SEP value-check)) / callable-check))
+
+sequence                = <list, tuple or any compatible container class>
+                            ; excluding stings!
+
+sequence-length-check   = length-of 1*2(SEP logic-comparison^NEQ SEP 1*DIGIT)
+                            SEP
+                            ; applied to the sequence type
+
+callable-check          = is-callable [SEP input-checks] [SEP output-checks]
+
+is-present-check        = <hasattr() function based check>
+
+attr-name               = DQUOTE identifier DQUOTE
 ```

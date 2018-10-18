@@ -9,4 +9,7 @@ class DualLogger {
     + enableFileLogging(): None -> None
     + disableFileLogging(): None -> None
     + changeLogFile(): /str/ -> None
+    ..Special methods..
+    # _setFormatWithLineCode(): None -> None
+    # _setFormatNoLineCode(): None -> None
 }

@@ -1,6 +1,6 @@
 @startuml
 
-title Activity Diagram of the Method pos.utils.logger.ConsoleLogger.enableConsoleLogging()
+title Activity Diagram of the Method ConsoleLogger.enableConsoleLogging()
 
 start
 
