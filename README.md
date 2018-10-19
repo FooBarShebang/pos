@@ -2,6 +2,15 @@
 
 as in Python on Steroids / Python of Steel - working title
 
+## Table of Content
+
+* [Description](#Description)
+* [Goal](#Goal)
+* [Rationale](#Rationale)
+* [Functionality and Intended Use](#Functionality-and-Intended-Use)
+* [Documentation](#Documentation)
+* [Structure](#Structure)
+
 ## Description
 
 Hacking of the Python programming language in its original MIT / UC Berkeley sense, not as in the computer security breaching.
@@ -50,7 +59,7 @@ Besides, I have some personal grudges with these implementations and my own wish
 
 ## Functionality and Intended Use
 
-This section gives a brief overview of the functionality and intended use of the packages and modules implemented within the library. The links to the detailed documentation on the modules are provided in the [Documentation section](#documentation). The detailed packages and modules structure of the library is given in the [Structure section](#structure).
+This section gives a brief overview of the functionality and intended use of the packages and modules implemented within the library. The links to the detailed documentation on the modules are provided in the [index.md](./Docs/index.md) file. The detailed packages and modules structure of the library is given in the [Structure section](#structure).
 
 ### Module exceptions
 
@@ -85,71 +94,17 @@ Provides two classes - derived from the **logging.Logger** class in the standard
 
 ## Documentation
 
-All documentation is placed in the sub-folder 'Docs' and is grouped by topics and types. All documents are written as text files using Markdown formatting.
-
-### Design and Requirements
-
-* [DE001 Core Features](./Docs/Design_and_Requirements/DE001_Core_Features.md)
-
-### Problem Analysis
-
-* [PA001 Descriptors](./Docs/Problem_Analysis/PA001_Descriptors/PA001_Descriptors.md)
-* [PA002 Decorators](./Docs/Problem_Analysis/PA002_Decorators/PA002_Decorators.md)
-* [PA003 Virtual Inheritance](./Docs/Problem_Analysis/PA003_Virtual_Inheritance_Exceptions/PA003_Virtual_Inheritance_Exceptions.md)
-* [PA004 Traceback](./Docs/Problem_Analysis/PA004_Traceback/PA004_Traceback_of_Exceptions.md)
-
-### User Documentation
-
-Here the documents are grouped according to the file structure, althoug they are all stored in a single sub-folder.
-
-* **utils**
-  - docstring_parsers module [UD003](./Docs/User_Documentation/UD003_pos.utils.docstring_parsers_Reference.md)
-  - dynamic_import module [UD004](./Docs/User_Documentation/UD004_pos.utils.dynamic_import_Reference.md)
-  - loggers module [UD005](./Docs/User_Documentation/UD005_pos.utils.loggers_Reference.md)
-  - traceback module [UD001](./Docs/User_Documentation/UD001_pos.utils.traceback_Reference.md)
-* exceptions module [UD002](./Docs/User_Documentation/UD002_pos.exceptions_Reference.md)
+All documentation is placed in the sub-folder 'Docs' and is grouped by topics and types. All documents are written as text files using Markdown formatting. The [index.md](./Docs/index.md) file provides the structured list of the available documents.
 
 ## Structure
 
 * package **utils**
-  - module [**attr_info**](./utils/attr_info.py)
-    * class AttributeInfo
-    * class FieldInfo
-    * class MethodInfo(AttributeInfo):
-  - module [**docstring_parsers**](./utils/docstring_parsers.py)
-    * class GenericParser
-    * class EpytextParser
-    * class reSTParser
-    * class GoogleParser
-    * class AAParser
-    * class NumPydocParser
-    * function guess_docstyle()
-    * function indent_docstring()
-  - module [**dynamic_import**](./utils/dynamic_import.py)
-    * function import_module()
-    * function import_from_module()
-  - module [**loggers**](./utils/loggers.py)
-    * class ConsoleLogger
-    * class DualLogger
-  - module [**traceback**](./utils/traceback.py)
-    * class StackTraceback
-    * class ExceptionTraceback
-* module [**base_classes**](./base_classes.py)
-  - class DescriptedABC_Meta
-  - class DescriptedABC
-* module [**exceptions**](./exceptions.py)
-  - class ErrorMixin
-  - class CustomError
-  - class DesignContractError
-  - class ConstantAssignment
-  - class CustomAttributeError
-  - class ConstantAttributeAssignment
-  - class NotExistingAttribute
-  - class PrivateAttributeAccess
-  - class NotInDCError
-  - class CustomTypeError
-  - class DCArgumentType
-  - class DCReturnType
-  - class CustomValueError
-  - class DCArgumentValue
-  - class DCReturnValue
+  - module **attr_info** [source](./utils/attr_info.py), [documentation]
+  - module **docstring_parsers** [source](./utils/docstring_parsers.py), [documentation](./Docs/User_Documentation/UD003_pos.utils.docstring_parsers_Reference.md)
+  - module **dynamic_import** [source](./utils/dynamic_import.py), [documentation](./Docs/User_Documentation/UD004_pos.utils.dynamic_import_Reference.md)
+  - module **loggers** [source](./utils/loggers.py), [documentation](./Docs/User_Documentation/UD005_pos.utils.loggers_Reference.md)
+  - module **traceback** [source](./utils/traceback.py), [documentation](./Docs/User_Documentation/UD001_pos.utils.traceback_Reference.md)
+* module **base_classes** [source](./base_classes.py), [documentation]
+* module **exceptions** [source](./exceptions.py), [documentation](./Docs/User_Documentation/UD002_pos.exceptions_Reference.md)
+
+More detailed overview, including implemented classes and functions per module is given in [pos Components Structure](./Docs/pos_components_structure.md) document.

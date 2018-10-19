@@ -1,5 +1,13 @@
 # UD004 Module pos.utils.dynamic_import Reference
 
+## Table of Content
+
+* [Scope](#Scope)
+* [Intended Use and Functionality](#Intended-Use-and-Functionality)
+* [Design and Implementation](#Design-and-Implementation)
+* [API Reference](#API-Reference)
+  - [Functions](#Functions)
+
 ## Scope
 
 This document describes the design, intended usage, implementation details and API of the module utils.dynamic_import, which implements two functions for the dynamic import of the modules and separate objects respectively:

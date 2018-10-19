@@ -1,5 +1,20 @@
 # UD003 Module pos.utils.docstring_parsers Reference
 
+## Table of Content
+
+* [Scope](#Scope)
+* [Intended Use and Functionality](#Intended-Use-and-Functionality)
+* [Design and Implementation](#Design-and-Implementation)
+* [API Reference](#API-Reference)
+  - [Class GenericParser](#Class-GenericParser)
+  - [Class EpytextParser](#Class-EpytextParser)
+  - [Class reSTParser](#Class-reSTParser)
+  - [Class GoogleParser](#Class-GoogleParser)
+  - [Class AAParser](#Class-AAParser)
+  - [Class NumPydocParser](#Class-NumPydocParser)
+  - [Functions](#Functions)
+* [References](#References)
+
 ## Scope
 
 This document provides reference information on the module **utils.docstring_parsers** within the library **pos**, wherein a set of classes is defined, which can either extract specific data related to the automatic documentation generation form the module’s, class’, method’s or function’s doc-string, or to produce a reduced version of the doc-string with all such data removed.

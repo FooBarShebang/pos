@@ -178,6 +178,9 @@ salt
         +++ <&document> UD003_pos.utils.docstring_parsers_Reference.md
         +++ <&document> UD004_pos.utils.dynamic_import_Reference.md
         +++ <&document> UD005_pos.utils.loggers_Reference.md
+        ++ <&info> index.md
+        ++ <&document> pos_components _structure.md
+        ++ <&info> pos_File _Structure.md
         + <&folder> Tests
         ++ <&folder> utils
         +++ <&script> _ _init_ _.py
@@ -198,9 +201,8 @@ salt
         + <&script> _ _init_ _.py
         + <&script> base_classes.py
         + <&script> exceptions.py
-        + <&info> pos File Structure.md
         + <&info> README.md
-        + <&info> Release log.md
+        + <&info> Release_log.md
     }
 }
 

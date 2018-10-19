@@ -2,12 +2,12 @@
 
 ## Table of Content
 
-* [Scope](#scope)
-* [Intended Use and Functionality](#iuf)
-* [Design and Implementation](#di)
-* [API Reference](#api)
-  - [Class ConsoleLogger](#consolelogger)
-  - [Class DualLogger](#duallogger)
+* [Scope](#Scope)
+* [Intended Use and Functionality](#Intended-Use-and-Functionality)
+* [Design and Implementation](#Design-and-Implementation)
+* [API Reference](#API-Reference)
+  - [Class ConsoleLogger](#Class-ConsoleLogger)
+  - [Class DualLogger](#Class-DualLogger)
 
 ## Scope
 
@@ -15,8 +15,6 @@ This document describes the design, intended usage, implementation details and A
 
 * **ConsoleLogger**
   - **DualLogger**
-
-<a id="iuf"></a>
 
 ## Intended Use and Functionality
 
@@ -47,8 +45,6 @@ For the rest, the functionality of these custom loggers should be the same as of
     + Otherwise, the handler must send a corresponding message to its bound stream
 * A hierarchy of the loggers, i.e. 'parent - child' relation should be supported. For instaance, if there are two logers: one with the name *SomeClassLogger*, and another - with the name *SomeClassLogger.SomeMethodLogger* - the second logger is a 'child' of the first one. A log entry issued to the 'child' logger should also be received and treated by the 'parent' logger (log entries propagation); but an entry issued to the 'parent' logger should not be visible to the 'child' logger.
   - In order to avoid the dubbling of the error entries, in such situation the log entry should be handled by the 'parent' logger and not the 'child' logger, which should let it simply propagate upwards.
-
-<a id="di"></a>
 
 ## Design and Implementation
 
@@ -126,11 +122,7 @@ Finally, the log file can be changed at any time using the instance method **cha
 
 Due to the implementation of the 'virtual inheritance' the behavior of the function **logging.getLogger**() may be confusing. Suppose, that the class **ConsoleLogger** is instantiated as **MyLoggger = ConsoleLogger**('LoggerMy'). The call **logging.getLogger**('MyLogger') will return the reference to an instance of **logging.Logger** class, namely the value of **MyLogger._logger**, and not the instance **MyLogger** itself.
 
-<a id="api"></a>
-
 ## API Reference
-
-<a id="consolelogger"></a>
 
 ### Class ConsoleLogger
 
@@ -303,8 +295,6 @@ Args:
 Description:
 
 Method to issue a log entry at CRITICAL level. Alias for **self._Logger.critical**(). Note, that the message is formed as the 3 lines, the module and line number of the issuer is added as the second line.
-
-<a id="duallogger"></a>
 
 ### Class DualLogger
 

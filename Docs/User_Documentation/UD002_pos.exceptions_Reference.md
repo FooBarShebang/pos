@@ -1,5 +1,14 @@
 # UD002 Module pos.exceptions Reference
 
+## Table of Content
+
+* [Scope](#Scope)
+* [Intended Use and Functionality](#Intended-Use-and-Functionality)
+* [Design and Implementation](#Design-and-Implementation)
+* [API Reference](#API-Reference)
+  - [Class ErrorMixin](#Class-ErrorMixin)
+  - [Custom Exception Classes](#Custom-Exception-Classes)
+
 ## Scope
 
 This document provides reference information on the module _**exceptions**_ within the library **pos**. In this module the custom exception classes are defined. These custom exceptions are closely integrated within the tree of the standard exceptions, in fact, depending on the situation when they are intended to be raised, they are organized in terms of the super class – subclass relations as branches originating from the standard exception classes **TypeError**, **ValueError**, **AttributeError**, etc. Unlike the standard exceptions, they provide the built-in traceback inspection functionality. When intercept in the except branch of the **try...except** construct, the call chain can be obtained as a list of strings – the fully qualified names of the callers, as well as the full traceback’s frame record in the human-readable form including the extracts from the source code.
