@@ -35,7 +35,7 @@ Warning:
 """
 
 __version__ = "0.0.1.1"
-__date__ = "17-10-2018"
+__date__ = "26-10-2018"
 __status__ = "Production"
 
 #imports
@@ -44,6 +44,7 @@ __status__ = "Production"
 
 import logging
 import datetime
+import inspect
 
 #classes
 
@@ -221,7 +222,7 @@ class ConsoleLogger(object):
         except AttributeError:
             object.__setattr__(self, strName, gValue)
     
-    def _setFormatWithLineCode(self):
+    def _setFormatWithLineCode(self, strModule, strCaller, iLine, strPath):
         """
         Helper method.
         
@@ -233,14 +234,34 @@ class ConsoleLogger(object):
             * actual message sent the logger
         
         Signature:
-            None -> None
+            str, str, int, str -> None
         
-        Version 0.0.1.0
+        Args:
+            strModule: str, name of the caller`s module, extracted from the
+                stack traceback
+            strCaller: str, name of the caller function / method, extracted from
+                the stack traceback
+            iLine: int, code line number, where the logger is called, extracted
+                from the stack traceback
+            strPath: str, path to the caller module, extracted from the stack
+                traceback
+        
+        Version 0.0.1.1
         """
+        if strCaller == '<module>':
+            _strCaller = '__main__'
+        else:
+            _strCaller = strCaller
+        if strModule == '__main__':
+            _strModule = os.path.basename(os.path.abspath(strPath))
+            _strModule = ".".join(_strModule.split('.')[:-1])
+        else:
+            _strModule = strModule
         self.formatter = logging.Formatter('\n'.join([
-            '<<%(levelname)s>> %(asctime)s @%(module)s.%(name)s.%(funcName)s',
-                'Line %(lineno)d in %(pathname)s', '%(message)s']),
-                                                        '%Y-%m-%d %H:%M:%S')
+            '<<%(levelname)s>> %(asctime)s',
+            '@{}.{}.{}'.format(_strModule, self._logger.name, _strCaller),
+                'Line {} in {}'.format(iLine, strPath),
+                '%(message)s']), '%Y-%m-%d %H:%M:%S')
         self.console.setFormatter(self.formatter)
     
     def _setFormatNoLineCode(self):
@@ -328,9 +349,15 @@ class ConsoleLogger(object):
                 used, just kept for the compatibility with the wrapped method
                 logging.Logger.warning()
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
-        self._setFormatWithLineCode()
+        objFrame, strPath, iLine, strCaller, _, _ = inspect.stack()[1]
+        objModule = inspect.getmodule(objFrame)
+        if not (objModule is None):
+            strModule = objModule.__name__
+        else:
+            strModule = '<console input>'
+        self._setFormatWithLineCode(strModule, strCaller, iLine, strPath)
         self._logger.warning(strMessage, *args, **kwargs)
         self._setFormatNoLineCode()
     
@@ -351,9 +378,15 @@ class ConsoleLogger(object):
                 used, just kept for the compatibility with the wrapped method
                 logging.Logger.error()
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
-        self._setFormatWithLineCode()
+        objFrame, strPath, iLine, strCaller, _, _ = inspect.stack()[1]
+        objModule = inspect.getmodule(objFrame)
+        if not (objModule is None):
+            strModule = objModule.__name__
+        else:
+            strModule = '<console input>'
+        self._setFormatWithLineCode(strModule, strCaller, iLine, strPath)
         self._logger.error(strMessage, *args, **kwargs)
         self._setFormatNoLineCode()
     
@@ -374,9 +407,15 @@ class ConsoleLogger(object):
                 used, just kept for the compatibility with the wrapped method
                 logging.Logger.error()
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
-        self._setFormatWithLineCode()
+        objFrame, strPath, iLine, strCaller, _, _ = inspect.stack()[1]
+        objModule = inspect.getmodule(objFrame)
+        if not (objModule is None):
+            strModule = objModule.__name__
+        else:
+            strModule = '<console input>'
+        self._setFormatWithLineCode(strModule, strCaller, iLine, strPath)
         self._logger.exception(strMessage, *args, **kwargs)
         self._setFormatNoLineCode()
     
@@ -397,9 +436,15 @@ class ConsoleLogger(object):
                 used, just kept for the compatibility with the wrapped method
                 logging.Logger.critical()
         
-        Version 0.0.1.0
+        Version 0.0.1.1
         """
-        self._setFormatWithLineCode()
+        objFrame, strPath, iLine, strCaller, _, _ = inspect.stack()[1]
+        objModule = inspect.getmodule(objFrame)
+        if not (objModule is None):
+            strModule = objModule.__name__
+        else:
+            strModule = '<console input>'
+        self._setFormatWithLineCode(strModule, strCaller, iLine, strPath)
         self._logger.critical(strMessage, *args, **kwargs)
         self._setFormatNoLineCode()
 
@@ -560,6 +605,52 @@ class DualLogger(ConsoleLogger):
         super(DualLogger, self).__init__(strName, level = level)
         if bLogToFile and isinstance(self.parent, logging.RootLogger):
             self.enableFileLogging()
+    
+    def _setFormatWithLineCode(self, *args):
+        """
+        Helper method.
+        
+        Sets the  format of a log entry is a 3-lines string:
+            * logging level, date and time in ASCII format, name of the module,
+                name of the logger (not its class), name of the calling function
+            * line number within and the path to the module, where the logging
+                entry is issued
+            * actual message sent the logger
+        
+        Signature:
+            str, str, int, str -> None
+        
+        Args:
+            strModule: str, name of the caller`s module, extracted from the
+                stack traceback
+            strCaller: str, name of the caller function / method, extracted from
+                the stack traceback
+            iLine: int, code line number, where the logger is called, extracted
+                from the stack traceback
+            strPath: str, path to the caller module, extracted from the stack
+                traceback
+        
+        Version 0.0.1.1
+        """
+        super(DualLogger, self)._setFormatWithLineCode(*args)
+        self.file_logging.setFormatter(self.formatter)
+    
+    def _setFormatNoLineCode(self):
+        """
+        Helper method.
+        
+        Sets the  format of a log entry is a 2-lines string:
+            * logging level, date and time in ASCII format, name of the module,
+                name of the logger (not its class), name of the calling function
+            * actual message sent the logger
+        
+        Signature:
+            None -> None
+        
+        Version 0.0.1.1
+        """
+        super(DualLogger, self)._setFormatNoLineCode()
+        self.file_logging.setFormatter(self.formatter)
     
     #public instance methods
     

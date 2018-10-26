@@ -1,5 +1,9 @@
 # pos Library Release Log
 
+#2018-10-26 v0.0.1.3
+
+Fixed improper resolution of the caller by the loggers with the level >= WARNING. In module utils/loggers.
+
 ## 2018-09-28 v0.0.1.3
 
 Switching to Markdown documentation of the project.

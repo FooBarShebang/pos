@@ -19,7 +19,7 @@ Modules:
 """
 
 __version__ = "0.0.1.3"
-__date__ = "15-08-2018"
+__date__ = "26-10-2018"
 __status__ = "Development"
 
 __all__ = ['traceback', 'attr_info', 'docstring_parsers', 'dynamic_import',

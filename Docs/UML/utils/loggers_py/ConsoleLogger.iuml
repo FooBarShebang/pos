@@ -16,7 +16,7 @@ class ConsoleLogger {
     ..Special methods..
     # _ _getattribute_ _(): str -> type A
     # _ _setattr_ _(): str, type A -> None
-    # _setFormatWithLineCode(): None -> None
+    # _setFormatWithLineCode(): str, str, int, str -> None
     # _setFormatNoLineCode(): None -> None
     __
     Emulates 'virtual inheritance' from the class logging.Logger
