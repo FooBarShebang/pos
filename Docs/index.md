@@ -3,6 +3,7 @@
 ## Design and Requirements
 
 * [DE001 Core Features](./Design_and_Requirements/DE001_Core_Features.md)
+* [DE002 Design by Contract Concept](./Design_and_Requirements/DE002_Design_by_Contract_Concept.md)
 
 ## Problem Analysis
 

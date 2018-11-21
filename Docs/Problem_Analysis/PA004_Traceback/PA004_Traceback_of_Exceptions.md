@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Standard Python Library provides multiple tools to trace the call chain that has led to an exception <a id="bref1">[<sup>^1, ^2, ^3</sup>](#aref1)</a>. The goal of this analysis is to define a method based on these tools, which can be used for the implementation of the required functionality, as it is listed below.
+Standard Python Library provides multiple tools to trace the call chain that has led to an exception <a id="bref1">[<sup>1, 2, 3</sup>](#aref1)</a>. The goal of this analysis is to define a method based on these tools, which can be used for the implementation of the required functionality, as it is listed below.
 
 * A custom exception should behave exactly as its parent class, except for possibly different signature of its initialization method if not intercepted (on the top level of the Python interpreter loop)
 * If intercepted, a custom exception must provide methods or properties for the analysis of the call chain
@@ -14,7 +14,7 @@ Standard Python Library provides multiple tools to trace the call chain that has
 
 ## Method and Results
 
-The first example demonstrates the basics of the traceback information retrieval using **sys.exec_info**(), **traceback.extract_tb**() and **traceback.extract_stack**() functions <a id="bref2">[<sup>^1, ^2</sup>](#aref2)</a>.
+The first example demonstrates the basics of the traceback information retrieval using **sys.exec_info**(), **traceback.extract_tb**() and **traceback.extract_stack**() functions <a id="bref2">[<sup>1, 2</sup>](#aref2)</a>.
 
 [pa004_traceback_test001.py](./pa004_traceback_test001.py)
 
@@ -346,7 +346,7 @@ if __name__ == '__main__':
 [('/home/anton/eclipse-workspace/Python2_7/pos/Docs/Problem Analysis/PA004 Traceback/pa004_traceback_test007.py', 39, '<module>', 'TestObject.outer()'), ('/home/anton/eclipse-workspace/Python2_7/pos/Docs/Problem Analysis/PA004 Traceback/pa004_traceback_test007.py', 34, 'outer', 'self.middle()'), ('/home/anton/eclipse-workspace/Python2_7/pos/Docs/Problem Analysis/PA004 Traceback/pa004_traceback_test007.py', 31, 'middle', 'self.inner()'), ('/home/anton/eclipse-workspace/Python2_7/pos/Docs/Problem Analysis/PA004 Traceback/pa004_traceback_test007.py', 28, 'inner', "raise CustomError('testing')")]
 ```
 
-The function **sys.exec_info**(), on the other hand, returns a reference to a real traceback object as its third element, as can be seen in the example above. A **traceback** object holds a reference to a **frame** object (which can be analyzed) and a reference to the next **traceback** object referring to another **frame**, etc. as in a linked list. It is not a difficult task to walk through such a linked list, but there is a ready function in the Standard Library, which does exactly this job – **inspect.trace**() <a id="bref3">[<sup>^3</sup>](#aref3)</a>. It also wraps the **sys.exec_info**() call, thus the interface becomes dead simple.
+The function **sys.exec_info**(), on the other hand, returns a reference to a real traceback object as its third element, as can be seen in the example above. A **traceback** object holds a reference to a **frame** object (which can be analyzed) and a reference to the next **traceback** object referring to another **frame**, etc. as in a linked list. It is not a difficult task to walk through such a linked list, but there is a ready function in the Standard Library, which does exactly this job – **inspect.trace**() <a id="bref3">[<sup>3</sup>](#aref3)</a>. It also wraps the **sys.exec_info**() call, thus the interface becomes dead simple.
 
 [pa004_traceback_test008.py](./pa004_traceback_test008.py)
 
@@ -433,7 +433,7 @@ Traceback(filename='/home/anton/eclipse-workspace/Python2_7/pos/Docs/Problem Ana
 Traceback(filename='/home/anton/eclipse-workspace/Python2_7/pos/Docs/Problem Analysis/PA004 Traceback/pa004_traceback_test009.py', lineno=19, function='inner', code_context=['    def inner(self):\n', "        raise CustomError('testing')\n", '\n'], index=1)
 ```
 
-**Frame** objects do not contain all the information required for the unambiguous distinction between the usual functions and class / instance methods calls without deeper analysis of the execution environment within the frame. On the other hand, they can provide enough data to make a good ‘educated guess’, which should be enough in the majority of the situations, as long as the code adheres to the general conventions. The trick lays in the simple ‘has a’ analysis of the dictionary of the frame’s local variables. The idea is taken from <a id="bref4">[<sup>^4</sup>](#aref4)</a>.
+**Frame** objects do not contain all the information required for the unambiguous distinction between the usual functions and class / instance methods calls without deeper analysis of the execution environment within the frame. On the other hand, they can provide enough data to make a good ‘educated guess’, which should be enough in the majority of the situations, as long as the code adheres to the general conventions. The trick lays in the simple ‘has a’ analysis of the dictionary of the frame’s local variables. The idea is taken from <a id="bref4">[<sup>4</sup>](#aref4)</a>.
 
 At first, there is a convenient standard library’s function **inspect.getmodule**(), which is quite accurate at ‘guessing’ in which module an object is defined. Secondly, when a class or instance method is called, a reference to an instance of the class (usually named ‘self’) or to the class as a type itself (usually named ‘cls’) must be present in the local variables. So, one can look-up the local variables dictionary for each frame (its attribute **f_locals**) in order to detect a method call as well as to which class / class instance it is belongs. Apparently, this approach fails with the static methods, which do not have such a reference, or if a programmer ignores the usual conventions.
 Let’s just illustrate the said above.
@@ -1034,10 +1034,10 @@ With the replacement of the **inspect.trace**() call by the call to **inspect.st
 
 ## References
 
-<a id="aref1">[^1]</a> https://docs.python.org/2/library/sys.html   [&#x2B0F;](#bref1)
+<a id="aref1">[1]</a> https://docs.python.org/2/library/sys.html   [&#x2B0F;](#bref1)
 
-<a id="aref2">[^2]</a> https://docs.python.org/2/library/traceback.html     [&#x2B0F;](#bref2)
+<a id="aref2">[2]</a> https://docs.python.org/2/library/traceback.html     [&#x2B0F;](#bref2)
 
-<a id="aref3">[^3]</a> https://docs.python.org/2/library/inspect.html     [&#x2B0F;](#bref3)
+<a id="aref3">[3]</a> https://docs.python.org/2/library/inspect.html     [&#x2B0F;](#bref3)
 
-<a id="aref4">[^4]</a> https://www.programcreek.com/python/example/1190/inspect.currentframe      [&#x2B0F;](#bref4)
+<a id="aref4">[4]</a> https://www.programcreek.com/python/example/1190/inspect.currentframe      [&#x2B0F;](#bref4)

@@ -1,0 +1,52 @@
+@startuml pos_utils_traceback_stacktraceback_callchain
+
+title Activity Diagram of the Property utils.traceback.StackTraceback.CallChain
+
+start
+
+:initiate <b>CallChain</b> with an empty list;
+
+if (traceback is stored?) then (True)
+    while (for each frame record in the traceback)
+        
+        if (frame corresponds to the console input?) then (Yes)
+            :use '<console input>' as the module's name;
+        else (No)
+            :extract module's name from the frame object in the record;
+         endif
+        
+        if ('caller' in the frame is 'module' ?) then (Yes)
+            :append the extracted module name into <b>CallChain</b> list;
+        else (No)
+            :analyze <b>f_locals</b> attribute of the frame object;
+            
+            if (contains 'self' key?) then (True)
+                :extract class name of the instance
+                referenced by that key using idiom
+                <b>inst._ _class_ _._ _name_ _<b> ;
+                
+                :form full caller's name from the
+                module's name, class name and 'caller'
+                of the frame using dot notation;
+            elseif (contains 'cls' key?) then (True)
+                :extract class name of the instance
+                referenced by that key using idiom
+                <b>class._ _name_ _<b> ;
+                
+                :form full caller's name from the
+                module's name, class name and 'caller'
+                of the frame using dot notation;
+            else (False)
+                :form full caller's name from the
+                module's name and 'caller' of the
+                frame using dot notation;
+            endif
+        endif
+    end while
+endif
+
+:return <b>CallChain</b> list>
+
+stop
+
+@enduml

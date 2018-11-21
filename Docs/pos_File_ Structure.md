@@ -10,6 +10,7 @@ salt
         + <&folder> Docs
         ++ <&folder> Design_and_Requirements
         +++ <&document> DE001_Core_Features.md
+        +++ <&document> DE002_Design_by_Contract_Concept.md
         ++ <&folder> Problem_Analysis
         +++ <&folder> PA001_Descriptors
         ++++ <&script> pa001_descriptors_test01.py
@@ -56,122 +57,130 @@ salt
         ++++ <&script> pa004_traceback_test014.py
         ++++ <&script> pa004_traceback_test015.py
         ++ <&folder> UML
-        +++ <&folder> exceptions_py
+        +++ <&folder> exceptions
         ++++ <&code> ConstantAssignment.iuml
-        ++++ <&code> Custom Exception Instantiation.pu
-        ++++ <&image> Custom_Exception_Instantiation.png
         ++++ <&code> CustomAttributeError.iuml
-        ++++ <&code> CustomError._ _subclasshook_ _() Activity.pu
-        ++++ <&image> CustomError._ _subclasshook_ _()_Activity.png
         ++++ <&code> CustomError.iuml
         ++++ <&code> CustomTypeError.iuml
         ++++ <&code> CustomValueError.iuml
-        ++++ <&code> ErrorMixin._ _del_ _() Activity.pu
-        ++++ <&image> ErrorMixin._ _del_ _()_Activity.png
         ++++ <&code> ErrorMixin.iuml
-        ++++ <&code> ErrorMixin.presetTraceback() Activity.pu
-        ++++ <&image> ErrorMixin.presetTraceback()_Activity.png
-        ++++ <&code> ErrorMixin.Traceback Activity.pu
-        ++++ <&image> ErrorMixin.Traceback_Activity.png
-        ++++ <&code> exceptions Class Diagram (Direct Only).pu
-        ++++ <&code> exceptions Class Diagram.pu
-        ++++ <&image> exceptions_Class_Diagram_(Direct_Only).png
-        ++++ <&image> exceptions_Class_Diagram.png
-        ++++ <&code> exceptions_Components.iuml
         ++++ <&code> NotInDCError.iuml
+        ++++ <&image> pos_exceptions_exceptions_classes_direct.png
+        ++++ <&code> pos_exceptions_exceptions_classes_direct.pu
+        ++++ <&image> pos_exceptions_exceptions_classes.png
+        ++++ <&code> pos_exceptions_exceptions_classes.pu
+        ++++ <&code> pos_exceptions_components.iuml
+        ++++ <&image> pos_exceptions_custom_exception_init.png
+        ++++ <&code> pos_exceptions_custom_exception_init.pu
+        ++++ <&image> pos_exceptions_customerror_subclasshook.png
+        ++++ <&code> pos_exceptions_customerror_subclasshook.pu
+        ++++ <&image> pos_exceptions_errormixin_del.png
+        ++++ <&code> pos_exceptions_errormixin_del.pu
+        ++++ <&image> pos_exceptions_errormixin_presettraceback.png
+        ++++ <&code> pos_exceptions_errormixin_presettraceback.pu
+        ++++ <&image> pos_exceptions_errormixin_traceback.png
+        ++++ <&code> pos_exceptions_errormixin_traceback.pu
         +++ <&folder> Miscellaneous
-        ++++ <&code> Custom Exceptions tree.pu
-        ++++ <&image> Custom_Exceptions_tree.png
-        ++++ <&code> Exceptions tree.pu
-        ++++ <&image> Exceptions_tree.png
+        ++++ <&image> xustom_exceptions_tree.png
+        ++++ <&code> custom_exceptions_tree.pu
+        ++++ <&image> exceptions_tree.png
+        ++++ <&code> exceptions_tree.pu
+        ++++ <&image> function_call_contract_bad.png
+        ++++ <&code> function_call_contract_bad.pu
+        ++++ <&image> function_call_contract_good.png
+        ++++ <&code> function_call_contract_good.pu
+        ++++ <&image> function_call_normal.png
+        ++++ <&code> function_call_normal.pu
         +++ <&folder> Templates
         ++++ <&code> Classes.cuml
         ++++ <&code> Components.cuml
         +++ <&folder> utils
-        ++++ <&folder> contracts_py
-        +++++ <&code> contracts.py Use Cases.pu
-        +++++ <&image> contracts.py_Use_Cases.png
-        ++++ <&folder> docstring_parsers_py
-        +++++ <&code> AAParser.extractArguments() Activity.pu
-        +++++ <&image> AAParser.extractArguments()_Activity.png
-        +++++ <&code> AAParser.iuml
-        +++++ <&code> docstring_parsers Classes.pu
-        +++++ <&code> docstring_parsers Use Cases.pu
-        +++++ <&image> docstring_parsers_Classes.png
-        +++++ <&image> docstring_parsers_Use_Cases.png
-        +++++ <&code> EpytextParser.iuml
-        +++++ <&code> GenericParser.extractArguments() Activity.pu
-        +++++ <&image> GenericParser.extractArguments()_Activity.png
-        +++++ <&code> GenericParser.extractLinesByTokens() Activity.pu
-        +++++ <&image> GenericParser.extractLinesByTokens()_Activity.png
-        +++++ <&code> GenericParser.extractRaises() Activity.pu
-        +++++ <&image> GenericParser.extractRaises()_Activity.png
-        +++++ <&code> GenericParser.extractReturnedValues() Activity.pu
-        +++++ <&image> GenericParser.extractReturnedValues()_Activity.png
-        +++++ <&code> GenericParser.extractSignature() Activity.pu
-        +++++ <&image> GenericParser.extractSignature()_Activity.png
-        +++++ <&code> GenericParser.iuml
-        +++++ <&code> GenericParser.reduceDocstring() Activity.pu
-        +++++ <&image> GenericParser.reduceDocstring()_Activity.png
-        +++++ <&code> GenericParser.trimDocstring() Activity.pu
-        +++++ <&image> GenericParser.trimDocstring()_Activity.png
-        +++++ <&code> GoogleParser.iuml
-        +++++ <&code> indent_docstring() Activity.pu
-        +++++ <&image> indent_docstring()_Activity.png
-        +++++ <&code> NumPydocParser.extractRaises() Activity.pu
-        +++++ <&image> NumPydocParser.extractRaises()_Activity.png
-        +++++ <&code> NumPydocParser.extractReturnedValues() Activity.pu
-        +++++ <&image> NumPydocParser.extractReturnedValues()_Activity.png
-        +++++ <&code> NumPydocParser.iuml
-        +++++ <&code> reSTParser.extractSignature() Activity.pu
-        +++++ <&image> reSTParser.extractSignature()_Activity.png
-        +++++ <&code> reSTParser.iuml
-        ++++ <&folder> dynamic_import_py
-        +++++ <&code> import_from_module() Activity.pu
-        +++++ <&image> import_from_module()_Activity.png
-        +++++ <&code> import_module() Activity.pu
-        +++++ <&image> import_module()_Activity.png
-        ++++ <&folder> loggers_py
-        +++++ <&code> ConsoleLogger Initialization Activity.pu
-        +++++ <&code> ConsoleLogger Logging Methods.pu
-        +++++ <&image> ConsoleLogger_Initialization_Activity.png
-        +++++ <&image> ConsoleLogger_Logging_Methods.png
-        +++++ <&code> ConsoleLogger._ _getattribute_ _() Activity.pu
-        +++++ <&image> ConsoleLogger._ _getattribute_ _()_Activity.png
-        +++++ <&code> ConsoleLogger._ _setattr_ _() Activity.pu
-        +++++ <&image> ConsoleLogger._ _setattr_ _()_Activity.png
-        +++++ <&code> ConsoleLogger.enableConsoleLogging() Activity.pu
-        +++++ <&image> ConsoleLogger.enableConsoleLogging()_Activity.png
-        +++++ <&code> ConsoleLogger.iuml
-        +++++ <&code> DualLogger Initialization Activity.pu
-        +++++ <&image> DualLogger_Initialization_Activity.png
-        +++++ <&code> DualLogger.changeLogFile() Activity.pu
-        +++++ <&image> DualLogger.changeLogFile()_Activity.png
-        +++++ <&code> DualLogger.enableFileLogging() Activity.pu
-        +++++ <&image> DualLogger.enableFileLogging()_Activity.png
-        +++++ <&code> DualLogger.iuml
-        +++++ <&code> loggers.py Class Diagram.pu
-        +++++ <&image> loggers.py_Class_Diagram.png
-        ++++ <&folder> traceback_py
-        +++++ <&code> ExceptionTraceback._ _init_ _() Activity.pu
-        +++++ <&image> ExceptionTraceback._ _init_ _()_Activity.png
-        +++++ <&code> ExceptionTraceback.iuml
-        +++++ <&code> StackTraceback._ _del_ _() Activity.pu
-        +++++ <&image> StackTraceback._ _del_ _()_Activity.png
-        +++++ <&code> StackTraceback._ _init_ _() Activity.pu
-        +++++ <&image> StackTraceback._ _init_ _()_Activity.png
-        +++++ <&code> StackTraceback.CallChain Property Activity.pu
-        +++++ <&image> StackTraceback.CallChain_Property_Activity.png
-        +++++ <&code> StackTraceback.Info Property Activity.pu
-        +++++ <&image> StackTraceback.Info_Property_Activity.png
-        +++++ <&code> StackTraceback.iuml
-        +++++ <&code> traceback Classes.pu
-        +++++ <&image> traceback_Classes.png
-        ++++ <&code> utils Components.pu
-        ++++ <&code> utils_components.iuml
-        ++++ <&image> utils_Components.png
-        +++ <&code> pos Components.pu
-        +++ <&image> pos_Components.png
+        ++++ <&folder> contracts
+        +++++ <&image> pos_utils_contracts_use_cases.png
+        +++++ <&code> pos_utils_contracts_use_cases.pu
+        ++++ <&folder> docstring_parsers
+        +++++ <&image> pos_utils_docstring_parsers_aaparser_extractarguments.png
+        +++++ <&code> pos_utils_docstring_parsers_aaparser_extractarguments.pu
+        +++++ <&code> pos_utils_docstring_parsers_aaparser.iuml
+        +++++ <&image> pos_utils_docstring_parsers_classes.png
+        +++++ <&code> pos_utils_docstring_parsers_classes.pu
+        +++++ <&code> pos_utils_docstring_parsers_epytextparser.iuml
+        +++++ <&image> pos_utils_docstring_parsers_genericparser_extractarguments.png
+        +++++ <&code> pos_utils_docstring_parsers_genericparser_extractarguments.pu
+        +++++ <&image> pos_utils_docstring_parsers_genericparser_extractlinesbytokens.png
+        +++++ <&code> pos_utils_docstring_parsers_genericparser_extractlinesbytokens.pu
+        +++++ <&image> pos_utils_docstring_parsers_genericparser_extractraises.png
+        +++++ <&code> pos_utils_docstring_parsers_genericparser_extractraises.pu
+        +++++ <&image> pos_utils_docstring_parsers_genericparser_extractreturnedvalues.png
+        +++++ <&code> pos_utils_docstring_parsers_genericparser_extractreturnedvalues.pu
+        +++++ <&image> pos_utils_docstring_parsers_genericparser_extractsignature.png
+        +++++ <&code> pos_utils_docstring_parsers_genericparser_extractsignature.pu
+        +++++ <&image> pos_utils_docstring_parsers_genericparser_reducedocstring.png
+        +++++ <&code> pos_utils_docstring_parsers_genericparser_reducedocstring.pu
+        +++++ <&image> pos_utils_docstring_parsers_genericparser_trimdocstring.png
+        +++++ <&code> pos_utils_docstring_parsers_genericparser_trimdocstring.pu
+        +++++ <&code> pos_utils_docstring_parsers_genericparser.iuml
+        +++++ <&code> pos_utils_docstring_parsers_googleparser.iuml
+        +++++ <&image> pos_utils_docstring_parsers_indent_docstring.png
+        +++++ <&code> pos_utils_docstring_parsers_indent_docstring.pu
+        +++++ <&image> pos_utils_docstring_parsers_numpydocparser_extractraises.png
+        +++++ <&code> pos_utils_docstring_parsers_numpydocparser_extractraises.pu
+        +++++ <&image> pos_utils_docstring_parsers_numpydocparser_extractreturnedvalues.png
+        +++++ <&code> pos_utils_docstring_parsers_numpydocparser_extractreturnedvalues.pu
+        +++++ <&code> pos_utils_docstring_parsers_numpydocparser.iuml
+        +++++ <&image> pos_utils_docstring_parsers_restparser_extractsignature.png
+        +++++ <&code> pos_utils_docstring_parsers_restparser_extractsignature.pu
+        +++++ <&code> pos_utils_docstring_parsers_restparser.iuml
+        +++++ <&image> pos_utils_docstring_parsers_use_cases.png
+        +++++ <&code> pos_utils_docstring_parsers_use_cases.pu
+        ++++ <&folder> dynamic_import
+        +++++ <&image> dynamic_import_from_module.png
+        +++++ <&code> dynamic_import_from_module.pu
+        +++++ <&image> dynamic_import_module.png
+        +++++ <&code> dynamic_import_module.pu
+        ++++ <&folder> loggers
+        +++++ <&image> pos_utils_loggers_classes.png
+        +++++ <&code> pos_utils_loggers_classes.pu
+        +++++ <&image> pos_utils_loggers_consolelogger_enableconsolelogging.png
+        +++++ <&code> pos_utils_loggers_consolelogger_enableconsolelogging.pu
+        +++++ <&image> pos_utils_loggers_consolelogger_getattribute.png
+        +++++ <&code> pos_utils_loggers_consolelogger_getattribute.pu
+        +++++ <&image> pos_utils_loggers_consolelogger_init.png
+        +++++ <&code> pos_utils_loggers_consolelogger_init.pu
+        +++++ <&image> pos_utils_loggers_consolelogger_logging_methods.png
+        +++++ <&code> pos_utils_loggers_consolelogger_logging_methods.pu
+        +++++ <&image> pos_utils_loggers_consolelogger_setattr.png
+        +++++ <&code> pos_utils_loggers_consolelogger_setattr.pu
+        +++++ <&code> pos_utils_loggers_consolelogger.iuml
+        +++++ <&image> pos_utils_loggers_duallogger_changelogfile.png
+        +++++ <&code> pos_utils_loggers_duallogger_changelogfile.pu
+        +++++ <&image> pos_utils_loggers_duallogger_disablefilelogging.png
+        +++++ <&code> pos_utils_loggers_duallogger_disablefilelogging.pu
+        +++++ <&image> pos_utils_loggers_duallogger_enablefilelogging.png
+        +++++ <&code> pos_utils_loggers_duallogger_enablefilelogging.pu
+        +++++ <&image> pos_utils_loggers_duallogger_init.png
+        +++++ <&code> pos_utils_loggers_duallogger_init.pu
+        +++++ <&code> pos_utils_loggers_duallogger.iuml
+        ++++ <&folder> traceback
+        +++++ <&image> pos_utils_traceback_classes.png
+        +++++ <&code> pos_utils_traceback_classes.pu
+        +++++ <&image> pos_utils_traceback_exceptiontraceback_init.png
+        +++++ <&code> pos_utils_traceback_exceptiontraceback_init.pu
+        +++++ <&code> pos_utils_traceback_exceptiontraceback.iuml
+        +++++ <&image> pos_utils_traceback_stacktraceback_callchain.png
+        +++++ <&code> pos_utils_traceback_stacktraceback_callchain.pu
+        +++++ <&image> pos_utils_traceback_stacktraceback_del.png
+        +++++ <&code> pos_utils_traceback_stacktraceback_del.pu
+        +++++ <&image> pos_utils_traceback_stacktraceback_info.png
+        +++++ <&code> pos_utils_traceback_stacktraceback_info.pu
+        +++++ <&image> pos_utils_traceback_stacktraceback_init.png
+        +++++ <&code> pos_utils_traceback_stacktraceback_init.pu
+        +++++ <&code> pos_utils_traceback_stacktraceback.iuml
+        ++++ <&code> pos_utils_components.iuml
+        ++++ <&image> pos_utils_components.png
+        ++++ <&code> pos_utils_components.pu
+        +++ <&image> pos_components.png
+        +++ <&code> pos_components.pu
         ++ <&folder> User_Documentation
         +++ <&document> UD001_pos.utils.traceback_Reference.md
         +++ <&document> UD002_pos.exceptions_Reference.md
@@ -179,8 +188,8 @@ salt
         +++ <&document> UD004_pos.utils.dynamic_import_Reference.md
         +++ <&document> UD005_pos.utils.loggers_Reference.md
         ++ <&info> index.md
-        ++ <&document> pos_components _structure.md
-        ++ <&info> pos_File _Structure.md
+        ++ <&document> pos_components_structure.md
+        ++ <&info> pos_File_Structure.md
         + <&folder> Tests
         ++ <&folder> utils
         +++ <&script> _ _init_ _.py

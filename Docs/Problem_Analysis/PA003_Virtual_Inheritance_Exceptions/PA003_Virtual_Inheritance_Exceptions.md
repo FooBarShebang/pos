@@ -29,7 +29,7 @@ This scheme implies, logically, the following inheritance chains:
 
 Additionally, it is useful if the **CustomError** can be used as an umbrella class to catch all these user-defined exceptions, since they all should provide trace-back analysis functionality. Similarly, the **DesignContractError** can be used as an umbrella class to catch all Design by Contract related errors, whereas **ConstantAssignment** – to catch **ConstantAttributeAssignment** as well.
 
-These additional requirements / wishes imply complex multiple inheritance scheme, which, potentially, may break the functionality inherited from the intended built-in exception classes parents. In this particular case the *virtual inheritance* seems to be the proper mechanism for the implementation, see <a id="bref1">[<sup>^1</sup>](#aref1)</a>.
+These additional requirements / wishes imply complex multiple inheritance scheme, which, potentially, may break the functionality inherited from the intended built-in exception classes parents. In this particular case the *virtual inheritance* seems to be the proper mechanism for the implementation, see <a id="bref1">[<sup>1</sup>](#aref1)</a>.
 
 In short, a registered *virtual subclass* of a class is considered to be its descendant by the ‘is a’ checks (**isinstance**() and **issubclass**() built-in functions) even though the *virtual parent* class is not in the MRO of its virtual subclass. Therefore, the MRO scheme is not affected. This functionality is implemented in the Standard Library module **abc**, see reference above.
 
@@ -53,7 +53,7 @@ Finally, the ‘is a’ relation between the built-in and custom defined excepti
 
 <a id="ill1">**Illustration 1**</a>     [&#x2B0E;](#bill1)
 
-![Illustration 1](../../UML/Miscellaneous/Custom_Exceptions_tree.png)
+![Illustration 1](../../UML/Miscellaneous/custom_exceptions_tree.png)
 
 ## Method and Results
 
@@ -611,4 +611,4 @@ The proposed method to implement custom exception classes structures emulating t
 
 ## References
 
-<a id="aref1">[^1]</a> https://docs.python.org/2/library/abc.html   [&#x2B0F;](#bref1)
+<a id="aref1">[1]</a> https://docs.python.org/2/library/abc.html   [&#x2B0F;](#bref1)

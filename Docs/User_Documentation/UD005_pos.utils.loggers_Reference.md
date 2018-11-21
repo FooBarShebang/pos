@@ -52,17 +52,17 @@ Two custom logger classes are implemented: one bound to the console output (**st
 
 <a id="ill1">Illustration 1</a>
 
-![Illustration 1](../UML/utils/loggers_py/loggers.py_Class_Diagram.png)
+![Illustration 1](../UML/utils/loggers/pos_utils_loggers_classes.png)
 
 Both classes store a reference to an actual instance of the **logging.Logger** class in a 'private' instance attribute and redirect the attribute access methods **\_\_getattribute\_\_**() and **\_\_setattr\_\_**() such, that any data attribute (field) or method implemented for the **logging.Logger** class instance is visible and accessible as an attribute of the instances of these custom loggers, see [Illustration 2](#ill2) and [Illustration 3](#ill3). So, from the user perspective they are wrapper objects for the standard logger.
 
 <a id="ill2">Illustration 2</a>
 
-![Illustration 2](../UML/utils/loggers_py/ConsoleLogger.__getattribute__()_Activity.png)
+![Illustration 2](../UML/utils/loggers/pos_utils_loggers_consolelogger_getattribute.png)
 
 <a id="ill3">Illustration 3</a>
 
-![Illustration 3](../UML/utils/loggers_py/ConsoleLogger.__setattr__()_Activity.png)
+![Illustration 3](../UML/utils/loggers/pos_utils_loggers_consolelogger_setattr.png)
 
 With this arrangement the calls like **MyLogger.error(Message)** or **MyLogger.setLevel(Level)**, etc. become *short-cuts* (syntax sugar) for the calls **MyLogger._logger.error(Message)** or **MyLogger._logger.setLevel(Level)**, etc. respectively, assuming that **MyLogger** is an instance of either **ConsoleLogger** or **DualLogger** class.
 
@@ -70,17 +70,17 @@ Note that for the logging at the level WARNING and higher the **ConsoleLogger** 
 
 <a id="ill4">Illustration 4</a>
 
-![Illustration 4](../UML/utils/loggers_py/ConsoleLogger_Logging_Methods.png)
+![Illustration 4](../UML/utils/loggers/pos_utils_loggers_consolelogger_logging_methods.png)
 
 These custom logger classes store a reference to an instance of **logging.Formater** class in the 'public' instance attribute. This formatter instance defines the format of each log entry, and it is applied to all handlers bound to this logger during the instantiation of the logger wrapper class, see [Illustration 5](#ill5) and [Illustration 6](#ill6). The handlers are created during the instantiation of the logger wrapper class as well, and they are stored (as references) in the public instance attributes: **console** (**stdout** handler - both classes) and **file_logging** (file output handler, only the **DualLogger** class). Note that the **file_logging** can reference either the **logging.FileHandler** (if the file logging is required / enabled) or the **logging.NullHandler** (if the file logging is suppressed). However, may be attached or not to the actual logger object depending on two factors: if that specific stream output is enabled or nor, and if this logger has a 'parent' or not. See furher in the text after the diagrams.
 
 <a id="ill5">Illustration 5</a>
 
-![Illustration 5](../UML/utils/loggers_py/ConsoleLogger_Initialization_Activity.png)
+![Illustration 5](../UML/utils/loggers/pos_utils_loggers_consolelogger_init.png)
 
 <a id="ill6">Illustration 6</a>
 
-![Illustration 6](../UML/utils/loggers_py/DualLogger_Initialization_Activity.png)
+![Illustration 6](../UML/utils/loggers/pos_utils_loggers_duallogger_init.png)
 
 The custom logger clases allow dynamic enabling and disabling of the output. They also support the loggers ancestor - descendant hierarchy: the names of the loggers with the dots are supposed to indicate such relation: logger 'parent.child.grandchild' is descendant of 'parent.child', which is descendant of 'parent' logger, even if it does not exist. The actual existence of the supposed ancestors affects only the message propagation, but not the creation of a logger, which can easily be an 'orphan'.
 
@@ -88,7 +88,7 @@ Thus, upon the instantiation of the logger wrapper class, the console logging ha
 
 <a id="ill7">Illustration 7</a>
 
-![Illustration 7](../UML/utils/loggers_py/ConsoleLogger.enableConsoleLoging()_Activity.png)
+![Illustration 7](../UML/utils/loggers/pos_utils_loggers_consolelogger_enableconsolelogging.png)
 
 With this arrangement the 'descendant' loggers, e.g. **SomeClassLogger.SomeMethodLogger** (as a 'child' of **SomeClassLogger**), do not have a console handler attached to them. Even if the console output has been disable and re-enabled afterwards (see [Illustration 7](#ill7)), the console handler remains not attached as long as the logger has direct a 'parent'.
 
@@ -100,7 +100,7 @@ With the *file output handler* another approach is taken, see [Illustration 6](#
 
 <a id="ill8">Illustration 8</a>
 
-![Illustration 8](../UML/utils/loggers_py/DualLogger.enableFileLogging()_Activity.png)
+![Illustration 8](../UML/utils/loggers/pos_utils_loggers_duallogger_enablefilelogging.png)
 
 Upon instantiation of the **DualLogger** class either an instance of the **logging.FileHandler** or an instance of the **logging.NullHandler** class is referenced by the instance attribute **file_logging** and is attached to the actual logger object, depending on if the file logging must be enabled or disabled. When the file logging is explicitely (re-) enabled (see [Illustration 7](#ill7)) the instance of the **logging.NullHandler** class referenced by the **file_logging** attribute (if this is the case) is replaced by an instance of the **logging.FileHandler** class (also in the list of the active handlers of the actual logger object). Otherwise, if the **file_logging** attribute references an isntance of the **logging.FileHandler** class already, this handler is simply re-attached to the logger object.
 
@@ -108,7 +108,7 @@ When the file logging is disabled at the 'run-time', the handler referenced by t
 
 <a id="ill9">Illustration 9</a>
 
-![Illustration 9](../UML/utils/loggers_py/DualLogger.disableFileLogging()_Activity.png)
+![Illustration 9](../UML/utils/loggers/pos_utils_loggers_duallogger_disablefilelogging.png)
 
 The file logging can be enabled / disabled for each of the logger in the hierarchy independently, since the expected '*modus operandi*' is that each instance of the **DualLogger** class uses own file to log in. It is convenient that each 'child' logger maintains own log file, where specific events are registered, for instance, originating from a specific class / method or function, whereas the 'parent' logger aggregates all relevant events in a single log file.
 
@@ -116,7 +116,7 @@ Finally, the log file can be changed at any time using the instance method **cha
 
 <a id="ill10">Illustration 10</a>
 
-![Illustration 10](../UML/utils/loggers_py/DualLogger.changeLogFile()_Activity.png)
+![Illustration 10](../UML/utils/loggers/pos_utils_loggers_duallogger_changelogfile.png)
 
 ### Warning
 

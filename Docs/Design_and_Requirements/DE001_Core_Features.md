@@ -12,7 +12,7 @@ The goal is to minimize the amount of repetitive / ‘boiler plate’ coding in 
 
 The idea is to emulate a static typing within the dynamically typed language (Python) in terms that a function / method is guaranteed by its contract to return a value of a specific type (or on of the specific types) and, optionally, within specific set / range of values if the input satisfies specific conditions; and a specific error / exception is raised when either the preconditions or postconditions checks failed. Thus, such a contract is an extension of the static typing (polymorphic) function / method signature. But a function / method’s contract can also be analysed by another function / method at the run-time, therefore a function doesn’t have to assume but can know for sure what kind of data another function requires or what kind of data it returns.
 
-This library should implement only part of the features of the actual software pattern known as Design by Contract <a id="bref1">[<sup>^1</sup>](#aref1)</a> and some additional features, namely:
+This library should implement only part of the features of the actual software pattern known as Design by Contract <a id="bref1">[<sup>1</sup>](#aref1)</a> and some additional features, namely:
 
 * A contract for a function / method is defined as a set of formal, precise and verifiable interface specifications, like: ‘requires {so many} arguments’, ‘requires argument {name} to be an instance of sub-class of {class}’, ‘returns {data type} with value in the {range}’, etc.
 * A contract directly concerns only the preconditions and / or postconditions of a function / method with the both types of checks being optional
@@ -22,7 +22,7 @@ This library should implement only part of the features of the actual software p
 * A contract of a function / method is available for inspection by another function / method
 * The checks implied by the contract can be enabled / disabled and even modified (if required) at the run-time
 
-References for the baseline implementation via decorators are: <a id="bref2">[<sup>^2</sup>](#aref2)</a>, <a id="bref3">[<sup>^3</sup>](#aref3)</a> and <a id="bref4">[<sup>^4</sup>](#aref4)</a>.
+References for the baseline implementation via decorators are: <a id="bref2">[<sup>2</sup>](#aref2)</a>, <a id="bref3">[<sup>3</sup>](#aref3)</a> and <a id="bref4">[<sup>4</sup>](#aref4)</a>.
 
 #### Functional Requirements
 
@@ -59,7 +59,7 @@ References for the baseline implementation via decorators are: <a id="bref2">[<s
 ### Forced Data Type / Value Checks for Instance / Class Data Attributes (Fields)
 
 There are three basic methods to ensure the data checks during the assignment to a data attribute (field) as well as of the data retrieved from it:
-* use of the **\_\_set\_\_**() and **\_\_get\_\_**() descriptors <a id="bref5">[<sup>^5,</sup>](#aref5)</a><a id="bref6">[<sup>^6</sup>](#aref6)</a> for the custom defined data types
+* use of the **\_\_set\_\_**() and **\_\_get\_\_**() descriptors <a id="bref5">[<sup>5,</sup>](#aref5)</a><a id="bref6">[<sup>6</sup>](#aref6)</a> for the custom defined data types
 * ‘hiding’ of the actual attribute and interfacing it via the public getter and setter properties
 * hooking the attribute resolution methods and use of a look-up table / object defining type check rules, same as the DbC rules but applied on the attributes not methods
 
@@ -96,7 +96,7 @@ On the basic level the classes that implement data encapsulation must deny read 
 
 The idea is to obtain a snapshot of the call stack from the top level of the interpreter loop to the point when the call stack is obtained. This traceback is to be stored in an instance of a special class, which provides methods or properties to analyse the traceback: 1) list of the fully qualified named of the callers along the call chain, and 2) human readable representation of the entire traceback including the source code fragments. The traceback of an exception is a specialized sub-class of that one, which obtains the traceback of the call chain ended in the last raised exception instead as a list of frame records between the exception handling frame and the frame, where it has been raised.
 
-References for the baseline of the implementation are: <a id="bref7">[<sup>^7</sup>](#aref7)</a>, <a id="bref8">[<sup>^8</sup>](#aref8)</a>, <a id="bref9">[<sup>^9</sup>](#aref9)</a> and <a id="bref10">[<sup>^10</sup>](#aref10)</a>
+References for the baseline of the implementation are: <a id="bref7">[<sup>7</sup>](#aref7)</a>, <a id="bref8">[<sup>8</sup>](#aref8)</a>, <a id="bref9">[<sup>9</sup>](#aref9)</a> and <a id="bref10">[<sup>10</sup>](#aref10)</a>
 
 #### Functional Requirements
 
@@ -118,32 +118,32 @@ The custom defined exceptions are to be raised in the cases when either the inpu
 * These classes should allow removal of the specified number of the deepest (inner) frames from the traceback
 * These classes should allow replacement of their actual traceback by another traceback object, thus the exception may be re-raised or another exception may be raised instead within the exception handler after some processing preserving the traceback of the original exception
 * These exception classes must support virtual sub-classes concept, so some more generic exceptions can be used as an ‘umbrella’ term for a group of more specialized exceptions even if these specialized exceptions are not direct or indirect sub classes of those generic ones
-* The relation between the built-in and custom defined exceptions show be as given in [Illustration 1](#ill1), with the real sub-classes (direct or indirect) shown in bold with a star symbol, and the virtual sub-classes are given in italic with a link symbol. Reference for the implementaion - virtual inheritance <a id="bref11">[<sup>^11</sup>](#aref11)</a>.
+* The relation between the built-in and custom defined exceptions show be as given in [Illustration 1](#ill1), with the real sub-classes (direct or indirect) shown in bold with a star symbol, and the virtual sub-classes are given in italic with a link symbol. Reference for the implementaion - virtual inheritance <a id="bref11">[<sup>11</sup>](#aref11)</a>.
 
 <a id="ill1">**Illustration 1**</a>
 
-![Illustration 1](../UML/Miscellaneous/Custom_Exceptions_tree.png)
+![Illustration 1](../UML/Miscellaneous/custom_exceptions_tree.png)
 
 ## References
 
-<a id="aref1">[^1]</a> https://en.wikipedia.org/wiki/Design_by_contract     [&#x2B0F;](#bref1)
+<a id="aref1">[1]</a> https://en.wikipedia.org/wiki/Design_by_contract     [&#x2B0F;](#bref1)
 
-<a id="aref2">[^2]</a> https://www.thecodeship.com/patterns/guide-to-python-function-decorators/    [&#x2B0F;](#bref2)
+<a id="aref2">[2]</a> https://www.thecodeship.com/patterns/guide-to-python-function-decorators/    [&#x2B0F;](#bref2)
 
-<a id="aref3">[^3]</a> https://www.codementor.io/sheena/advanced-use-python-decorators-class-function-du107nxsv     [&#x2B0F;](#bref3)
+<a id="aref3">[3]</a> https://www.codementor.io/sheena/advanced-use-python-decorators-class-function-du107nxsv     [&#x2B0F;](#bref3)
 
-<a id="aref4">[^4]</a> https://blog.apcelent.com/python-decorator-tutorial-with-example.html    [&#x2B0F;](#bref4)
+<a id="aref4">[4]</a> https://blog.apcelent.com/python-decorator-tutorial-with-example.html    [&#x2B0F;](#bref4)
 
-<a id="aref5">[^5]</a> https://docs.python.org/2/howto/descriptor.html      [&#x2B0F;](#bref5)
+<a id="aref5">[5]</a> https://docs.python.org/2/howto/descriptor.html      [&#x2B0F;](#bref5)
 
-<a id="aref6">[^6]</a> https://docs.python.org/2/reference/datamodel.html   [&#x2B0F;](#bref6)
+<a id="aref6">[6]</a> https://docs.python.org/2/reference/datamodel.html   [&#x2B0F;](#bref6)
 
-<a id="aref7">[^7]</a> https://docs.python.org/2/library/sys.html   [&#x2B0F;](#bref7)
+<a id="aref7">[7]</a> https://docs.python.org/2/library/sys.html   [&#x2B0F;](#bref7)
 
-<a id="aref8">[^8]</a> https://docs.python.org/2/library/traceback.html     [&#x2B0F;](#bref8)
+<a id="aref8">[8]</a> https://docs.python.org/2/library/traceback.html     [&#x2B0F;](#bref8)
 
-<a id="aref9">[^9]</a> https://docs.python.org/2/library/inspect.html     [&#x2B0F;](#bref9)
+<a id="aref9">[9]</a> https://docs.python.org/2/library/inspect.html     [&#x2B0F;](#bref9)
 
-<a id="aref10">[^10]</a> https://www.programcreek.com/python/example/1190/inspect.currentframe      [&#x2B0F;](#bref10)
+<a id="aref10">[10]</a> https://www.programcreek.com/python/example/1190/inspect.currentframe      [&#x2B0F;](#bref10)
 
-<a id="aref11">[^11]</a> https://docs.python.org/2/library/abc.html   [&#x2B0F;](#bref11)
+<a id="aref11">[11]</a> https://docs.python.org/2/library/abc.html   [&#x2B0F;](#bref11)

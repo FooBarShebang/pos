@@ -79,7 +79,7 @@ The rest of the document is not as much problem analysis research as simply illu
 
 ## Results
 
-The examples given are mostly by these sources: <a id="bref1">[<sup>^1</sup>](#aref1)</a>, [<sup>^2</sup>](#aref2) and [<sup>^3</sup>](#aref3).
+The examples given are mostly by these sources: <a id="bref1">[<sup>1</sup>](#aref1)</a>, [<sup>2</sup>](#aref2) and [<sup>3</sup>](#aref3).
 
 So, the first example demonstrates the discussed above approach.
 
@@ -1238,8 +1238,8 @@ The decorators provide powerful, flexible and reliable means for the implementat
 
 ## References
 
-<a id="aref1">[^1]</a> https://www.thecodeship.com/patterns/guide-to-python-function-decorators/    [&#x2B0F;](#bref1)
+<a id="aref1">[1]</a> https://www.thecodeship.com/patterns/guide-to-python-function-decorators/    [&#x2B0F;](#bref1)
 
-<a id="aref2">[^2]</a> https://www.codementor.io/sheena/advanced-use-python-decorators-class-function-du107nxsv
+<a id="aref2">[2]</a> https://www.codementor.io/sheena/advanced-use-python-decorators-class-function-du107nxsv
 
-<a id="aref3">[^3]</a> https://blog.apcelent.com/python-decorator-tutorial-with-example.html
+<a id="aref3">[3]</a> https://blog.apcelent.com/python-decorator-tutorial-with-example.html

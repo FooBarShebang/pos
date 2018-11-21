@@ -1,4 +1,4 @@
-@startuml
+@startuml function_call_contract_good
 
 state "Input check" as Input
 

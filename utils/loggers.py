@@ -258,8 +258,8 @@ class ConsoleLogger(object):
         else:
             _strModule = strModule
         self.formatter = logging.Formatter('\n'.join([
-            '<<%(levelname)s>> %(asctime)s',
-            '@{}.{}.{}'.format(_strModule, self._logger.name, _strCaller),
+            '<<%(levelname)s>> %(asctime)s @{}.{}.{}'.format(_strModule,
+                                                self._logger.name, _strCaller),
                 'Line {} in {}'.format(iLine, strPath),
                 '%(message)s']), '%Y-%m-%d %H:%M:%S')
         self.console.setFormatter(self.formatter)

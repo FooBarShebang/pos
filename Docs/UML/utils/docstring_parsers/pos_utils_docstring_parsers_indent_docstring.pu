@@ -1,0 +1,48 @@
+@startuml pos_utils_docstring_parsers_indent_docstring
+
+title Activity Diagram of the Funciton utils.docstring_parsers.indent_docstring()
+
+start
+
+:<b>DocString</b> - string, doc-string to be indented
+<b>Tabs</b> - (optional), non-negative integer, length of the indentation in 'tabs' as 4 spaces each; defaults to 0<
+
+if (<b>DocString</b> is not a string?) then (True)
+    :raise exceptions.CustomTypeError;
+    
+    stop
+elseif (<b>DocString</b> is an empty string?) then (True)
+    :raise exceptions.CustomValueError;
+    
+    stop
+else (False)
+    if (<b>Tabs</b> is not an integer?) then (True)
+        :raise exceptions.CustomTypeError;
+        
+        stop
+    elseif (<b>Tabs</b> < 0?) then (True)
+        :raise exceptions.CustomValueError;
+        
+        stop
+    else (False)
+        :split <b>DocString</b> into
+        lines by new-line characters
+        -> <b>Buffer</b>::list(str);
+        
+        while (for each line in <b>Buffer</b>)
+            :add 4 * <b>Tabs</b> spaces
+            into the begin of the line;
+        end while
+        
+        :merge all lines in the
+        <b>Buffer</b> using the
+        new-line characters in
+        between -> <b>Result</b> ;
+        
+        :return <b>Result</b> string>
+        
+        stop
+    endif
+endif
+
+@enduml

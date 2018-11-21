@@ -1,0 +1,9 @@
+@startuml pos_utils_components
+
+title Components Diagram of the Package pos.utils
+
+!ifndef UTILS
+!include ./pos_utils_components.iuml
+!endif
+
+@enduml

@@ -48,7 +48,7 @@ The direct (parent – child) and indirect (grand-parent – grand-child, etc.) 
 
 <a id="ill1">Illustration 1</a>
 
-![Illustration 1](../UML/Miscellaneous/Custom_Exceptions_tree.png)
+![Illustration 1](../UML/Miscellaneous/custom_exceptions_tree.png)
 
 In terms of API the custom exceptions differ from the standard exceptions but not drastically:
 
@@ -143,15 +143,15 @@ The activity diagrams of the described properties and method are given in [Illus
 
 <a id="ill2">Illustration 2</a>
 
-![Illustration 2](../UML/exceptions_py/ErrorMixin.Traceback_Activity.png)
+![Illustration 2](../UML/exceptions/pos_exceptions_errormixin_traceback.png)
 
 <a id="ill3">Illustration 3</a>
 
-![Illustration 3](../UML/exceptions_py/ErrorMixin.presetTraceback()_Activity.png)
+![Illustration 3](../UML/exceptions/pos_exceptions_errormixin_presettraceback.png)
 
 <a id="ill4">Illustration 4</a>
 
-![Illustration 4](../UML/exceptions_py/ErrorMixin.__del__()_Activity.png)
+![Illustration 4](../UML/exceptions/pos_exceptions_errormixin_del.png)
 
 The initialization methods of the custom exceptions may require either a single mandatory argument or two mandatory arguments, depending on their intended usage. However, within a single sub-tree (closely related types of the exceptions) all exceptions have the same signature of the initialization method and the same format of the error message. Thus, the initialization methods are overloaded only for the ‘roots’ of the sub-trees, whereas their sub-classes simply inherit these overloaded methods. Additionally, optional arguments may be supplied either as positional or keyword arguments when required to provide a traceback substitution object and / or a number of the innermost frames to hide.
 
@@ -159,13 +159,13 @@ Thus, each overloaded initialization method forms a proper error message from th
 
 <a id="ill5">Illustration 5</a>
 
-![Illustration 5](../UML/exceptions_py/Custom_Exception_Instantiation.png)
+![Illustration 5](../UML/exceptions/pos_exceptions_custom_exception_init.png)
 
 The read-only properties **Traceback**, **CallChain** and **Info** are also inherited from the mix-in class **ErrorMixin**. The real super class – subclass relation between the custom exception classes, **ErrorMixin** class and the standard exception classes is given in the class diagram in [Illustration 6](#ill6).
 
 <a id="ill6">Illustration 6</a>
 
-![Illustration 6](../UML/exceptions_py/exceptions_Class_Diagram_(Direct_Only).png)
+![Illustration 6](../UML/exceptions/pos_exceptions_classes_direct.png)
 
 The **CustomError** class has **abc.ABC_Meta** as its meta-class. It defines a class method **\_\_subclasshook\_\_**(), which changes the behavior of the built-in function **issubclass**(). When the **CustomError** class is used as a reference type the calling type is considered to be its subclass if:
 
@@ -176,11 +176,11 @@ Otherwise the standard relation resolution scheme is employed (see [Illustration
 
 <a id="ill7">Illustration 7</a>
 
-![Illustration 7](../UML/exceptions_py/CustomError.__subclasshook__()_Activity.png)
+![Illustration 7](../UML/exceptions/pos_exceptions_customerror_subclasshook.png)
 
 <a id="ill8">Illustration 8</a>
 
-![Illustration 8](../UML/exceptions_py/exceptions_Class_Diagram.png)
+![Illustration 8](../UML/exceptions/pos_exceptions_classes.png)
 
 ## API Reference
 

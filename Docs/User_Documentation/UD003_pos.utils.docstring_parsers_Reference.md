@@ -19,7 +19,7 @@
 
 This document provides reference information on the module **utils.docstring_parsers** within the library **pos**, wherein a set of classes is defined, which can either extract specific data related to the automatic documentation generation form the module’s, class’, method’s or function’s doc-string, or to produce a reduced version of the doc-string with all such data removed.
 
-The four most widely used formats <a id="bref">[<sup>^1</sup>](#ref)</a> for the auto-documentation are supported:
+The four most widely used formats <a id="bref">[<sup>1 - 5</sup>](#ref)</a> for the auto-documentation are supported:
 
 * [Epytext](http://epydoc.sourceforge.net/manual-epytext.html) (based on the javadoc format)
 * [reST](https://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html) (as reStructured Text format)
@@ -72,7 +72,7 @@ The intended use cases of the module are shown in [Illustration 1](#ill1).
 
 <a id="ill1">Illustration 1</a>
 
-![Illustration 1](../UML/utils/docstring_parsers_py/docstring_parsers_Use_Cases.png)
+![Illustration 1](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_use_cases.png)
 
 This functionality is implemented according the following logic:
 
@@ -111,7 +111,7 @@ The class diagram of the module is given in [Illustration 2](#ill2).
 
 <a id="ill2">Illustration 2</a>
 
-![Illustration 2](../UML/utils/docstring_parsers_py/docstring_parsers_Classes.png)
+![Illustration 2](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_classes.png)
 
 Apart from these classes two helpful functions are implemented:
 
@@ -122,31 +122,31 @@ The activity diagrams of these methods and functions are given in [Illustration 
 
 <a id="ill3">Illustration 3</a>
 
-![Illustration 3](../UML/utils/docstring_parsers_py/GenericParser.trimDocstring()_Activity.png)
+![Illustration 3](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_genericparser_trimdocstring.png)
 
 <a id="ill4">Illustration 4</a>
 
-![Illustration 4](../UML/utils/docstring_parsers_py/GenericParser.reduceDocstring()_Activity.png)
+![Illustration 4](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_genericparser_reducedocstring.png)
 
 <a id="ill5">Illustration 5</a>
 
-![Illustration 5](../UML/utils/docstring_parsers_py/GenericParser.extractLinesByTokens()_Activity.png)
+![Illustration 5](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_genericparser_extractlinesbytokens.png)
 
 <a id="ill6">Illustration 6</a>
 
-![Illustration 6](../UML/utils/docstring_parsers_py/GenericParser.extractSignature()_Activity.png)
+![Illustration 6](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_genericparser_extractsignature.png)
 
 <a id="ill7">Illustration 7</a>
 
-![Illustration 7](../UML/utils/docstring_parsers_py/GenericParser.extractArguments()_Activity.png)
+![Illustration 7](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_genericparser_extractarguments.png)
 
 <a id="ill8">Illustration 8</a>
 
-![Illustration 8](../UML/utils/docstring_parsers_py/GenericParser.extractReturnedValues()_Activity.png)
+![Illustration 8](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_genericparser_extractreturnedvalues.png)
 
 <a id="ill9">Illustration 9</a>
 
-![Illustration 9](../UML/utils/docstring_parsers_py/GenericParser.extractRaises()_Activity.png)
+![Illustration 9](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_genericparser_extractraises.png)
 
 The class **GenericParser** is the prototype, and it is quite useless otherwise. The only recognized token is ‘>>>’, thus it can only remove the doc-test related lines; whereas all __extract*__() methods do nothing usefull.
 
@@ -166,7 +166,7 @@ The class **reSTParser** redefines the class fields and overrides the method **e
 
 <a id="ill10">Illustration 10</a>
 
-![Illustration 10](../UML/utils/docstring_parsers_py/reSTParser.extractSignature()_Activity.png)
+![Illustration 10](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_restparser_extractsignature.png)
 
 The class **GoogleParser** does not override any of the inherited methods (uses the generic implementation), but it redefines the class fields. The specifics of the Google Python doc-style format are:
 
@@ -183,7 +183,7 @@ The doc-style adopted by the author (AA) is a superset of the Google Python doc-
 
 <a id="ill11">Illustration 11</a>
 
-![Illustration 11](../UML/utils/docstring_parsers_py/AAParser.extractArguments()_Activity.png)
+![Illustration 11](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_aaparser_extractarguments.png)
 
 The class **NumPydocParser** implements the NumPydoc doc-style format, which has the following specifics:
 
@@ -195,15 +195,15 @@ The class **NumPydocParser** implements the NumPydoc doc-style format, which has
 
 <a id="ill12">Illustration 12</a>
 
-![Illustration 12](../UML/utils/docstring_parsers_py/NumPydocParser.extractReturnedValues()_Activity.png)
+![Illustration 12](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_numpydocparser_extractreturnedvalues.png)
 
 <a id="ill13">Illustration 13</a>
 
-![Illustration 13](../UML/utils/docstring_parsers_py/NumPydocParser.extractRaises()_Activity.png)
+![Illustration 13](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_numpydocparser_extractraises.png)
 
 <a id="ill14">Illustration 14</a>
 
-![Illustration 14](../UML/utils/docstring_parsers_py/indent_docstring()_Activity.png)
+![Illustration 14](../UML/utils/docstring_parsers/pos_utils_docstring_parsers_indent_docstring.png)
 
 ## API Reference
 
@@ -464,12 +464,12 @@ Prepends each line in the passed docstring (may be already trimmed) with the 4 t
 
 ## References
 
-<a id="ref">[^1]</a> https://stackoverflow.com/questions/3898572/what-is-the-standard-python-docstring-format   [&#x2B0F;](#bref)
+<a id="ref">[1]</a> https://stackoverflow.com/questions/3898572/what-is-the-standard-python-docstring-format   [&#x2B0F;](#bref)
 
-[^2] http://epydoc.sourceforge.net/manual-epytext.html
+[2] http://epydoc.sourceforge.net/manual-epytext.html
 
-[^3] https://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html
+[3] https://thomas-cokelaer.info/tutorials/sphinx/docstring_python.html
 
-[^4] https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
+[4] https://github.com/google/styleguide/blob/gh-pages/pyguide.md#38-comments-and-docstrings
 
-[^5] https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard
+[5] https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard

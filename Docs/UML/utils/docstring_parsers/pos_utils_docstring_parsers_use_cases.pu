@@ -1,0 +1,45 @@
+@startuml pos_utils_docstring_parsers_use_cases
+
+title Use Cases Diagram of the Module pos.utils.docstring_parsers.py
+
+actor User <<human or object>>
+
+actor Parser <<class>>
+
+rectangle "Docstring parsing" as Use_Cases {
+    usecase "Unindent docstring" as Unindent
+    
+    usecase "Remove auto-doc information" as Remove
+    
+    Remove --|> Unindent
+    
+    usecase "Extract signature" as Signature
+    
+    Signature --|> Unindent
+    
+    usecase "Extract arguments names" as Arguments
+    
+    Arguments -|> Unindent
+    
+    usecase "Extract returned type(s)" as Return
+    
+    Unindent <|-- Return
+    
+    usecase "Extract exceptions names" as Exceptions
+    
+    Unindent <|-- Exceptions
+}
+
+Use_Cases -- User
+
+Use_Cases - Parser
+
+usecase "Indent docstring" as Indent
+
+User --Indent
+
+actor "indent_docstring()" as indent_docstring <<function>>
+
+Indent -- indent_docstring
+
+@enduml

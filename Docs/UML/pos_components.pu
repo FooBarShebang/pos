@@ -1,0 +1,27 @@
+@startuml pos_components
+
+title Components Diagram of the Library pos
+
+!ifndef COMPONENTS
+!include ./Templates/Components.cuml
+!endif
+
+!ifndef UTILS
+!include ./utils/pos_utils_components.iuml
+!endif
+
+!ifndef EXCEPTIONS_COMPONENTS
+!include ./exceptions/pos_exceptions_components.iuml
+!endif
+
+utils -[hidden]- exceptions
+
+ExceptionTraceback o-- ErrorMixin: gerenerates
+
+ExceptionTraceback -[hidden] SpecificCustomExceptions
+
+SpecificCustomExceptions <-- import_from_module: raises
+
+SpecificCustomExceptions <-- import_module: raises
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml pos_utils_traceback_classes
+
+title Class Diagram of the Module utils.traceback
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+!ifndef UTILS_TRACEBACK_STACKTRACEBACK
+!include ./pos_utils_traceback_stacktraceback.iuml
+!endif
+
+!ifndef UTILS_TRACEBACK_EXCEPTIONTRACEBACK
+!include ./pos_utils_traceback_exceptiontraceback.iuml
+!endif
+
+StackTraceback <|- ExceptionTraceback
+
+@enduml

@@ -54,7 +54,7 @@ The function **import_module**() operates as shown in [Illustration 1](#ill1):
 
 <a id="ill1">Illustration 1</a>
 
-![Illustration 1](../UML/utils/dynamic_import_py/import_module()_Activity.png)
+![Illustration 1](../UML/utils/dynamic_import/dynamic_import_module.png)
 
 The function **import_from_module**() operates as shown in [Illustration 2](#ill2):
 
@@ -67,7 +67,7 @@ The function **import_from_module**() operates as shown in [Illustration 2](#ill
 
 <a id="ill2">Illustration 2</a>
 
-![Illustration 2](../UML/utils/dynamic_import_py/import_from_module()_Activity.png)
+![Illustration 2](../UML/utils/dynamic_import/dynamic_import_from_module.png)
 
 ## API Reference
 

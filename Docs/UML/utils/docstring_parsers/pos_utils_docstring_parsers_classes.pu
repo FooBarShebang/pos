@@ -1,0 +1,43 @@
+@startuml pos_utils_docstring_parsers_classes
+
+title Class Diagram of the Module utils.docstring_parsers
+
+!ifndef CLASSES
+!include ../../Templates/Classes.cuml
+!endif
+
+!ifndef UTILS_DOCSTRING_PARSERS_GENERICPARSER
+!include ./pos_utils_docstring_parsers_genericparser.iuml
+!endif
+
+!ifndef UTILS_DOCSTRING_PARSERS_EPYTEXTPARSER
+!include ./pos_utils_docstring_parsers_epytextparser.iuml
+!endif
+
+!ifndef UTILS_DOCSTRING_PARSERS_RESTPARSER
+!include ./pos_utils_docstring_parsers_restparser.iuml
+!endif
+
+!ifndef UTILS_DOCSTRING_PARSERS_GOOGLEPARSER
+!include ./pos_utils_docstring_parsers_googleparser.iuml
+!endif
+
+!ifndef UTILS_DOCSTRING_PARSERS_AAPARSER
+!include ./pos_utils_docstring_parsers_aaparser.iuml
+!endif
+
+!ifndef UTILS_DOCSTRING_PARSERS_NUMPYDOCPARSER
+!include ./pos_utils_docstring_parsers_numpydocparser.iuml
+!endif
+
+EpytextParser --|> GenericParser
+
+reSTParser --|> GenericParser
+
+GenericParser <|-- GoogleParser
+
+AAParser --|> GoogleParser
+
+GenericParser <|-- NumPydocParser
+
+@enduml

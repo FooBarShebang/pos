@@ -57,29 +57,29 @@ The class diagram of the module is given in [Illustration 1](#ill1).
 
 <a id="ill1">Illustration 1</a>
 
-![Illustration 1](../UML/utils/traceback_py/traceback_Classes.png)
+![Illustration 1](../UML/utils/traceback/pos_utils_traceback_classes.png)
 
 The activity diagrams of the implemented methods are given in to [Illustration 2](#ill2) to [Illustration 6](#ill6). The special method **\_\_del\_\_**() is intended to prevent ‘hanging around’ orphan references to the frame objects, thus the garbage collection can occur properly and earlier.
 
 <a id="ill2">Illustration 2</a>
 
-![Illustration 2](../UML/utils/traceback_py/StackTraceback.__init__()_Activity.png)
+![Illustration 2](../UML/utils/traceback/pos_utils_traceback_stacktraceback_init.png)
 
 <a id="ill3">Illustration 3</a>
 
-![Illustration 3](../UML/utils/traceback_py/StackTraceback.__del__()_Activity.png)
+![Illustration 3](../UML/utils/traceback/pos_utils_traceback_stacktraceback_del.png)
 
 <a id="ill4">Illustration 4</a>
 
-![Illustration 4](../UML/utils/traceback_py/ExceptionTraceback.__init__()_Activity.png)
+![Illustration 4](../UML/utils/traceback/pos_utils_traceback_exceptiontraceback_init.png)
 
 <a id="ill5">Illustration 5</a>
 
-![Illustration 5](../UML/utils/traceback_py/StackTraceback.CallChain_Property_Activity.png)
+![Illustration 5](../UML/utils/traceback/pos_utils_traceback_stacktraceback_callchain.png)
 
 <a id="ill6">Illustration 6</a>
 
-![Illustration 6](../UML/utils/traceback_py/StackTraceback.Info_Property_Activity.png)
+![Illustration 6](../UML/utils/traceback/pos_utils_traceback_stacktraceback_info.png)
 
 ### Implementation Notes
 

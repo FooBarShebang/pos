@@ -5,11 +5,11 @@
 The input data sanity checks (as in type, range, etc.) as a part of Design by Contract can be easily implemented within the body of functions thus class / instance methods. In the case of the data attributes (as fields) the same effect can be achieved by hooking the attribute access, namely the special methods **\_\_getattribute\_\_**() and **\_\_setattr\_\_**(). The drawback of such approach is that the class must be aware of the expected types and ranges of values of all relevant data attributes, for instance, by maintaining some sort of ‘template’, as it is done with the Standard Python Library module _**ctypes**_.
 
 On the other hand, the task of the input data sanity check can be delegated to the objects themselves, stored as attributes of their ‘parent’ object, provided that the data retrieval and update happen through the special getter / setter methods of the said classes. Since release 2.2 Python provides descriptors protocol, which serves exactly this purpose.
-Unfortunately, use of descriptors is not the universal way of the attributes resolution, and it has its own ‘underwater stones’, and I do not have any prior experience with them. Although there are many ‘guides’ available on-line, the majority of them is simply re-written in mostly own words ‘Descriptors HOWTO’ page from the CPython documentation <a id="bref1">[<sup>^1</sup>](#aref1)</a>. Therefore this problem analysis research is performed.
+Unfortunately, use of descriptors is not the universal way of the attributes resolution, and it has its own ‘underwater stones’, and I do not have any prior experience with them. Although there are many ‘guides’ available on-line, the majority of them is simply re-written in mostly own words ‘Descriptors HOWTO’ page from the CPython documentation <a id="bref1">[<sup>1</sup>](#aref1)</a>. Therefore this problem analysis research is performed.
 
 ## Method and Results
 
-We begin with the slightly modified ‘text-book’ example from the ‘Descriptors HOWTO’ [<sup>^1</sup>](#aref1). Thus, a class implementing the getter and setter descriptors (**DescriptorClass**) and its user class (**TestClass**) are created, see below.
+We begin with the slightly modified ‘text-book’ example from the ‘Descriptors HOWTO’ [<sup>1</sup>](#aref1). Thus, a class implementing the getter and setter descriptors (**DescriptorClass**) and its user class (**TestClass**) are created, see below.
 
 [pa001_descriptors_test01.py](./pa001_descriptors_test01.py)
 
@@ -607,4 +607,4 @@ In order to ensure the usage of the defined getter and setter descriptors by the
 
 ## References
 
-<a id="aref1">[^1]</a> https://docs.python.org/2/howto/descriptor.html      [&#x2B0F;](#bref1)
+<a id="aref1">[1]</a> https://docs.python.org/2/howto/descriptor.html      [&#x2B0F;](#bref1)

@@ -1,0 +1,63 @@
+@startuml pos_utils_contracts_use_cases
+
+title Use Cases of contracts.py Module
+
+left to right direction
+
+rectangle IsContract {
+    usecase "value being / not being\nwithin some range\nor set" as ValueCheck
+
+    usecase "value being / not being\nof some type or\nspecific class instance" as IsCheck
+
+    usecase "sequence being\nof specific length" as LengthCheck
+    
+    usecase "value being / not being\nsubclass of specific class" as ClassCheck
+
+    ValueCheck -|> IsCheck : extends
+
+    IsCheck <|- LengthCheck : extends
+    
+    ClassCheck -[hidden] ValueCheck
+}
+
+usecase "Arguments\ncheck" as ArgumentsCheck
+
+ArgumentsCheck <|-- HasContract
+
+rectangle HasContract {
+    usecase "value being an object\nwith a specific attribute" as AttributeCheck
+}
+
+IsContract -|> HasContract
+
+ArgumentsCheck <|-- IsContract
+
+usecase "Returned\nvalue\ncheck" as ReturnCheck
+
+HasContract --|> ReturnCheck
+
+IsContract --|> ReturnCheck
+
+actor "Arguments" as arguments
+
+actor "Returned value" as return
+
+ArgumentsCheck <- arguments
+
+ReturnCheck <- return
+
+actor "Function or method" as function
+
+arguments -o function
+
+return -o function
+
+actor "Check class(es)" as ArgsClasses
+
+actor "Check class" as RetClass
+
+ArgsClasses -> ArgumentsCheck
+
+RetClass -> ReturnCheck
+
+@enduml

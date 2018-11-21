@@ -43,4 +43,4 @@
   - class DCArgumentValue
   - class DCReturnValue
 
-![Diagram](./UML/pos_Components.png)
+![Diagram](./UML/pos_components.png)
