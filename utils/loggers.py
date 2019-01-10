@@ -598,7 +598,8 @@ class DualLogger(ConsoleLogger):
         else:
             self.log_file = str(strFileName)
         if bLogToFile:
-            self.file_logging = logging.FileHandler(self.log_file, mode = 'w')
+            self.file_logging = logging.FileHandler(self.log_file, mode = 'w',
+                                                                    delay=False)
         else:
             self.file_logging = logging.NullHandler()
         self.file_logging.setLevel(logging.WARNING)
@@ -679,7 +680,8 @@ class DualLogger(ConsoleLogger):
             iCurrentLevel = self.file_logging.level
             self._logger.removeHandler(self.file_logging)
             del self.file_logging
-            self.file_logging = logging.FileHandler(self.log_file, mode = 'w')
+            self.file_logging = logging.FileHandler(self.log_file, mode = 'w',
+                                                                    delay=False)
             self.file_logging.setLevel(iCurrentLevel)
             self.file_logging.setFormatter(self.formatter)
         self._logger.addHandler(self.file_logging)
@@ -750,7 +752,8 @@ class DualLogger(ConsoleLogger):
         self.file_logging.close()
         self._logger.removeHandler(self.file_logging)
         del self.file_logging
-        self.file_logging = logging.FileHandler(self.log_file, mode = 'w')
+        self.file_logging = logging.FileHandler(self.log_file, mode = 'w',
+                                                                    delay=False)
         self.file_logging.setLevel(iCurrentLevel)
         self.file_logging.setFormatter(self.formatter)
         self._logger.addHandler(self.file_logging)
