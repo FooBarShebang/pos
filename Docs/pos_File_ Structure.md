@@ -94,6 +94,7 @@ salt
         +++ <&folder> Templates
         ++++ <&code> Classes.cuml
         ++++ <&code> Components.cuml
+        ++++ <&code> Tables.cuml
         +++ <&folder> utils
         ++++ <&folder> contracts
         +++++ <&image> pos_utils_contracts_use_cases.png

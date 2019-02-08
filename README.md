@@ -5,6 +5,7 @@ as in Python on Steroids / Python of Steel - working title
 ## Table of Content
 
 * [Description](#Description)
+* [Installation](#Installation)
 * [Goal](#Goal)
 * [Rationale](#Rationale)
 * [Functionality and Intended Use](#Functionality-and-Intended-Use)
@@ -14,6 +15,29 @@ as in Python on Steroids / Python of Steel - working title
 ## Description
 
 Hacking of the Python programming language in its original MIT / UC Berkeley sense, not as in the computer security breaching.
+
+## Installation
+
+Clone the official repository into your local workspace / project folder:
+
+```bash
+$ git clone <repository_path> "your project folder"
+```
+
+Initialize the UML templates submodule
+
+```bash
+$ cd "your project folder"/pos/Docs/UML/Templates
+$ git submodule init
+```
+
+Download the content of the UML templates submodule
+
+```bash
+$ git submodule update --recursive --remote
+```
+
+**Note**: You do not have to intialize and download the UML templates submodule if you do not plan to update the library's documentation. They are not required for the functionality of the library iteself. 
 
 ## Goal
 

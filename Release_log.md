@@ -1,6 +1,10 @@
 # pos Library Release Log
 
-#2018-10-26 v0.0.1.3
+## 2019-02-08 v0.0.1.3
+
+Re-organized UML templates into Git submodule.
+
+## 2018-10-26 v0.0.1.3
 
 Fixed improper resolution of the caller by the loggers with the level >= WARNING. In module utils/loggers.
 
