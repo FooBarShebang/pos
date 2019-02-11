@@ -27,7 +27,7 @@ $ git clone <repository_path> "your project folder"
 Initialize the UML templates submodule
 
 ```bash
-$ cd "your project folder"/regex_lib/Docs/UML/Templates
+$ cd "your project folder"/pos/Docs/UML/Templates
 $ git submodule init
 ```
 

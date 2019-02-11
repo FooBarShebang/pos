@@ -1,0 +1,3 @@
+[submodule "Docs/UML/Templates"]
+	path = Docs/UML/Templates
+	url = ssh://git@rdserver/research-tools/generic-tools/plant_uml.git
