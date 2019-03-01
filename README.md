@@ -37,8 +37,11 @@ Download the content of the UML templates submodule
 $ git submodule update --recursive --remote
 ```
 
+<<<<<<< HEAD
 **Note**: You do not have to intialize and download the UML templates submodule if you do not plan to update the library's documentation. They are not required for the functionality of the library iteself. 
 
+=======
+>>>>>>> e04daec429afc23a0283867c49b055b7594a91e9
 ## Goal
 
 Python is a dynamic though strong typed language with all its benefits and beauty. In some cases though, especially for the "big data" processing of production quality with unpredictable input source, static typing has its merits.
